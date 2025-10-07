@@ -7,7 +7,7 @@
 Az **Acxor** egy **Jira-hoz hasonló, de egyszerűbb és felhasználóbarátabb** projektmenedzsment eszköz, amely **weben és mobilon egyaránt elérhető**.  
 Kifejezetten a programozó csapatok munkájának támogatására készült, lehetővé téve a projektek áttekinthetőségét, a feladatok priorizálását és a csapatok közötti hatékony kommunikációt.
 
-Az alkalmazásban a projektek **sprint-alapú struktúrában** szerveződnek, így a csapatok feloszthatják a munkát **taskokra és subtaskokra**, miközben a függőségi sorrend automatikusan biztosítja, hogy **egy feladat csak az előző teljesítése után kezdhető el**. A felhasználói felület egyszerű, de hatékony, így a csapat minden tagja gyorsan hozzáférhet a projektekhez, nyomon követheti a haladást, és valós időben értesülhet a változásokról.
+Az alkalmazásban a projektek **sprint-alapú struktúrában** szerveződnek, így a csapatok feloszthatják a munkát **taskokra és subtaskokra**, miközben a függőségi sorrend automatikusan biztosítja, hogy **egy feladat csak az előző teljesítése után kezdhető el**. A felhasználói felület egyszerű, de hatékony, így a csapat minden tagja gyorsan hozzáférhet a projektekhez, nyomon követheti a haladást, és valós időben értesülhet a változásokról. Kis-közép méretű projektekhez ideális, hol kulcsfontosságú lehet a flexibilitás a projekt-feladatok létrehozásában.
 
 ## Erősségek
 
@@ -246,3 +246,19 @@ Az Acxor ehelyett egy globális kommunikációs panelt (Log) és egy intelligens
 Új projekt létrehozásakor az Acxor automatikusan sprint-alapú szerkezetet épít fel,  
 létrehozza az alap task-struktúrát, és lehetőséget ad a határidők és résztvevők beállítására.  
 Ez sokkal gyorsabb bevezetést tesz lehetővé, mint a Jira részletes setup-ja vagy a Trello manuális táblalétrehozása.
+
+## Jelenleg még nem dolgoztam ki:
+
+- Ezen választás:
+  - Open source az egész. (Az üzemeltetés fizetős.)
+  - Open source az egész. (Az üzemeltetés ingyenes, de az adatok feldolgozásra kerülnek.)
+  - Open source alap, fizetős plugin-ek.
+  - Fizetős alap, open source plugin-ek.
+  - Teljesen zárt, piaci szoftver.
+- Feladatstátuszhoz lévő állapotdiagram
+- Use-case diagram a szerepkörökhöz
+- Saját wiki
+- Célközönségi flexibilitás mit is jelent
+- Letisztultabb kinézet mit is jelent
+- Teljes git alapon működés
+- offline működés
