@@ -1,32 +1,58 @@
-# BSc Degree Project
+# JavaScript alapú webalkalmazások karbantarthatóságának vizsgálata
 
-## Project Title
-(Írd ide a szakdolgozatod címét – pl. "Performance and Maintainability Aspects of React Applications")
+### MISKOLCI EGYETEM
 
-## Description
-This repository contains the source code, documentation, and research materials for my BSc Degree Project.  
-The project focuses on investigating **[fő téma, pl. performance optimization and maintainability in React-based applications]**.  
+**Gépészmérnöki és Informatikai Kar**  
+**Alkalmazott Matematikai Intézeti Tanszék**
 
-The aim of the project is to:
-- analyze the chosen problem domain,
-- implement proof-of-concept solutions or case studies,
-- evaluate results with metrics, benchmarks, and/or static code analysis,
-- provide recommendations and conclusions for future work.
+---
 
-## Structure
-- `/src` – Source code (implementations, examples, experiments)
-- `/docs` – Documentation, reports, thesis-related notes
-- `/tests` – Automated tests and performance measurement scripts
-- `README.md` – Project description (this file)
+## Szakdolgozat információk
 
-## Technologies
-- **Programming language(s):** JavaScript / TypeScript
-- **Frameworks / Libraries:** React, React Native (if applicable), Node.js
-- **Tools:** Git, npm, tsc (TypeScript compiler), benchmarking libraries
+- **Hallgató:** Sándor János
+- **Neptun kód:** U03GDK
+- **Szak:** Programtervező informatikus BSc
+- **Témavezető:** Dr. Agárdi Anita, egyetemi adjunktus
+- **Konzulens:** –
+- **Kiadás dátuma:** 2025. szeptember 24.
 
-## Installation & Usage
-Clone the repository and install dependencies:
-```bash
-git clone https://github.com/username/project-name.git
-cd project-name
-npm install
+---
+
+## Témakör
+
+**Projektkezelés, Webalkalmazás fejlesztés**
+
+---
+
+## Szakdolgozat címe
+
+**JavaScript alapú webalkalmazások karbantarthatóságának vizsgálata**
+
+---
+
+## Feladatleírás
+
+A szakdolgozat célja, hogy egy — elsősorban szoftverfejlesztési projektek menedzselésére alkalmas — webalkalmazás fejlesztésén keresztül vizsgálja a **JavaScript alapú webalkalmazások karbantarthatóságát**.
+
+A dolgozat az alábbi főbb területeket érinti:
+
+- A projektkezelés általános működésének és típusainak bemutatása
+- Aktuálisan elérhető projektmenedzsment rendszerek és eszközök összehasonlítása
+- A készülő rendszer működésének és követelményeinek specifikálása
+- A forráskód karbantarthatóságának elemzése a szoftverfejlesztési módszertanok tükrében
+
+---
+
+## Fejlesztési környezet és technológiák
+
+A webalkalmazás fejlesztése **JavaScript alapú technológiákra** épül:
+
+- **React** – felhasználói felület fejlesztéséhez
+- **React Native** – mobilalkalmazás-fejlesztéshez
+- **Express.js** – szerveroldali logika megvalósításához
+
+---
+
+## Cél
+
+A projekt célja egy olyan **webalkalmazás prototípus** létrehozása, amely a projektkezelés folyamatát támogatja, miközben a forráskód karbantarthatósága és szerkezete is elemzésre kerül.
