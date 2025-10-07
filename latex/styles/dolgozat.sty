@@ -1,0 +1,72 @@
+%A szükséges csomagok
+%méretek: margó, lap, fej~ és lábléc stb. NE MÓDOSÍTSUK!
+\usepackage[paperwidth=210mm,paperheight=297mm,headheight=15.2pt,headsep=7.1mm,top=25mm,bottom=25mm,inner=30mm,outer=25mm,dvips]{geometry}
+%fejléc kezelõ csomag
+\usepackage{fancyhdr}
+%ams matematikai makrócsomag
+\usepackage{amsmath}
+%ams matematikai szimbólumcsomag
+\usepackage{amssymb}
+%színkezelés
+\usepackage{color}
+%eps ábrák beszúrása
+\usepackage{epsfig}
+%grafikai csomag
+\usepackage{graphicx}
+%vezérlési szerkezetek
+\usepackage{ifthen}
+%array csomag a táblázatokhoz
+\usepackage{array}
+%saját tételszerû környezetekhez
+\usepackage{ntheorem}
+%multirow csomag: összevont sorokhoz
+\usepackage{multirow}
+%szines tablazatok
+\usepackage{colortbl}
+%ábrakészítés a Tex-kel
+% \usepackage[metapost]{mfpic}
+%latin2 kódolás - a magyar ékezetes betûk miatt
+\usepackage[utf8]{inputenc}
+%a magyar elválasztáshoz szükséges
+\usepackage[T1]{fontenc}
+%elválasztást végzõ csomag
+\usepackage[magyar]{babel}
+
+% \newcommand{\myinclude}[1]{%
+% 
+% \ifthenelse{\not\(\isodd{\thepage}\)}{\thispagestyle{empty}\hbox{}\newpage}%
+% 
+% \include{#1}}
+
+%fancyhdr beállítása
+\fancyhf{} % sets both header and footer to nothing
+\renewcommand{\headrulewidth}{0pt}
+
+\fancyhead[L]{}
+\fancyhead[R]{}
+\fancyfoot[C]{\thepage}
+\fancyfoot[R]{}
+
+%táblázatok beállítása
+\renewcommand{\arraystretch}{1.3}  %default: 1 Sorok közötti távolság nagyítása
+
+\setlength{\arrayrulewidth}{0.6pt} %default: 0.6pt A vonalak vastagsága
+
+%A túlcsordulási hibák jelzése a nyomtatási képben vastag, telített téglalappal
+\overfullrule10pt
+
+%pont után nem nagyobb a szóköz
+\frenchspacing
+
+
+%Új tételkörnyezetek
+\newtheoremstyle{MYhun}%
+{\item[\hskip\labelsep\theorem@headerfont ##2.\ ##1.]}%
+{\item[\hskip\labelsep\theorem@headerfont ##2.\ ##1\ \textnormal{(##3).}]}
+
+\newtheoremstyle{MYwithoutnumber}%
+{\item[\hskip\labelsep\theorem@headerfont ##1.]}%
+{\item[\hskip\labelsep\theorem@headerfont ##3.]}
+
+\def\QEDsign{\hfill$\Box$}
+\newenvironment{proof}{\begin{prooF}}{\QEDsign\end{prooF}}
