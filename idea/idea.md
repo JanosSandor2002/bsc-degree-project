@@ -136,6 +136,12 @@ Ezen fülön tudjuk beállítani az új projekt nevét, határidejét, a contrib
 
 ![Koncepciós kép](./images/newproject.png)
 
+##### Mails (Levelek)
+
+Ezen fülön tudjuk megnézni a bejövő leveleket, illetve írhatunk levelet másoknak.
+
+![Koncepciós kép](./images/mails.png)
+
 ##### Bejelentkezés/Regisztráció
 
 Alapvető főoldalon és ezen a fülön tudjuk magunkat oda írányítani, ahol regisztrálhatunk vagy bejelentkezhetünk. Alapvető email-felhasználó név-jelszó + hitelesítő kód emailre megoldás.
