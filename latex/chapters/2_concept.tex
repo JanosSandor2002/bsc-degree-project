@@ -2,29 +2,121 @@
 
 \Section{A fejezet célja}
 
-Ez a fejezet még nem a saját eredményekkel foglalkozik, hanem bemutatja, mi a problémakör, milyen módszerekkel, milyeneredményeket sikerült elérni eddig másoknak.
-
-A hivatkozások jelentős része ehhez a fejezethez szokott kötődni.
-(Egy hivatkozás például így néz ki \cite{coombs1987markup}.)
-Itt lehet bemutatni a hasonló alkalmazásokat.
+Ebben a fejezetben a dolgozat témáját körülhatároljuk, bemutatjuk a releváns projektmenedzsment rendszereket, azok főbb funkcióit, előnyeit és hátrányait, valamint azt, hogyan kapcsolódnak az Acxor fejlesztéséhez. A cél nem a saját eredmények részletezése, hanem egy átfogó, irodalmi és technológiai alap bemutatása, amelyre a dolgozat további részei építenek. A hivatkozások jelentős része ebben a fejezetben kerül alkalmazásra, például \cite{coombs1987markup}.
 
 \Section{Tartalom és felépítés}
 
-A fejezet tartalma témától függően változhat. Az alábbiakat attól függően különböző arányban tartalmazhatják.
+A fejezet tartalma négy fő területre koncentrál: irodalomkutatás, technológia, piackutatás és követelmény specifikáció. Az irodalomkutatás során áttekintjük a legfontosabb projektmenedzsment rendszereket, a technológiai részben bemutatjuk a rendszerek főbb funkcióit, a piackutatás során összehasonlítjuk a meglévő megoldásokat, míg a követelmény specifikációban az Acxor fejlesztés céljait és alapelveit foglaljuk össze.
+
+\Section{Projektmenedzsment rendszerek áttekintése}
+
+\SubSection{JIRA}
+
+A JIRA egy komplex, vállalati szintű projektmenedzsment és issue tracking rendszer. Kiemelt jellemzői:
+
 \begin{itemize}
-\item Irodalomkutatás. Amennyiben a dolgozat egy módszer kidolgozására, kifejlesztésére irányul, akkor itt lehet részletesen végignézni (módszertani vagy időrendi bontásban), hogy az eddigiekben milyen eredmények születtek a témakörben.
-\item Technológia. Mivel jellemzően kutatásról vagy szoftverfejlesztésről van szó, ezért annak a jellemző elemeit, technikai részleteit itt kell bemutatni.
-Ez tehát egy módszeres bevezetés ahhoz, hogy ha valaki nem jártas a témakörben, akkor tudja, hogy a dolgozat milyen aktuálisan elérhető eredményeket, eszközöket használt fel.
-\item Piackutatás. Bizonyos témáknál új termék vagy szolgáltatás kifejlesztése a cél.
-Ekkor érdemes annak alaposan utánanézni, hogy aktuálisan milyen eszközök érhetők el a piacon.
-Ez szoftverek esetében a hasonló alkalmazások bemutatását, táblázatos formában történő összehasonlítását jelentheti.
-Szerepelhetnek képek és észrevételek a viszonyításként bemutatott alkalmazásokhoz.
-\item Követelmény specifikáció. Külön szakaszban érdemes részletesen kitérni az elkészítendő alkalmazással kapcsolatos követelményekre.
-Ehhez tartozhatnak forgatókönyvek (\textit{scenario}-k).
-A szemléletesség kedvéért lehet hozzájuk képernyőkép vázlatokat is készíteni, vagy a használati eseteket más módon szemléltetni.
+\item Issue tracking, Agile metodikák (Scrum / Kanban) támogatása
+\item Workflow testreszabás
+\item Jogosultságkezelés
+\item Riportok és dashboardok
+\item Széleskörű integrációk (Confluence, Bitbucket, GitHub, Slack, Teams)
 \end{itemize}
 
-\Section{Amit csak említés szintjén érdemes szerepeltetni}
+A JIRA rugalmas és szinte bármi testreszabható, ami előnyt jelent nagyvállalati környezetben, ugyanakkor komplexitása miatt tanulási görbéje meredek. A rendszer hierarchiája Epic–Story–Task–Subtask struktúrát követ, ami előnyös a nagy csapatok számára. Automatizmusai trigger–condition–action logikán alapulnak, amely lehetővé teszi például automatikus állapotváltást, assignee hozzárendelést, vagy e-mail értesítések küldését.
 
-Az olvasóról annyit feltételezhetünk, hogy programozásban valamilyen szinten járatos, és a matematikai alapfogalmakkal sem ebben a dolgozatban kell megismertetni.
-A speciális eszközök, programozási nyelvek, matematikai módszerekk és jelölések persze jó, hogy ha említésre kerülnek, de nem kell nagyon belemenni a közismertnek tekinthető dolgokba.
+Az Acxor fejlesztésében a JIRA inspirációként szolgált a funkcionalitás és a workflow kezelés terén, de egyszerűsített felhasználói felületet és átláthatóbb jogosultsági modellt alkalmaz.
+
+\SubSection{Trello}
+
+A Trello egy intuitív, kártya-alapú projektmenedzsment rendszer, amely kisebb csapatoknak vagy egyszerűbb folyamatokhoz ideális. Főbb jellemzői:
+
+\begin{itemize}
+\item Board → List → Card → Checklist vizuális hierarchia
+\item Drag \& drop alapú kezelés
+\item Minimális konfiguráció és real-time szinkron
+\item Egyszerű automatizmusok (Butler)
+\end{itemize}
+
+A Trello előnye a gyors betanulás és a vizuális, átlátható felület, míg hátránya a korlátozott testreszabhatóság és a nagyobb projektekhez kevésbé megfelelő komplexitás. Az Acxor esetében a Trello inspirálta az intuitív, vizuális task lifecycle és board kezelést, amely egyszerre egyszerű és professzionális.
+
+\SubSection{Asana}
+
+Az Asana egy feladat- és projektmenedzsment platform, amely a csapatok együttműködését támogatja. Fő funkciói:
+
+\begin{itemize}
+\item Task és Subtask kezelés
+\item Projektek és Timeline vizualizáció
+\item Határidők és felelősök hozzárendelése
+\item Dashboard és riporting
+\item Integráció külső szolgáltatásokkal (Slack, Teams, GitHub, Google Workspace)
+\end{itemize}
+
+Előnye a könnyen átlátható felület és a gyors onboarding, hátránya a korlátozott workflow testreszabás és a részletes riporting hiánya. Az Acxor tervezésénél az Asana inspirációt jelentett a fókuszált task lifecycle és minimalista felület kialakításában.
+
+\SubSection{Redmine}
+
+A Redmine nyílt forráskódú rendszer, amely elsősorban testreszabhatóságáról és bővíthetőségéről ismert. Főbb jellemzői:
+
+\begin{itemize}
+\item Issue tracking és projekt hierarchia (főprojekt → alprojekt)
+\item Testreszabható workflow és permission rendszer
+\item Gantt és Calendar vizualizáció
+\item Plugin és API alapú integráció
+\end{itemize}
+
+Előnye a nagy projektek kezelésére való alkalmasság és a nyílt forráskódú bővíthetőség, míg hátránya a kevésbé modern UI és a tanulási görbe. Az Acxorban a Redmine inspirációt jelentett a backend struktúrában és az issue hierarchia egyszerűsítésében, modern, letisztult felülettel.
+
+\SubSection{Projektmenedzsment rendszerek összehasonlítása}
+
+Az Acxor a közepes komplexitású fejlesztői csapatok számára készült, kiemelten figyelve a vizualitásra, egyszerűségre és motivációs rendszerekre. Összehasonlításképpen bemutatom a Redmine, Asana, Trello és Jira főbb jellemzőit:
+
+\begin{table}[h!]
+\centering
+\scriptsize
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Funkció / Eszköz} & \textbf{Acxor} & \textbf{Trello} & \textbf{Jira} \\
+\hline
+Webes felület & Igen, modern vizuális UI & Igen, webes, vizuális & Igen, webes, komplex \\
+Kanban board & Igen, beépített, drag\&drop & Igen, beépített & Részben, plugin / board szükséges \\
+Sprint / Iteration & Részben, egyszerű & Nem & Igen, teljes körű \\
+Gamifikáció & Igen, XP, szint, badge & Nem & Nem \\
+Task / Subtask & Igen, egyszerű hierarchia & Igen, kártya / checklist & Igen, Epic→Story→Task→Subtask \\
+Chat / Log & Igen, globális bot & Részben, kommentek & Részben, jegy alapú \\
+Workflow testreszabás & Részben, egyszerű & Részben, limitált & Igen, részletes, szabály alapú \\
+Permission rendszer & Részben, egyszerű & Részben, egyszerű & Igen, mély, szerepkör alapú \\
+Integrációk & Igen, alap, kulcs szolgáltatások & Részben, Power-Ups & Igen, széles (Confluence, GitHub, Slack...) \\
+\hline
+\end{tabular}
+\caption{Acxor összehasonlítása a Trello-val és a Jira-val}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\scriptsize
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Funkció / Eszköz} & \textbf{Acxor} & \textbf{Redmine} & \textbf{Asana} \\
+\hline
+Webes felület & Igen, modern vizuális UI & Igen, webes, részletes & Igen, webes, intuitív \\
+Kanban board & Igen, beépített & Részben, plugin szükséges & Igen, board / list nézet \\
+Sprint / Iteration & Részben, egyszerű & Igen, teljes körű & Részben, idővonal / Timeline \\
+Gamifikáció & Igen, XP, szint, badge & Nem & Nem \\
+Task / Subtask & Igen, egyszerű hierarchia & Igen, issue / subtask & Igen, task / subtask \\
+Chat / Log & Igen, globális bot & Részben, jegy alapú & Részben, kommentek \\
+Workflow testreszabás & Részben, egyszerű & Igen, részletes & Részben, egyszerű \\
+Permission rendszer & Részben, egyszerű & Igen, roles & Részben, alap \\
+Integrációk & Igen, kulcs szolgáltatások & Részben, pluginok, SCM & Igen, Slack, GitHub, Google Workspace \\
+\hline
+\end{tabular}
+\caption{Acxor összehasonlítása a Redmine-nel és az Asana-val}
+\end{table}
+
+
+
+\Section{Összegzés}
+
+A fenti rendszerek áttekintése rávilágít arra, hogy a projektmenedzsment eszközök széles skálán helyezkednek el komplexitás, testreszabhatóság és felhasználói élmény szempontjából. Az Acxor célja a különböző rendszerek előnyeinek ötvözése: a JIRA funkcionalitásának, a Trello vizuális egyszerűségének, az Asana átlátható task lifecycle-jának, valamint a Redmine struktúrájának kombinálása egy intuitív, könnyen használható, ugyanakkor professzionális projektmenedzsment platformban.
+
+Ez a koncepciói alap biztosítja, hogy a dolgozat későbbi fejezeteiben bemutatott fejlesztések jól meghatározott, átgondolt irányelv szerint történjenek, és az olvasó számára érthető, követhető legyen a választott megközelítés és technológiai háttér.
+
