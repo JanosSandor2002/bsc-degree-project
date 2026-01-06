@@ -60,8 +60,6 @@ A projektmenedzsment rendszerek a szoftverfejlesztési folyamatok szervezéséne
 | Asana    | Közepes     | Közepes      | Közepes       | Plugin-alapú          | Jó                |
 | Redmine  | Közepes     | Kicsi        | Közepes       | Egyedi bővítés        | Nagy              |
 
----
-
 ## 2. Gamifikációs elméletek és motivációs modellek
 
 A gamifikáció a játékmechanizmusok alkalmazása a felhasználói aktivitás ösztönzésére nem játék környezetben.
@@ -85,8 +83,6 @@ A gamifikáció a játékmechanizmusok alkalmazása a felhasználói aktivitás 
 - Sprint lezárás → Badge
 - Visszajelzés → értesítések, bot üzenetek
 
----
-
 ## 3. Felhőalapú rendszerek és valós idejű szinkronizáció
 
 ### 3.1 WebSocket
@@ -106,8 +102,6 @@ A gamifikáció a játékmechanizmusok alkalmazása a felhasználói aktivitás 
 - Többszereplős adatkonzisztencia
 - Diff alapú frissítés
 - Hálózati késés és offline kezelés
-
----
 
 ## 4. Modern webes és mobil technológiák
 
@@ -146,8 +140,6 @@ A gamifikáció a játékmechanizmusok alkalmazása a felhasználói aktivitás 
 - GitHub: issue létrehozás, státusz szinkron
 - CI/CD pipeline: automatizált tesztelés, build, deploy
 - Valós idejű értesítések és bot integráció
-
----
 
 ## 5. UI/UX trendek
 
