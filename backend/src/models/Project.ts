@@ -1,26 +1,33 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import { Schema, model, Types, Document } from 'mongoose';
+import { IUser } from './User';
 
 export interface IProject extends Document {
   name: string;
   description?: string;
-  admin: mongoose.Types.ObjectId;
-  contributors: mongoose.Types.ObjectId[];
-  viewers: mongoose.Types.ObjectId[];
+  members: (IUser | Types.ObjectId)[];
+  createdBy: IUser | Types.ObjectId;
+  admin: IUser | Types.ObjectId;
+  contributors: (IUser | Types.ObjectId)[];
+  viewers: (IUser | Types.ObjectId)[];
   startDate?: Date;
   endDate?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-const ProjectSchema: Schema = new Schema<IProject>(
+const ProjectSchema = new Schema<IProject>(
   {
     name: { type: String, required: true },
     description: { type: String },
-    admin: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    contributors: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-    viewers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-    startDate: { type: Date, default: Date.now },
+    members: [{ type: Types.ObjectId, ref: 'User' }],
+    createdBy: { type: Types.ObjectId, ref: 'User', required: true },
+    admin: { type: Types.ObjectId, ref: 'User', required: true },
+    contributors: [{ type: Types.ObjectId, ref: 'User' }],
+    viewers: [{ type: Types.ObjectId, ref: 'User' }],
+    startDate: { type: Date },
     endDate: { type: Date },
   },
   { timestamps: true },
 );
 
-export default mongoose.model<IProject>('Project', ProjectSchema);
+export default model<IProject>('Project', ProjectSchema);
