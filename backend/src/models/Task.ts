@@ -1,26 +1,39 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import { Schema, model, Types, Document } from 'mongoose';
+import { IUser } from './User';
+import { IProject } from './Project';
+import { ISprint } from './Sprint';
 
 export interface ITask extends Document {
   title: string;
   description?: string;
-  status: 'Starting' | 'To Do' | 'Help Needed' | 'Review' | 'Done';
-  project: mongoose.Types.ObjectId;
-  assignedTo?: mongoose.Types.ObjectId;
+  status: 'Open' | 'InProgress' | 'Done';
+  assignedTo?: IUser | Types.ObjectId;
+  project?: IProject | Types.ObjectId;
+  sprint?: ISprint | Types.ObjectId;
+  dependencies: Types.ObjectId[];
+  xpReward: number;
+  deadline?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-const TaskSchema: Schema = new Schema<ITask>(
+const TaskSchema = new Schema<ITask>(
   {
     title: { type: String, required: true },
     description: { type: String },
     status: {
       type: String,
-      enum: ['Starting', 'To Do', 'Help Needed', 'Review', 'Done'],
-      default: 'Starting',
+      enum: ['Open', 'InProgress', 'Done'],
+      default: 'Open',
     },
-    project: { type: Schema.Types.ObjectId, ref: 'Project', required: true },
-    assignedTo: { type: Schema.Types.ObjectId, ref: 'User' },
+    assignedTo: { type: Types.ObjectId, ref: 'User' },
+    project: { type: Types.ObjectId, ref: 'Project' },
+    sprint: { type: Types.ObjectId, ref: 'Sprint' },
+    dependencies: [{ type: Types.ObjectId, ref: 'Task' }],
+    xpReward: { type: Number, default: 0 },
+    deadline: { type: Date },
   },
   { timestamps: true },
 );
 
-export default mongoose.model<ITask>('Task', TaskSchema);
+export default model<ITask>('Task', TaskSchema);
