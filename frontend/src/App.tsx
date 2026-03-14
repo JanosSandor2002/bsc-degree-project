@@ -30,50 +30,16 @@ const App = () => {
   };
 
   return (
-    <div className='flex h-screen bg-gray-50'>
-      {/* Sidebar */}
-      <Sidebar />
+    <div className='flex justify-center bg-gray-200 min-h-screen'>
+      <div className='flex min-h-screen bg-gray-50 max-w-7xl w-full mx-auto'>
+        {/* Sidebar */}
+        <Sidebar />
 
-      {/* Main content area */}
-      <div className='flex-1 flex flex-col'>
-        {/* Topbar */}
-        <Topbar />
+        {/* Main content area */}
+        <div className='flex-1 flex flex-col'>
+          <Topbar />
 
-        {/* View area */}
-        <div className='flex-1 p-4 overflow-auto'>{renderView()}</div>
-
-        {/* Nézetválasztó gombok (demo) */}
-        <div className='flex space-x-2 p-2 border-t bg-gray-100'>
-          <button
-            onClick={() => setActiveView('main')}
-            className='px-3 py-1 bg-blue-200 rounded'
-          >
-            Main
-          </button>
-          <button
-            onClick={() => setActiveView('kanban')}
-            className='px-3 py-1 bg-green-200 rounded'
-          >
-            Kanban
-          </button>
-          <button
-            onClick={() => setActiveView('scrum')}
-            className='px-3 py-1 bg-yellow-200 rounded'
-          >
-            Scrum
-          </button>
-          <button
-            onClick={() => setActiveView('gamification')}
-            className='px-3 py-1 bg-purple-200 rounded'
-          >
-            Gamification
-          </button>
-          <button
-            onClick={() => setActiveView('wiki')}
-            className='px-3 py-1 bg-gray-300 rounded'
-          >
-            Wiki
-          </button>
+          <div className='flex-1 p-4 overflow-auto'>{renderView()}</div>
         </div>
       </div>
     </div>

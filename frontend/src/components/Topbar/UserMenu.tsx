@@ -14,17 +14,20 @@ const UserMenu = () => {
       {open && (
         <div className='absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-50'>
           <ul className='flex flex-col'>
-            <li className='px-4 py-2 hover:bg-gray-100 cursor-pointer'>
-              Karakter
+            <li className='px-4 py-2 bg-black hover:bg-gray-700 cursor-pointer'>
+              Account
             </li>
-            <li className='px-4 py-2 hover:bg-gray-100 cursor-pointer'>
-              Projekt létrehozás
+            <li className='px-4 py-2 bg-black hover:bg-gray-700 cursor-pointer'>
+              Create Project
             </li>
-            <li className='px-4 py-2 hover:bg-gray-100 cursor-pointer'>
-              Bejelentkezés/Regisztráció
+            <li className='px-4 py-2 bg-black hover:bg-gray-700 cursor-pointer'>
+              Mails
             </li>
-            <li className='px-4 py-2 hover:bg-gray-100 cursor-pointer'>
-              Kijelentkezés
+            <li className='px-4 py-2 bg-black hover:bg-gray-700 cursor-pointer'>
+              Sign In / Sign Up
+            </li>
+            <li className='px-4 py-2 bg-black hover:bg-gray-700 cursor-pointer'>
+              Log Out
             </li>
           </ul>
         </div>
