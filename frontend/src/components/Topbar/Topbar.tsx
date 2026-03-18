@@ -8,18 +8,19 @@ import HeroLogo from './HeroLogo';
 
 const Topbar = () => {
   return (
-    <header className='h-16 bg-white flex items-center justify-between px-4 shadow-md'>
+    <header className='h-15 mt-4 flex justify-between mr-5 ml-5'>
       {/* Bal oldali gombok */}
-      <div className='flex space-x-2'>
+      <div className='h-20 w-120 p-3 flex justify-between bg-white border border-gray-300 rounded-3xl flex space-x-2 border border-gray-300 rounded-3xl'>
         <PlanTab />
         <TasksTab />
         <SubtasksTab />
         <LogTab />
       </div>
-
-      <HeroLogo />
+      <div className='h-20 w-40 p-3 bg-white border border-gray-300 rounded-3xl flex space-x-2 border border-gray-300 rounded-3xl'>
+        <HeroLogo />
+      </div>
       {/* Jobb oldali menük */}
-      <div className='flex items-center space-x-4'>
+      <div className='h-20 w-70 p-3 flex justify-between bg-white border border-gray-300 rounded-3xl flex space-x-2 border border-gray-300 rounded-3xl'>
         <ProjectSelect />
         <UserMenu />
       </div>

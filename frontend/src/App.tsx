@@ -45,7 +45,9 @@ const App = () => {
         <Sidebar />
         <div className='flex-1 flex flex-col'>
           <Topbar />
-          <div className='flex-1 p-4 overflow-auto'>{renderView()}</div>
+          <div className='flex-1 m-4 mt-8 overflow-auto border border-gray-200 rounded-3xl'>
+            {renderView()}
+          </div>
         </div>
       </div>
     </div>
