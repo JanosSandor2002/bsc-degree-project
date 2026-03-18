@@ -5,7 +5,7 @@ const SubtasksTab = () => {
 
   return (
     <button
-      className='px-3 py-1 hover:bg-blue-100 rounded'
+      className='w-25 bg-blue-700 border border-blue-300 rounded-3xl px-3 py-1 hover:bg-blue-100'
       onClick={() => dispatch({ type: 'SET_VIEW', payload: 'subtasks' })}
     >
       SubTasks

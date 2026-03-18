@@ -5,7 +5,7 @@ const PlanTab = () => {
 
   return (
     <button
-      className='px-3 py-1 hover:bg-blue-100 rounded'
+      className='w-20 bg-blue-900 px-3  py-1 hover:bg-blue-100 border border-blue-300 rounded-3xl'
       onClick={() => dispatch({ type: 'SET_VIEW', payload: 'plan' })}
     >
       Plan
