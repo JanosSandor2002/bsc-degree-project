@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useViewContext } from './Context/ViewContext';
 import Sidebar from './components/Sidebar/Sidebar';
 import Topbar from './components/Topbar/Topbar';
 import MainView from './components/Views/MainView';
@@ -8,9 +8,7 @@ import GamificationView from './components/Views/GamificationView';
 import WikiView from './components/Views/WikiView';
 
 const App = () => {
-  const [activeView, setActiveView] = useState<
-    'main' | 'kanban' | 'scrum' | 'gamification' | 'wiki'
-  >('main');
+  const { activeView } = useViewContext();
 
   const renderView = () => {
     switch (activeView) {
@@ -32,13 +30,9 @@ const App = () => {
   return (
     <div className='flex justify-center bg-gray-200 min-h-screen'>
       <div className='flex min-h-screen bg-gray-50 max-w-7xl w-full mx-auto'>
-        {/* Sidebar */}
         <Sidebar />
-
-        {/* Main content area */}
         <div className='flex-1 flex flex-col'>
           <Topbar />
-
           <div className='flex-1 p-4 overflow-auto'>{renderView()}</div>
         </div>
       </div>
