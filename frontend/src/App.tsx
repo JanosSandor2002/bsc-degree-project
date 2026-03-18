@@ -6,6 +6,10 @@ import KanbanView from './components/Views/KanbanView';
 import ScrumView from './components/Views/ScrumView';
 import GamificationView from './components/Views/GamificationView';
 import WikiView from './components/Views/WikiView';
+import PlanView from './components/Views/PlanView';
+import TasksView from './components/Views/TasksView';
+import SubTasksView from './components/Views/SubTasksView';
+import LogView from './components/Views/LogView';
 
 const App = () => {
   const { activeView } = useViewContext();
@@ -22,6 +26,14 @@ const App = () => {
         return <GamificationView />;
       case 'wiki':
         return <WikiView />;
+      case 'plan':
+        return <PlanView />;
+      case 'tasks':
+        return <TasksView />;
+      case 'subtasks':
+        return <SubTasksView />;
+      case 'log':
+        return <LogView />;
       default:
         return <MainView />;
     }
@@ -29,7 +41,7 @@ const App = () => {
 
   return (
     <div className='flex justify-center bg-gray-200 min-h-screen'>
-      <div className='flex min-h-screen bg-gray-50 max-w-7xl w-full mx-auto'>
+      <div className='flex min-h-screen bg-gray-200 max-w-7xl w-full mx-auto'>
         <Sidebar />
         <div className='flex-1 flex flex-col'>
           <Topbar />

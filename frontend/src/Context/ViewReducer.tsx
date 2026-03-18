@@ -1,6 +1,15 @@
 import type { Dispatch } from 'react';
 
-export type ViewState = 'main' | 'kanban' | 'scrum' | 'gamification' | 'wiki';
+export type ViewState =
+  | 'main'
+  | 'kanban'
+  | 'scrum'
+  | 'gamification'
+  | 'wiki'
+  | 'plan'
+  | 'tasks'
+  | 'subtasks'
+  | 'log';
 
 export interface ViewContextType {
   activeView: ViewState;
