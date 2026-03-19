@@ -40,12 +40,12 @@ const App = () => {
   };
 
   return (
-    <div className='flex justify-center bg-blue-50 min-h-screen'>
+    <div className='bg-premium flex justify-center min-h-screen'>
       <div className='flex min-h-screen max-w-7xl w-full mx-auto'>
         <Sidebar />
         <div className='flex-1 flex flex-col'>
           <Topbar />
-          <div className='flex-1 m-4 mt-8 overflow-auto border border-blue-500 rounded-3xl bg-blue-900'>
+          <div className='text-black flex-1 m-4 mt-8 overflow-auto border-10 border-blue-900 rounded-3xl bg-blue-100'>
             {renderView()}
           </div>
         </div>

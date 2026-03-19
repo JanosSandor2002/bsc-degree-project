@@ -7,7 +7,7 @@ const UserMenu = () => {
     <div className='flex justify-between'>
       <button
         onClick={() => setOpen(!open)}
-        className='w-18 h-12 bg-blue-300 border border-blue-300 rounded-3xl hover:bg-blue-200'
+        className='w-18 h-12 bg-blue-400 border border-blue-300 rounded-3xl hover:bg-blue-300'
       >
         User
       </button>

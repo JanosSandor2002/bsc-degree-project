@@ -12,7 +12,7 @@ const MainIcon = () => {
         bg-blue-900
         rounded-3xl
         flex items-center justify-center
-        hover:!bg-blue-500
+        hover:!bg-blue-400
         shadow-md
         transition-all duration-200
       '
