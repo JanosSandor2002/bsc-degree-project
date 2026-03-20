@@ -16,7 +16,7 @@ const Topbar = () => {
         <SubtasksTab />
         <LogTab />
       </div>
-      <div className='h-20 w-40 p-3 bg-blue-100 border border-gray-300 rounded-3xl flex space-x-2 border border-gray-300 rounded-3xl'>
+      <div className='h-20 w-40 p-3 bg-blue-100 border border-gray-300 rounded-3xl flex items-center justify-center'>
         <HeroLogo />
       </div>
       {/* Jobb oldali menük */}
