@@ -10,6 +10,10 @@ import PlanView from './components/Views/PlanView';
 import TasksView from './components/Views/TasksView';
 import SubTasksView from './components/Views/SubTasksView';
 import LogView from './components/Views/LogView';
+import User from './components/UserMenu/User';
+import Mails from './components/Mails/Mails';
+import CreateProject from './components/CreateProject/CreateProject';
+import Sign from './components/Sign/Sign';
 
 const App = () => {
   const { activeView } = useViewContext();
@@ -34,6 +38,14 @@ const App = () => {
         return <SubTasksView />;
       case 'log':
         return <LogView />;
+      case 'account':
+        return <User />;
+      case 'mails':
+        return <Mails />;
+      case 'create':
+        return <CreateProject />;
+      case 'sign':
+        return <Sign />;
       default:
         return <MainView />;
     }

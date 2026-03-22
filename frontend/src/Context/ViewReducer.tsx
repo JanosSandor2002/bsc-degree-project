@@ -9,7 +9,12 @@ export type ViewState =
   | 'plan'
   | 'tasks'
   | 'subtasks'
-  | 'log';
+  | 'log'
+  | 'account'
+  | 'create'
+  | 'mails'
+  | 'sign'
+  | 'quit';
 
 export interface ViewContextType {
   activeView: ViewState;
