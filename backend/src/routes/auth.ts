@@ -5,7 +5,7 @@ import User from '../models/User';
 
 const router = Router();
 
-// REGISTER
+// REGISTERING
 router.post('/register', async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
 
