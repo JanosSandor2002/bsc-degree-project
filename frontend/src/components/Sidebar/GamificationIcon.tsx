@@ -1,4 +1,4 @@
-import { SiGamejolt } from 'react-icons/si';
+import { FaGamepad } from 'react-icons/fa6';
 import { useViewContext } from '../../Context/ViewContext';
 
 const GamificationIcon = () => {
@@ -16,7 +16,7 @@ const GamificationIcon = () => {
         transition-all duration-200'
       onClick={() => dispatch({ type: 'SET_VIEW', payload: 'gamification' })}
     >
-      <SiGamejolt className='text-white w-[48px] h-[48px]' />
+      <FaGamepad className='text-white w-[48px] h-[48px]' />
     </button>
   );
 };
