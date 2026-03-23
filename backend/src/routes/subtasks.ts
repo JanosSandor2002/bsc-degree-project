@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { protect } from '../middleware/auth';
+import protect from '../middleware/auth';
 import Subtask from '../models/Subtask';
 
 const router = Router();

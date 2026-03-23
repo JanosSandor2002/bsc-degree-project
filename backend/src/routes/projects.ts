@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { protect } from '../middleware/auth';
+import protect from '../middleware/auth';
 import Project from '../models/Project';
 
 const router = Router();
