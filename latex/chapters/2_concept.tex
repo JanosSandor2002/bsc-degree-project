@@ -1,3 +1,7 @@
+% új oszloptípus a tördeléshez
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+
 \Chapter{Koncepció}
 
 \Section{A fejezet célja}
@@ -73,7 +77,8 @@ Az Acxor a közepes komplexitású fejlesztői csapatok számára készült, kie
 \begin{table}[h!]
 \centering
 \scriptsize
-\begin{tabular}{|l|c|c|c|}
+\setlength{\arrayrulewidth}{0.5pt} % vékonyabb vonalak
+\begin{tabularx}{\textwidth}{|l|Y|Y|Y|}
 \hline
 \textbf{Funkció / Eszköz} & \textbf{Acxor} & \textbf{Trello} & \textbf{Jira} \\
 \hline
@@ -81,20 +86,21 @@ Webes felület & Igen, modern vizuális UI & Igen, webes, vizuális & Igen, webe
 Kanban board & Igen, beépített, drag\&drop & Igen, beépített & Részben, plugin / board szükséges \\
 Sprint / Iteration & Részben, egyszerű & Nem & Igen, teljes körű \\
 Gamifikáció & Igen, XP, szint, badge & Nem & Nem \\
-Task / Subtask & Igen, egyszerű hierarchia & Igen, kártya / checklist & Igen, Epic→Story→Task→Subtask \\
+Task / Subtask & Igen, \makecell[l]{Epic $\rightarrow$ Story \\ Task $\rightarrow$ Subtask} & Igen, kártya / checklist & Igen, \makecell[l]{Epic $\rightarrow$ Story \\ Task $\rightarrow$ Subtask} \\
 Chat / Log & Igen, globális bot & Részben, kommentek & Részben, jegy alapú \\
 Workflow testreszabás & Részben, egyszerű & Részben, limitált & Igen, részletes, szabály alapú \\
 Permission rendszer & Részben, egyszerű & Részben, egyszerű & Igen, mély, szerepkör alapú \\
-Integrációk & Igen, alap, kulcs szolgáltatások & Részben, Power-Ups & Igen, széles (Confluence, GitHub, Slack...) \\
+Integrációk & Igen, alap, kulcs szolgáltatások & Részben, Power-Ups & Igen, széles \newline (Confluence, GitHub, Slack...) \\
 \hline
-\end{tabular}
+\end{tabularx}
 \caption{Acxor összehasonlítása a Trello-val és a Jira-val}
 \end{table}
 
 \begin{table}[h!]
 \centering
 \scriptsize
-\begin{tabular}{|l|c|c|c|}
+\setlength{\arrayrulewidth}{0.5pt} % vékonyabb vonalak
+\begin{tabularx}{\textwidth}{|l|Y|Y|Y|}
 \hline
 \textbf{Funkció / Eszköz} & \textbf{Acxor} & \textbf{Redmine} & \textbf{Asana} \\
 \hline
@@ -108,7 +114,7 @@ Workflow testreszabás & Részben, egyszerű & Igen, részletes & Részben, egys
 Permission rendszer & Részben, egyszerű & Igen, roles & Részben, alap \\
 Integrációk & Igen, kulcs szolgáltatások & Részben, pluginok, SCM & Igen, Slack, GitHub, Google Workspace \\
 \hline
-\end{tabular}
+\end{tabularx}
 \caption{Acxor összehasonlítása a Redmine-nel és az Asana-val}
 \end{table}
 
