@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useViewContext } from '../../Context/ViewContext';
+import { useGlobalContext } from '../../Context/GlobalContext';
 
 const UserMenu = () => {
+  const { state, dispatch: globalDispatch } = useGlobalContext();
   const { dispatch } = useViewContext();
   const [open, setOpen] = useState(false);
 
@@ -34,18 +36,25 @@ const UserMenu = () => {
             >
               Mails
             </li>
-            <li
-              className='px-4 py-2 hover:bg-blue-200 cursor-pointer'
-              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'sign' })}
-            >
-              Sign In / Sign Up
-            </li>
-            <li
-              className='px-4 py-2 hover:bg-blue-200 cursor-pointer'
-              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'quit' })}
-            >
-              Log Out
-            </li>
+            {!state.user ? (
+              <li
+                className='px-4 py-2 hover:bg-blue-200 cursor-pointer'
+                onClick={() => dispatch({ type: 'SET_VIEW', payload: 'sign' })}
+              >
+                Sign In / Sign Up
+              </li>
+            ) : (
+              <li
+                className='px-4 py-2 hover:bg-blue-200 cursor-pointer'
+                onClick={() => {
+                  globalDispatch({ type: 'LOGOUT' });
+                  localStorage.removeItem('token');
+                  dispatch({ type: 'SET_VIEW', payload: 'sign' });
+                }}
+              >
+                Log Out
+              </li>
+            )}
           </ul>
         </div>
       )}
