@@ -15,10 +15,18 @@ import User from './components/UserMenu/User';
 import Mails from './components/Mails/Mails';
 import CreateProject from './components/CreateProject/CreateProject';
 import Sign from './components/Sign/Sign';
+import { useEffect } from 'react';
+import { fetchProjects } from './Context/Actions';
 
 const App = () => {
-  const { state } = useGlobalContext();
   const { activeView } = useViewContext();
+  const { state, dispatch } = useGlobalContext();
+
+  useEffect(() => {
+    if (state.token) {
+      fetchProjects(dispatch, state.token);
+    }
+  }, [state.token]);
 
   const renderView = () => {
     switch (activeView) {

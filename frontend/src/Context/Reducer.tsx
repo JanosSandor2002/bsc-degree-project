@@ -6,6 +6,7 @@ export const initialState = {
   subtasks: [] as any[],
   loading: false,
   error: null as string | null,
+  selectedProject: null as any | null,
 };
 
 type Action =
@@ -24,7 +25,8 @@ type Action =
   | { type: 'UPDATE_SUBTASK'; payload: any }
   | { type: 'DELETE_SUBTASK'; payload: string }
   | { type: 'SET_LOADING'; payload: boolean }
-  | { type: 'SET_ERROR'; payload: string | null };
+  | { type: 'SET_ERROR'; payload: string | null }
+  | { type: 'SET_SELECTED_PROJECT'; payload: any };
 
 export const AppReducer = (state: typeof initialState, action: Action) => {
   switch (action.type) {
@@ -88,6 +90,8 @@ export const AppReducer = (state: typeof initialState, action: Action) => {
       return { ...state, loading: action.payload };
     case 'SET_ERROR':
       return { ...state, error: action.payload };
+    case 'SET_SELECTED_PROJECT':
+      return { ...state, selectedProject: action.payload };
     default:
       return state;
   }
