@@ -73,13 +73,14 @@ const CreateProject = () => {
     const projectData = {
       name,
       description,
-      admin,
       contributors,
       taskGroups,
     };
     console.log(projectData);
+    console.log('TOKEN:', state.token);
 
     if (state.token) {
+      console.log('TOKEN:', state.token);
       await addProject(dispatch, state.token, projectData);
       alert('Project created successfully!');
       // Reset everything
