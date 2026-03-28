@@ -2,10 +2,9 @@ import { RequestHandler } from 'express';
 import { getRepoNames, getRepoIssues } from '../services/githubService';
 
 // Repository-k neveinek lekérése (GET)
-export const fetchRepoNames: RequestHandler = async (req, res) => {
+export const fetchRepoNames: RequestHandler = async (_req, res) => {
   try {
-    const owner = req.params.owner as string;
-    const names = await getRepoNames(owner);
+    const names = await getRepoNames();
     res.status(200).json(names);
   } catch (error: any) {
     res.status(500).json({

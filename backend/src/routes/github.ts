@@ -8,8 +8,8 @@ import protect from '../middleware/auth';
 
 const router = Router();
 
-// GET repository-k nevei
-router.get('/:owner/repos/names', fetchRepoNames);
+// GET repository-k nevei (nem kell owner, token alapján)
+router.get('/repos/names', fetchRepoNames);
 
 // GET issues egy repo-hoz
 router.get('/:owner/:repo/issues', fetchIssues);

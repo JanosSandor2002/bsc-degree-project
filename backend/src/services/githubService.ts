@@ -2,13 +2,17 @@ import axios from 'axios';
 
 const GITHUB_API = 'https://api.github.com';
 
-// Lekéri egy felhasználó repository-jait, csak a neveket adja vissza
-export const getRepoNames = async (owner: string) => {
+// Lekéri a felhasználó repository-jait (publikus + privát)
+export const getRepoNames = async () => {
   try {
-    const response = await axios.get(`${GITHUB_API}/users/${owner}/repos`, {
+    const response = await axios.get(`${GITHUB_API}/user/repos`, {
       headers: {
-        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`, // Personal token
         Accept: 'application/vnd.github+json',
+      },
+      params: {
+        visibility: 'all', // all = public + private
+        affiliation: 'owner,collaborator', // repo-k amikben tulaj vagy kollaborátor vagy
       },
     });
 
