@@ -2,21 +2,15 @@ import axios from 'axios';
 
 const GITHUB_API = 'https://api.github.com';
 
-// Lekéri a felhasználó repository-jait (publikus + privát)
-export const getRepoNames = async () => {
+export const getRepoNames = async (token: string) => {
   try {
     const response = await axios.get(`${GITHUB_API}/user/repos`, {
       headers: {
-        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`, // Personal token
+        Authorization: `Bearer ${token}`,
         Accept: 'application/vnd.github+json',
       },
-      params: {
-        visibility: 'all', // all = public + private
-        affiliation: 'owner,collaborator', // repo-k amikben tulaj vagy kollaborátor vagy
-      },
+      params: { visibility: 'all', affiliation: 'owner,collaborator' },
     });
-
-    // Csak a repository nevek
     return response.data.map((repo: any) => repo.name);
   } catch (error: any) {
     console.error(
@@ -27,20 +21,21 @@ export const getRepoNames = async () => {
   }
 };
 
-// Lekéri egy repository issue-jait, szűrt JSON-ban
-export const getRepoIssues = async (owner: string, repo: string) => {
+export const getRepoIssues = async (
+  owner: string,
+  repo: string,
+  token: string,
+) => {
   try {
     const response = await axios.get(
       `${GITHUB_API}/repos/${owner}/${repo}/issues`,
       {
         headers: {
-          Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+          Authorization: `Bearer ${token}`,
           Accept: 'application/vnd.github+json',
         },
       },
     );
-
-    // Szűrés: csak a fontos mezők
     return response.data.map((issue: any) => ({
       number: issue.number,
       title: issue.title,

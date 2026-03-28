@@ -1,10 +1,12 @@
 import { RequestHandler } from 'express';
 import { getRepoNames, getRepoIssues } from '../services/githubService';
 
-// Repository-k neveinek lekérése (GET)
-export const fetchRepoNames: RequestHandler = async (_req, res) => {
+export const fetchRepoNames: RequestHandler = async (req, res) => {
   try {
-    const names = await getRepoNames();
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) return res.status(401).json({ message: 'No GitHub token' });
+
+    const names = await getRepoNames(token);
     res.status(200).json(names);
   } catch (error: any) {
     res.status(500).json({
@@ -14,34 +16,35 @@ export const fetchRepoNames: RequestHandler = async (_req, res) => {
   }
 };
 
-// Egy repository issue-jainak lekérése (GET)
 export const fetchIssues: RequestHandler = async (req, res) => {
   try {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) return res.status(401).json({ message: 'No GitHub token' });
+
     const owner = req.params.owner as string;
     const repo = req.params.repo as string;
-    const issues = await getRepoIssues(owner, repo);
+    const issues = await getRepoIssues(owner, repo, token);
     res.status(200).json(issues);
   } catch (error: any) {
-    res.status(500).json({
-      message: 'GitHub fetch error (issues)',
-      error: error.message,
-    });
+    res
+      .status(500)
+      .json({ message: 'GitHub fetch error (issues)', error: error.message });
   }
 };
 
-// Kiválasztott repository issue-jainak lekérése POST-tal
 export const fetchSelectedRepoIssues: RequestHandler = async (req, res) => {
   try {
-    const owner = req.body.owner as string;
-    const repo = req.body.repo as string;
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) return res.status(401).json({ message: 'No GitHub token' });
 
-    if (!owner || !repo) {
+    const owner = req.body.owner;
+    const repo = req.body.repo;
+    if (!owner || !repo)
       return res
         .status(400)
         .json({ message: 'Owner és repo mezők kötelezőek' });
-    }
 
-    const issues = await getRepoIssues(owner, repo);
+    const issues = await getRepoIssues(owner, repo, token);
     res.status(200).json(issues);
   } catch (error: any) {
     res.status(500).json({
