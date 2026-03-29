@@ -1,4 +1,4 @@
-# 1. Célkitűzés és témamegjelölés
+## Célkitűzés és témamegjelölés
 
 A szakdolgozat központi témája a **JavaScript alapú webalkalmazások karbantarthatóságának vizsgálata**, különös tekintettel egy olyan projektmenedzsment rendszer fejlesztésére, amely főként szoftverfejlesztési projektek kezelésére alkalmas. Az alkalmazás fejlesztése során a modern JavaScript ökoszisztéma eszközeit használjuk, többek között:
 
@@ -28,7 +28,7 @@ A dolgozat célja, hogy bemutassa, miként lehet **modern JavaScript-eszközökk
 
 A kutatás és a fejlesztés eredményeként elkészült MVP prototípus lehetővé teszi, hogy a karbantarthatóság elveit és a modern webes architektúrák gyakorlatban történő alkalmazását bemutassuk, miközben a rendszer funkcionalitása is tesztelhető, és a felhasználói élmény demonstrálható.
 
-# Kutatási kérdések
+## Kutatási kérdések
 
 ### K1 — Hogyan integrálható a gamifikáció úgy, hogy növelje a motivációt, de ne váljon zavaróvá?
 
@@ -84,11 +84,11 @@ A kutatás és a fejlesztés eredményeként elkészült MVP prototípus lehető
 - Funkcióhasználati analitika
 - Visszajelzés-alapú finomhangolás
 
-# 1.2. A rendszer koncepciója (részletes, idea.md alapján kibővített)
+## A rendszer koncepciója (részletes, idea.md alapján kibővített)
 
 Az Acxor három fő funkcionális pillérre épül, kiegészítve egy fejlesztői workflow modullal (GitHub integráció):
 
-## 1. Projektkezelés
+### Projektkezelés
 
 A rendszer logikája a következő hierarchiát követi:
 
@@ -106,7 +106,7 @@ A projektkezelés fókusza:
 
 A kezelőfelület minimalista, vizuálisan tiszta, drag & drop-képes, gyors navigációt biztosít.
 
-## 2. Gamifikáció
+### Gamifikáció
 
 A gamifikáció célja motiváció növelése és pozitív visszajelzési rendszer kialakítása:
 
@@ -118,7 +118,7 @@ A gamifikáció célja motiváció növelése és pozitív visszajelzési rendsz
 
 A gamifikáció úgy épül be, hogy ne szakítsa meg a flow élményt.
 
-## 3. Kommunikáció és automatizáció
+### Kommunikáció és automatizáció
 
 A rendszer kommunikációs moduljai:
 
@@ -134,7 +134,7 @@ Bot funkciók például:
 
 Minden kommunikációs elem valós időben frissül.
 
-## 4. GitHub integráció
+### GitHub integráció
 
 A fejlesztői csapatok számára az Acxor összeköti a projektmenedzsment és a forráskódkezelés világát:
 

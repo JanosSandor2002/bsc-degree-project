@@ -1,0 +1,50 @@
+\documentclass[12pt,a4paper]{article}
+
+% Encoding
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[hungarian]{babel}
+
+% Page layout
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+
+% Markdown support
+\usepackage{markdown}
+
+% Optional: nicer formatting
+\usepackage{hyperref}
+\usepackage{setspace}
+\onehalfspacing
+
+\title{Dokumentáció}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Milestone One}
+\markdownInput{milestone_parts/Celkituzes_Temamegjeloles.md}
+
+\newpage
+
+\section{Milestone Two}
+\markdownInput{milestone_parts/IrodalmiAttekintes_Hatterkutatas.md}
+
+\newpage
+
+\section{Rivals}
+\input{project_handling_rivals/rivals}
+
+\newpage
+
+\section{Milestone Three}
+\markdownInput{milestone_parts/Rendszerkovetelmeny_specifikacio.md}
+
+\newpage
+
+\end{document}
