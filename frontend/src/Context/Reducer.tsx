@@ -1,6 +1,6 @@
 export const initialState = {
-  user: null,
-  token: null,
+  user: null as any | null,
+  token: null as string | null,
   projects: [] as any[],
   tasks: [] as any[],
   subtasks: [] as any[],
