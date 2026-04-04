@@ -21,7 +21,7 @@
   "homepage": "https://github.com/JanosSandor2002/bsc-degree-project#readme",
   "devDependencies": {
     "@types/react": "~19.2.10",
-    "expo": "^55.0.8",
+    "expo": "^55.0.11",
     "typescript": "~5.9.2"
   }
 }
