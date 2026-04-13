@@ -147,3 +147,98 @@ export const addSubtask = async (
     });
   }
 };
+
+//Fetch sprints
+
+export const fetchSprints = async (
+  dispatch: Dispatch<any>,
+  token: string,
+  projectId: string,
+) => {
+  try {
+    const res = await axios.get(`${API_URL}/sprints/project/${projectId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    dispatch({ type: 'SET_SPRINTS', payload: res.data });
+  } catch (err: any) {
+    dispatch({
+      type: 'SET_ERROR',
+      payload: err.response?.data?.message || err.message,
+    });
+  }
+};
+
+//create sprints
+
+export const createSprint = async (
+  dispatch: Dispatch<any>,
+  token: string,
+  sprint: {
+    name: string;
+    projectId: string;
+    startDate: string;
+    endDate: string;
+  },
+) => {
+  try {
+    const res = await axios.post(
+      `${API_URL}/sprints`,
+      {
+        name: sprint.name,
+        project: sprint.projectId, // ← projectId → project, mert a modell "project"-et vár
+        startDate: sprint.startDate,
+        endDate: sprint.endDate,
+      },
+      { headers: { Authorization: `Bearer ${token}` } },
+    );
+    dispatch({ type: 'ADD_SPRINT', payload: res.data });
+  } catch (err: any) {
+    dispatch({
+      type: 'SET_ERROR',
+      payload: err.response?.data?.message || err.message,
+    });
+  }
+};
+
+//add task to sprint
+
+export const assignTaskToSprint = async (
+  dispatch: Dispatch<any>,
+  token: string,
+  sprintId: string,
+  taskId: string,
+) => {
+  try {
+    const res = await axios.post(
+      `${API_URL}/sprints/${sprintId}/tasks/${taskId}`,
+      {},
+      { headers: { Authorization: `Bearer ${token}` } },
+    );
+    dispatch({ type: 'UPDATE_TASK', payload: res.data });
+  } catch (err: any) {
+    dispatch({
+      type: 'SET_ERROR',
+      payload: err.response?.data?.message || err.message,
+    });
+  }
+};
+
+//delete sprint
+
+export const deleteSprint = async (
+  dispatch: Dispatch<any>,
+  token: string,
+  sprintId: string,
+) => {
+  try {
+    await axios.delete(`${API_URL}/sprints/${sprintId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    dispatch({ type: 'DELETE_SPRINT', payload: sprintId });
+  } catch (err: any) {
+    dispatch({
+      type: 'SET_ERROR',
+      payload: err.response?.data?.message || err.message,
+    });
+  }
+};

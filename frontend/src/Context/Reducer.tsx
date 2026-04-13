@@ -7,6 +7,8 @@ export const initialState = {
   loading: false,
   error: null as string | null,
   selectedProject: null as any | null,
+  sprints: [] as any[],
+  selectedSprint: null as any | null,
 };
 
 type Action =
@@ -26,7 +28,11 @@ type Action =
   | { type: 'DELETE_SUBTASK'; payload: string }
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_ERROR'; payload: string | null }
-  | { type: 'SET_SELECTED_PROJECT'; payload: any };
+  | { type: 'SET_SELECTED_PROJECT'; payload: any }
+  | { type: 'SET_SPRINTS'; payload: any[] }
+  | { type: 'SET_SELECTED_SPRINT'; payload: any }
+  | { type: 'ADD_SPRINT'; payload: any }
+  | { type: 'DELETE_SPRINT'; payload: string };
 
 export const AppReducer = (state: typeof initialState, action: Action) => {
   switch (action.type) {
@@ -92,6 +98,17 @@ export const AppReducer = (state: typeof initialState, action: Action) => {
       return { ...state, error: action.payload };
     case 'SET_SELECTED_PROJECT':
       return { ...state, selectedProject: action.payload };
+    case 'SET_SPRINTS':
+      return { ...state, sprints: action.payload };
+    case 'SET_SELECTED_SPRINT':
+      return { ...state, selectedSprint: action.payload };
+    case 'ADD_SPRINT':
+      return { ...state, sprints: [...state.sprints, action.payload] };
+    case 'DELETE_SPRINT':
+      return {
+        ...state,
+        sprints: state.sprints.filter((s) => s._id !== action.payload),
+      };
     default:
       return state;
   }
