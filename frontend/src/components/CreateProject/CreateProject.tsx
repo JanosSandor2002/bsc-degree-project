@@ -9,7 +9,6 @@ interface Task {
   description: string;
   subtasks: string[];
 }
-
 interface TaskGroup {
   name: string;
   deadline: string;
@@ -49,7 +48,6 @@ const CreateProject = () => {
   });
   const [newSubtask, setNewSubtask] = useState('');
 
-  // ─── Manual handlers ───────────────────────────────────────────
   const handleAddContributor = () => {
     if (newContributor.trim()) {
       setContributors([...contributors, newContributor.trim()]);
@@ -80,20 +78,19 @@ const CreateProject = () => {
       setNewTaskGroup({ name: '', deadline: '', tasks: [] });
     }
   };
-  // Manual submit
+
   const handleSubmitManual = async () => {
-    const token = state.token;
-    if (!token) {
-      alert('You must be logged in to create a project.');
-      return;
-    }
-    const projectData = { name, description, contributors, taskGroups };
-    await addProject(dispatch, token, projectData);
+    if (!state.token) return alert('You must be logged in.');
+    await addProject(dispatch, state.token, {
+      name,
+      description,
+      contributors,
+      taskGroups,
+    });
     alert('Project created successfully!');
     resetAll();
   };
 
-  // ─── GitHub handlers ───────────────────────────────────────────
   const handleFetchRepos = async () => {
     if (!githubOwner || !githubToken) {
       setGithubError('Username and token are required');
@@ -114,51 +111,31 @@ const CreateProject = () => {
     }
   };
 
-  const handleSelectRepo = (repoName: string) => {
-    setSelectedRepo(repoName);
-    setStep(2);
-  };
-
-  const handleAddGithubContributor = () => {
-    if (newGithubContributor.trim()) {
-      setGithubContributors([
-        ...githubContributors,
-        newGithubContributor.trim(),
-      ]);
-      setNewGithubContributor('');
-    }
-  };
-
   const handleSubmitGithub = async () => {
-    const token = state.token;
-    if (!githubOwner || !githubToken || !selectedRepo) return;
-    if (!token) {
-      alert('You must be logged in to create a project.');
-      return;
-    }
+    if (!state.token || !githubOwner || !githubToken || !selectedRepo) return;
     setGithubLoading(true);
     setGithubError('');
     try {
       const issuesRes = await axios.get(
         `${API_URL}/github/${githubOwner}/${selectedRepo}/issues`,
-        { headers: { Authorization: `Bearer ${githubToken}` } },
+        {
+          headers: { Authorization: `Bearer ${githubToken}` },
+        },
       );
-      const issues = issuesRes.data;
       const taskGroup: TaskGroup = {
         name: selectedRepo,
         deadline: '',
-        tasks: issues.map((issue: any) => ({
-          description: issue.title,
+        tasks: issuesRes.data.map((i: any) => ({
+          description: i.title,
           subtasks: [],
         })),
       };
-      const projectData = {
+      await addProject(dispatch, state.token, {
         name: selectedRepo,
         description: `Imported from GitHub: ${githubOwner}/${selectedRepo}`,
         contributors: githubContributors,
         taskGroups: [taskGroup],
-      };
-      await addProject(dispatch, token, projectData);
+      });
       alert('Project created from GitHub successfully!');
       resetAll();
     } catch (err: any) {
@@ -168,7 +145,6 @@ const CreateProject = () => {
     }
   };
 
-  // ─── Reset ──────────────────────────────────────────────────────
   const resetAll = () => {
     setStep(0);
     setProjectType('');
@@ -184,269 +160,445 @@ const CreateProject = () => {
     setGithubToken('');
   };
 
-  // ─── Render ─────────────────────────────────────────────────────
+  const stepLabel =
+    projectType === 'github'
+      ? ['Connect GitHub', 'Select Repo', 'Add Contributors'][step]
+      : projectType === 'manual'
+        ? ['', 'Project Details', 'Task Groups'][step]
+        : 'Create Project';
+
   return (
-    <div className='p-6'>
-      {/* STEP 0: Choose type */}
-      {step === 0 && (
-        <div className='flex flex-col gap-4'>
-          <h2 className='text-xl font-bold'>Choose project type</h2>
-
-          <div className='flex flex-col gap-2'>
-            <input
-              type='text'
-              placeholder='GitHub username'
-              value={githubOwner}
-              onChange={(e) => setGithubOwner(e.target.value)}
-              className='p-2 border rounded'
-            />
-            <input
-              type='password'
-              placeholder='GitHub personal token'
-              value={githubToken}
-              onChange={(e) => setGithubToken(e.target.value)}
-              className='p-2 border rounded'
-            />
+    <div className='h-full overflow-auto'>
+      {/* ── Hero ── */}
+      <div className='relative px-8 pt-8 pb-6 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 rounded-t-3xl overflow-hidden'>
+        <div className='absolute -top-6 -right-6 w-44 h-44 rounded-full bg-blue-600 opacity-25' />
+        <div className='absolute bottom-0 left-1/3 w-32 h-32 rounded-full bg-blue-800 opacity-30' />
+        <div className='relative z-10'>
+          <div className='inline-block bg-blue-500 bg-opacity-40 border border-blue-400 border-opacity-50 text-blue-100 text-xs font-medium px-3 py-1 rounded-full mb-2 tracking-wide'>
+            New Project
           </div>
-
-          <button
-            className='bg-blue-600 text-white p-2 rounded'
-            onClick={() => {
-              setProjectType('github');
-              handleFetchRepos();
-            }}
-            disabled={githubLoading}
-          >
-            {githubLoading ? 'Loading repos...' : 'GitHub'}
-          </button>
-
-          <button
-            className='bg-green-600 text-white p-2 rounded'
-            onClick={() => {
-              setProjectType('manual');
-              setStep(1);
-            }}
-          >
-            Manual
-          </button>
-
-          {githubError && <p className='text-red-500'>{githubError}</p>}
-        </div>
-      )}
-
-      {/* GITHUB STEP 1: select repo */}
-      {step === 1 && projectType === 'github' && (
-        <div className='flex flex-col gap-4'>
-          <h2 className='text-xl font-bold'>Select a Repository</h2>
-          <ul className='flex flex-col gap-2'>
-            {repos.map((repo) => (
-              <li key={repo}>
-                <button
-                  className='w-full text-left bg-blue-100 hover:bg-blue-300 border border-blue-300 rounded p-2'
-                  onClick={() => handleSelectRepo(repo)}
-                >
-                  {repo}
-                </button>
-              </li>
-            ))}
-          </ul>
-          <button
-            className='text-sm text-gray-500 underline'
-            onClick={resetAll}
-          >
-            ← Back
-          </button>
-        </div>
-      )}
-
-      {/* GITHUB STEP 2: add contributors & import */}
-      {step === 2 && projectType === 'github' && (
-        <div className='flex flex-col gap-4'>
-          <h2 className='text-xl font-bold'>Project: {selectedRepo}</h2>
-          <p className='text-sm text-gray-600'>
-            All issues will be imported as tasks.
+          <h1 className='text-2xl font-bold text-white'>{stepLabel}</h1>
+          <p className='text-blue-300 text-xs mt-1'>
+            Create a project manually or import directly from GitHub.
           </p>
-
-          <div className='flex flex-col gap-2'>
-            <h3 className='font-semibold'>Contributors</h3>
-            <div className='flex gap-2'>
-              <input
-                type='text'
-                placeholder='Add contributor username'
-                value={newGithubContributor}
-                onChange={(e) => setNewGithubContributor(e.target.value)}
-                className='p-2 border rounded flex-1'
+        </div>
+        {/* Step indicator */}
+        {projectType && (
+          <div className='relative z-10 flex gap-2 mt-4'>
+            {(projectType === 'github' ? [0, 1, 2] : [1, 2]).map((s) => (
+              <div
+                key={s}
+                className={`h-1.5 rounded-full transition-all ${
+                  s <= step ? 'bg-white w-8' : 'bg-blue-600 w-4'
+                }`}
               />
-              <button
-                className='bg-blue-500 text-white p-2 rounded'
-                onClick={handleAddGithubContributor}
-              >
-                Add
-              </button>
-            </div>
-            <ul className='list-disc ml-5'>
-              {githubContributors.map((c, i) => (
-                <li key={i}>{c}</li>
-              ))}
-            </ul>
+            ))}
           </div>
+        )}
+      </div>
 
-          {githubError && <p className='text-red-500'>{githubError}</p>}
+      <div className='px-6 py-5'>
+        {/* ── STEP 0: Choose type ── */}
+        {step === 0 && (
+          <div className='flex flex-col gap-4 max-w-md'>
+            <p className='text-xs font-semibold text-blue-600 uppercase tracking-widest'>
+              Choose import method
+            </p>
 
-          <div className='flex gap-2'>
+            <div className='flex flex-col gap-3'>
+              <div className='flex flex-col gap-2'>
+                <label className='text-xs text-gray-500'>GitHub username</label>
+                <input
+                  type='text'
+                  placeholder='e.g. octocat'
+                  value={githubOwner}
+                  onChange={(e) => setGithubOwner(e.target.value)}
+                  className='p-2 border border-blue-200 rounded-xl text-sm'
+                />
+              </div>
+              <div className='flex flex-col gap-2'>
+                <label className='text-xs text-gray-500'>
+                  GitHub personal access token
+                </label>
+                <input
+                  type='password'
+                  placeholder='ghp_...'
+                  value={githubToken}
+                  onChange={(e) => setGithubToken(e.target.value)}
+                  className='p-2 border border-blue-200 rounded-xl text-sm'
+                />
+              </div>
+            </div>
+
             <button
-              className='text-sm text-gray-500 underline'
-              onClick={() => setStep(1)}
+              className='bg-blue-700 text-white text-sm font-medium py-2.5 rounded-2xl hover:bg-blue-600 disabled:opacity-50 transition-colors'
+              onClick={() => {
+                setProjectType('github');
+                handleFetchRepos();
+              }}
+              disabled={githubLoading}
+            >
+              {githubLoading
+                ? 'Fetching repositories...'
+                : '⊞ Import from GitHub'}
+            </button>
+
+            <div className='flex items-center gap-3'>
+              <div className='flex-1 h-px bg-blue-100' />
+              <span className='text-xs text-gray-400'>or</span>
+              <div className='flex-1 h-px bg-blue-100' />
+            </div>
+
+            <button
+              className='border-2 border-blue-200 text-blue-700 text-sm font-medium py-2.5 rounded-2xl hover:bg-blue-50 transition-colors'
+              onClick={() => {
+                setProjectType('manual');
+                setStep(1);
+              }}
+            >
+              ✎ Create manually
+            </button>
+
+            {githubError && (
+              <div className='bg-red-50 border border-red-200 rounded-xl px-3 py-2'>
+                <p className='text-sm text-red-600'>{githubError}</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── GITHUB STEP 1: select repo ── */}
+        {step === 1 && projectType === 'github' && (
+          <div className='flex flex-col gap-3 max-w-md'>
+            <p className='text-xs font-semibold text-blue-600 uppercase tracking-widest mb-1'>
+              {repos.length} repositories found
+            </p>
+            <div className='flex flex-col gap-2'>
+              {repos.map((repo) => (
+                <button
+                  key={repo}
+                  className='w-full text-left bg-white border border-blue-200 hover:border-blue-400 hover:bg-blue-50 rounded-xl p-3 text-sm font-medium text-gray-700 transition-colors'
+                  onClick={() => {
+                    setSelectedRepo(repo);
+                    setStep(2);
+                  }}
+                >
+                  ⊞ {repo}
+                </button>
+              ))}
+            </div>
+            <button
+              className='text-xs text-gray-400 hover:text-gray-600 mt-2'
+              onClick={resetAll}
             >
               ← Back
             </button>
-            <button
-              className='bg-blue-700 text-white p-2 rounded flex-1'
-              onClick={handleSubmitGithub}
-              disabled={githubLoading}
-            >
-              {githubLoading ? 'Creating...' : 'Create Project from GitHub'}
-            </button>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* MANUAL STEP 1: Project details */}
-      {step === 1 && projectType === 'manual' && (
-        <div className='flex flex-col gap-4'>
-          <h2 className='text-xl font-bold'>Project Details</h2>
-          <input
-            type='text'
-            placeholder='Project Name'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className='p-2 border rounded'
-          />
-          <textarea
-            placeholder='Description'
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className='p-2 border rounded'
-          />
-          <div className='flex flex-col gap-2'>
-            <h3 className='font-semibold'>Contributors</h3>
+        {/* ── GITHUB STEP 2: contributors ── */}
+        {step === 2 && projectType === 'github' && (
+          <div className='flex flex-col gap-4 max-w-md'>
+            <div className='bg-blue-50 border border-blue-200 rounded-xl px-4 py-3'>
+              <p className='text-sm font-semibold text-gray-700'>
+                ⊞ {selectedRepo}
+              </p>
+              <p className='text-xs text-gray-400 mt-0.5'>
+                All open issues will be imported as tasks.
+              </p>
+            </div>
+
+            <div className='flex flex-col gap-2'>
+              <label className='text-xs font-semibold text-gray-600'>
+                Contributors (optional)
+              </label>
+              <div className='flex gap-2'>
+                <input
+                  type='text'
+                  placeholder='GitHub username'
+                  value={newGithubContributor}
+                  onChange={(e) => setNewGithubContributor(e.target.value)}
+                  className='flex-1 p-2 border border-blue-200 rounded-xl text-sm'
+                />
+                <button
+                  onClick={() => {
+                    if (newGithubContributor.trim()) {
+                      setGithubContributors([
+                        ...githubContributors,
+                        newGithubContributor.trim(),
+                      ]);
+                      setNewGithubContributor('');
+                    }
+                  }}
+                  className='bg-blue-700 text-white text-sm px-3 rounded-xl hover:bg-blue-600 transition-colors'
+                >
+                  Add
+                </button>
+              </div>
+              {githubContributors.length > 0 && (
+                <div className='flex flex-wrap gap-2 mt-1'>
+                  {githubContributors.map((c, i) => (
+                    <span
+                      key={i}
+                      className='text-xs bg-blue-100 text-blue-700 px-2.5 py-1 rounded-full'
+                    >
+                      {c}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {githubError && (
+              <div className='bg-red-50 border border-red-200 rounded-xl px-3 py-2'>
+                <p className='text-sm text-red-600'>{githubError}</p>
+              </div>
+            )}
+
             <div className='flex gap-2'>
-              <input
-                type='text'
-                placeholder='Add Contributor'
-                value={newContributor}
-                onChange={(e) => setNewContributor(e.target.value)}
-                className='p-2 border rounded'
-              />
               <button
-                className='bg-blue-500 text-white p-2 rounded'
-                onClick={handleAddContributor}
+                className='text-xs text-gray-400 hover:text-gray-600 px-3 py-2'
+                onClick={() => setStep(1)}
               >
-                Add
+                ← Back
+              </button>
+              <button
+                onClick={handleSubmitGithub}
+                disabled={githubLoading}
+                className='flex-1 bg-blue-700 text-white text-sm font-medium py-2.5 rounded-2xl hover:bg-blue-600 disabled:opacity-50 transition-colors'
+              >
+                {githubLoading ? 'Creating...' : 'Create Project from GitHub'}
               </button>
             </div>
-            <ul className='list-disc ml-5'>
-              {contributors.map((c, i) => (
-                <li key={i}>{c}</li>
-              ))}
-            </ul>
           </div>
-          <button
-            className='bg-green-600 text-white p-2 rounded'
-            onClick={() => setStep(2)}
-          >
-            Next: Task Groups
-          </button>
-        </div>
-      )}
+        )}
 
-      {/* MANUAL STEP 2: Task groups */}
-      {step === 2 && projectType === 'manual' && (
-        <div className='flex flex-col gap-4'>
-          <h2 className='text-xl font-bold'>Task Groups</h2>
-          <input
-            type='text'
-            placeholder='Task Group Name'
-            value={newTaskGroup.name}
-            onChange={(e) =>
-              setNewTaskGroup({ ...newTaskGroup, name: e.target.value })
-            }
-            className='p-2 border rounded'
-          />
-          <input
-            type='date'
-            value={newTaskGroup.deadline}
-            onChange={(e) =>
-              setNewTaskGroup({ ...newTaskGroup, deadline: e.target.value })
-            }
-            className='p-2 border rounded'
-          />
-          <div className='flex flex-col gap-2 border p-2 rounded'>
-            <h3 className='font-semibold'>Add Task</h3>
-            <input
-              type='text'
-              placeholder='Task Description'
-              value={newTask.description}
-              onChange={(e) =>
-                setNewTask({ ...newTask, description: e.target.value })
-              }
-              className='p-2 border rounded'
-            />
-            <div className='flex gap-2'>
+        {/* ── MANUAL STEP 1: details ── */}
+        {step === 1 && projectType === 'manual' && (
+          <div className='flex flex-col gap-4 max-w-md'>
+            <div className='flex flex-col gap-2'>
+              <label className='text-xs text-gray-500'>Project name</label>
               <input
                 type='text'
-                placeholder='Subtask'
-                value={newSubtask}
-                onChange={(e) => setNewSubtask(e.target.value)}
-                className='p-2 border rounded'
+                placeholder='My awesome project'
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className='p-2 border border-blue-200 rounded-xl text-sm'
+                autoFocus
               />
-              <button
-                className='bg-blue-500 text-white p-2 rounded'
-                onClick={handleAddSubtask}
-              >
-                Add Subtask
-              </button>
             </div>
+            <div className='flex flex-col gap-2'>
+              <label className='text-xs text-gray-500'>
+                Description (optional)
+              </label>
+              <textarea
+                placeholder='What is this project about?'
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={3}
+                className='p-2 border border-blue-200 rounded-xl text-sm resize-none'
+              />
+            </div>
+
+            <div className='flex flex-col gap-2'>
+              <label className='text-xs font-semibold text-gray-600'>
+                Contributors (optional)
+              </label>
+              <div className='flex gap-2'>
+                <input
+                  type='text'
+                  placeholder='Username'
+                  value={newContributor}
+                  onChange={(e) => setNewContributor(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleAddContributor()}
+                  className='flex-1 p-2 border border-blue-200 rounded-xl text-sm'
+                />
+                <button
+                  onClick={handleAddContributor}
+                  className='bg-blue-700 text-white text-sm px-3 rounded-xl hover:bg-blue-600 transition-colors'
+                >
+                  Add
+                </button>
+              </div>
+              {contributors.length > 0 && (
+                <div className='flex flex-wrap gap-2 mt-1'>
+                  {contributors.map((c, i) => (
+                    <span
+                      key={i}
+                      className='text-xs bg-blue-100 text-blue-700 px-2.5 py-1 rounded-full'
+                    >
+                      {c}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <button
-              className='bg-green-500 text-white p-2 rounded'
-              onClick={handleAddTask}
+              onClick={() => setStep(2)}
+              disabled={!name.trim()}
+              className='bg-blue-700 text-white text-sm font-medium py-2.5 rounded-2xl hover:bg-blue-600 disabled:opacity-40 transition-colors'
             >
-              Add Task
+              Next: Task Groups →
             </button>
-            <ul className='list-disc ml-5'>
-              {newTaskGroup.tasks.map((t, i) => (
-                <li key={i}>
-                  {t.description}
-                  <ul className='list-disc ml-5'>
-                    {t.subtasks.map((s, j) => (
-                      <li key={j}>{s}</li>
+          </div>
+        )}
+
+        {/* ── MANUAL STEP 2: task groups ── */}
+        {step === 2 && projectType === 'manual' && (
+          <div className='flex flex-col gap-5 max-w-lg'>
+            {/* New task group form */}
+            <div className='bg-blue-50 border border-blue-200 rounded-2xl p-4 flex flex-col gap-3'>
+              <p className='text-sm font-semibold text-gray-700'>
+                Add task group
+              </p>
+              <div className='flex gap-3'>
+                <div className='flex flex-col gap-1 flex-1'>
+                  <label className='text-xs text-gray-500'>Group name</label>
+                  <input
+                    type='text'
+                    placeholder='e.g. Sprint 1'
+                    value={newTaskGroup.name}
+                    onChange={(e) =>
+                      setNewTaskGroup({ ...newTaskGroup, name: e.target.value })
+                    }
+                    className='p-2 border border-blue-200 rounded-xl text-sm'
+                  />
+                </div>
+                <div className='flex flex-col gap-1 flex-1'>
+                  <label className='text-xs text-gray-500'>Deadline</label>
+                  <input
+                    type='date'
+                    value={newTaskGroup.deadline}
+                    onChange={(e) =>
+                      setNewTaskGroup({
+                        ...newTaskGroup,
+                        deadline: e.target.value,
+                      })
+                    }
+                    className='p-2 border border-blue-200 rounded-xl text-sm'
+                  />
+                </div>
+              </div>
+
+              {/* Add task to group */}
+              <div className='border border-blue-200 rounded-xl p-3 flex flex-col gap-2 bg-white'>
+                <p className='text-xs font-medium text-gray-600'>Add task</p>
+                <input
+                  type='text'
+                  placeholder='Task description'
+                  value={newTask.description}
+                  onChange={(e) =>
+                    setNewTask({ ...newTask, description: e.target.value })
+                  }
+                  className='p-2 border border-blue-100 rounded-lg text-sm'
+                />
+                <div className='flex gap-2'>
+                  <input
+                    type='text'
+                    placeholder='Subtask'
+                    value={newSubtask}
+                    onChange={(e) => setNewSubtask(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleAddSubtask()}
+                    className='flex-1 p-2 border border-blue-100 rounded-lg text-sm'
+                  />
+                  <button
+                    onClick={handleAddSubtask}
+                    className='text-xs bg-blue-100 text-blue-700 px-3 rounded-lg hover:bg-blue-200 transition-colors'
+                  >
+                    + Subtask
+                  </button>
+                </div>
+                {newTask.subtasks.length > 0 && (
+                  <div className='flex flex-wrap gap-1'>
+                    {newTask.subtasks.map((s, i) => (
+                      <span
+                        key={i}
+                        className='text-xs bg-blue-50 border border-blue-200 text-blue-600 px-2 py-0.5 rounded-full'
+                      >
+                        {s}
+                      </span>
                     ))}
-                  </ul>
-                </li>
-              ))}
-            </ul>
+                  </div>
+                )}
+                <button
+                  onClick={handleAddTask}
+                  disabled={!newTask.description.trim()}
+                  className='bg-blue-700 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-blue-600 disabled:opacity-40 transition-colors self-start'
+                >
+                  Add task to group
+                </button>
+              </div>
+
+              {newTaskGroup.tasks.length > 0 && (
+                <div className='flex flex-col gap-1'>
+                  {newTaskGroup.tasks.map((t, i) => (
+                    <div
+                      key={i}
+                      className='text-xs text-gray-600 flex items-center gap-2'
+                    >
+                      <span className='w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0' />
+                      {t.description}
+                      {t.subtasks.length > 0 && (
+                        <span className='text-gray-400'>
+                          ({t.subtasks.length} subtasks)
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <button
+                onClick={handleAddTaskGroup}
+                disabled={!newTaskGroup.name.trim() || !newTaskGroup.deadline}
+                className='border border-blue-300 text-blue-700 text-sm py-2 rounded-xl hover:bg-blue-100 disabled:opacity-40 transition-colors'
+              >
+                + Add task group
+              </button>
+            </div>
+
+            {/* Added task groups */}
+            {taskGroups.length > 0 && (
+              <div className='flex flex-col gap-2'>
+                <p className='text-xs font-semibold text-gray-600'>
+                  {taskGroups.length} task group
+                  {taskGroups.length > 1 ? 's' : ''} added
+                </p>
+                {taskGroups.map((tg, i) => (
+                  <div
+                    key={i}
+                    className='bg-white border border-blue-200 rounded-xl px-3 py-2 flex items-center justify-between'
+                  >
+                    <span className='text-sm font-medium text-gray-700'>
+                      {tg.name}
+                    </span>
+                    <span className='text-xs text-gray-400'>
+                      {tg.tasks.length} task{tg.tasks.length !== 1 ? 's' : ''} ·{' '}
+                      {tg.deadline}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className='flex gap-2'>
+              <button
+                className='text-xs text-gray-400 hover:text-gray-600 px-3 py-2'
+                onClick={() => setStep(1)}
+              >
+                ← Back
+              </button>
+              <button
+                onClick={handleSubmitManual}
+                className='flex-1 bg-blue-700 text-white text-sm font-medium py-2.5 rounded-2xl hover:bg-blue-600 transition-colors'
+              >
+                Create Project
+              </button>
+            </div>
           </div>
-          <button
-            className='bg-green-600 text-white p-2 rounded'
-            onClick={handleAddTaskGroup}
-          >
-            Add Task Group
-          </button>
-          <ul className='list-disc ml-5'>
-            {taskGroups.map((tg, i) => (
-              <li key={i}>
-                {tg.name} (Deadline: {tg.deadline}) - Tasks: {tg.tasks.length}
-              </li>
-            ))}
-          </ul>
-          <button
-            className='bg-blue-700 text-white p-2 rounded mt-4'
-            onClick={handleSubmitManual}
-          >
-            Submit Project
-          </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
