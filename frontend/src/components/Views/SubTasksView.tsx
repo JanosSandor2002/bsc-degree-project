@@ -40,6 +40,7 @@ const SubTasksView = () => {
     status: 'Open' as Subtask['status'],
   });
   const [loadingId, setLoadingId] = useState<string | null>(null);
+  const [xpToast, setXpToast] = useState<string | null>(null);
 
   useEffect(() => {
     if (state.token && state.tasks.length > 0) {
@@ -48,6 +49,11 @@ const SubTasksView = () => {
       });
     }
   }, [state.tasks]);
+
+  const showToast = (msg: string) => {
+    setXpToast(msg);
+    setTimeout(() => setXpToast(null), 3000);
+  };
 
   const handleAddSubtask = async (taskId: string) => {
     if (!newSubtaskTitle.trim() || !state.token) return;
@@ -67,12 +73,30 @@ const SubTasksView = () => {
   const handleEditSave = async () => {
     if (!editingSub || !state.token) return;
     setLoadingId(editingSub._id);
+
+    const becomingDone =
+      editData.status === 'Done' && editingSub.status !== 'Done';
+
     try {
-      const res = await axios.put(
-        `${API_URL}/subtasks/${editingSub._id}`,
-        { title: editData.title.trim(), status: editData.status },
-        { headers: { Authorization: `Bearer ${state.token}` } },
-      );
+      let res;
+
+      if (becomingDone) {
+        // Single call to /complete — sets Done + awards XP + accepts title
+        res = await axios.put(
+          `${API_URL}/subtasks/${editingSub._id}/complete`,
+          { title: editData.title.trim() },
+          { headers: { Authorization: `Bearer ${state.token}` } },
+        );
+        showToast('✦ Subtask completed! +3 XP awarded');
+      } else {
+        // Normal update — no XP
+        res = await axios.put(
+          `${API_URL}/subtasks/${editingSub._id}`,
+          { title: editData.title.trim(), status: editData.status },
+          { headers: { Authorization: `Bearer ${state.token}` } },
+        );
+      }
+
       dispatch({ type: 'UPDATE_SUBTASK', payload: res.data });
       setEditingSub(null);
     } catch (err) {
@@ -111,6 +135,13 @@ const SubTasksView = () => {
 
   return (
     <div className='p-6 flex flex-col gap-4 overflow-auto'>
+      {/* XP toast */}
+      {xpToast && (
+        <div className='fixed top-6 right-6 z-50 bg-blue-700 text-white text-sm font-medium px-4 py-2.5 rounded-2xl shadow-lg'>
+          {xpToast}
+        </div>
+      )}
+
       <h2 className='text-2xl font-bold'>Subtasks</h2>
 
       {state.loading && <p className='text-sm text-gray-400'>Loading...</p>}
@@ -119,7 +150,6 @@ const SubTasksView = () => {
         <p className='text-sm text-gray-400'>No tasks in this project.</p>
       )}
 
-      {/* Group subtasks by task */}
       {state.tasks.map((task: Task) => {
         const subs: Subtask[] = state.subtasks.filter(
           (s: Subtask) =>
@@ -132,7 +162,6 @@ const SubTasksView = () => {
             key={task._id}
             className='bg-white border border-blue-200 rounded-2xl p-4'
           >
-            {/* Task header */}
             <div className='flex items-center gap-2 mb-3'>
               <span className='font-semibold text-gray-800'>{task.title}</span>
               <span
@@ -142,7 +171,6 @@ const SubTasksView = () => {
               </span>
             </div>
 
-            {/* Subtask list */}
             <div className='flex flex-col gap-2'>
               {subs.length === 0 && (
                 <p className='text-xs text-gray-400'>No subtasks.</p>
@@ -154,7 +182,6 @@ const SubTasksView = () => {
                   className='bg-blue-50 border border-blue-100 rounded-xl px-3 py-2'
                 >
                   {editingSub?._id === sub._id ? (
-                    /* ── Edit mode ── */
                     <div className='flex flex-col gap-2'>
                       <input
                         type='text'
@@ -179,6 +206,12 @@ const SubTasksView = () => {
                           <option key={s}>{s}</option>
                         ))}
                       </select>
+                      {editData.status === 'Done' &&
+                        editingSub?.status !== 'Done' && (
+                          <p className='text-xs text-green-600 font-medium'>
+                            ✦ Completing this subtask will award +3 XP
+                          </p>
+                        )}
                       <div className='flex gap-2'>
                         <button
                           onClick={handleEditSave}
@@ -196,7 +229,6 @@ const SubTasksView = () => {
                       </div>
                     </div>
                   ) : (
-                    /* ── View mode ── */
                     <div className='flex items-center justify-between gap-2'>
                       <div className='flex items-center gap-2 flex-1 min-w-0'>
                         <span className='text-sm text-gray-700 truncate'>
@@ -229,7 +261,6 @@ const SubTasksView = () => {
               ))}
             </div>
 
-            {/* Add subtask inline */}
             <div className='mt-3 border-t border-blue-100 pt-3'>
               {addingForTask === task._id ? (
                 <div className='flex gap-2'>

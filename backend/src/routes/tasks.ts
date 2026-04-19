@@ -1,6 +1,8 @@
 import { Router, Request, Response } from 'express';
 import protect from '../middleware/auth';
 import Task from '../models/Task';
+import { addXP } from '../services/xpService';
+import { logEvent } from '../services/logService';
 
 const router = Router();
 
@@ -31,12 +33,51 @@ router.get(
   },
 );
 
-// UPDATE TASK
-router.put('/:id', protect, async (req, res: Response) => {
+// UPDATE TASK (generic — title, deadline, status — no XP triggered)
+router.put('/:id', protect, async (req: any, res: Response) => {
   try {
     const task = await Task.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
+      returnDocument: 'after',
     });
+    res.json(task);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+});
+
+// COMPLETE TASK — marks Done AND awards XP in one call
+// Also accepts optional title/deadline in body so frontend only needs one request
+router.put('/:id/complete', protect, async (req: any, res: Response) => {
+  try {
+    const task = await Task.findById(req.params.id);
+    if (!task) return res.status(404).json({ message: 'Task not found' });
+
+    const alreadyDone = task.status === 'Done';
+
+    // Apply any field updates sent alongside (title, deadline)
+    if (req.body.title) task.title = req.body.title;
+    if (req.body.deadline) task.deadline = req.body.deadline;
+    task.status = 'Done';
+    await task.save();
+
+    // Only award XP if it wasn't already Done
+    if (!alreadyDone) {
+      const recipientId = task.assignedTo
+        ? task.assignedTo.toString()
+        : req.user._id.toString();
+
+      const xpAmount = task.xpReward && task.xpReward > 0 ? task.xpReward : 5;
+      await addXP(recipientId, xpAmount);
+
+      if (task.project) {
+        await logEvent(
+          task.project.toString(),
+          `Task completed: "${task.title}" (+${xpAmount} XP)`,
+          recipientId,
+        );
+      }
+    }
+
     res.json(task);
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });
