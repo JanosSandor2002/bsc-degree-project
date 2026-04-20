@@ -3,7 +3,7 @@ import type { Dispatch } from 'react';
 
 const API_URL = 'http://localhost:5000/api';
 
-// AUTH ACTIONS
+// ── AUTH ─────────────────────────────────────────────────────────────────────
 
 export const registerUser = async (dispatch: Dispatch<any>, data: any) => {
   dispatch({ type: 'SET_LOADING', payload: true });
@@ -35,7 +35,7 @@ export const loginUser = async (dispatch: Dispatch<any>, data: any) => {
   }
 };
 
-// PROJECT ACTIONS
+// ── PROJECTS ─────────────────────────────────────────────────────────────────
 
 export const fetchProjects = async (dispatch: Dispatch<any>, token: string) => {
   dispatch({ type: 'SET_LOADING', payload: true });
@@ -72,7 +72,7 @@ export const addProject = async (
   }
 };
 
-// TASK ACTIONS
+// ── TASKS ─────────────────────────────────────────────────────────────────────
 
 export const fetchTasks = async (
   dispatch: Dispatch<any>,
@@ -110,7 +110,7 @@ export const addTask = async (
   }
 };
 
-// SUBTASK ACTIONS
+// ── SUBTASKS ──────────────────────────────────────────────────────────────────
 
 export const fetchSubtasks = async (
   dispatch: Dispatch<any>,
@@ -121,7 +121,8 @@ export const fetchSubtasks = async (
     const res = await axios.get(`${API_URL}/subtasks/task/${taskId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    dispatch({ type: 'SET_SUBTASKS', payload: res.data });
+    // Use APPEND_SUBTASKS so multiple task fetches don't overwrite each other
+    dispatch({ type: 'APPEND_SUBTASKS', payload: res.data });
   } catch (err: any) {
     dispatch({
       type: 'SET_ERROR',
@@ -148,7 +149,7 @@ export const addSubtask = async (
   }
 };
 
-//Fetch sprints
+// ── SPRINTS ───────────────────────────────────────────────────────────────────
 
 export const fetchSprints = async (
   dispatch: Dispatch<any>,
@@ -168,8 +169,6 @@ export const fetchSprints = async (
   }
 };
 
-//create sprints
-
 export const createSprint = async (
   dispatch: Dispatch<any>,
   token: string,
@@ -185,7 +184,7 @@ export const createSprint = async (
       `${API_URL}/sprints`,
       {
         name: sprint.name,
-        project: sprint.projectId, // ← projectId → project, mert a modell "project"-et vár
+        project: sprint.projectId,
         startDate: sprint.startDate,
         endDate: sprint.endDate,
       },
@@ -199,8 +198,6 @@ export const createSprint = async (
     });
   }
 };
-
-//add task to sprint
 
 export const assignTaskToSprint = async (
   dispatch: Dispatch<any>,
@@ -223,8 +220,6 @@ export const assignTaskToSprint = async (
   }
 };
 
-//delete sprint
-
 export const deleteSprint = async (
   dispatch: Dispatch<any>,
   token: string,
@@ -240,5 +235,33 @@ export const deleteSprint = async (
       type: 'SET_ERROR',
       payload: err.response?.data?.message || err.message,
     });
+  }
+};
+
+// ── USER ──────────────────────────────────────────────────────────────────────
+
+export const updateUser = async (
+  dispatch: Dispatch<any>,
+  token: string,
+  data: { username?: string; email?: string; password?: string },
+) => {
+  dispatch({ type: 'SET_LOADING', payload: true });
+  try {
+    const res = await axios.put(`${API_URL}/users/me`, data, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    dispatch({ type: 'UPDATE_USER', payload: res.data });
+    return { success: true };
+  } catch (err: any) {
+    dispatch({
+      type: 'SET_ERROR',
+      payload: err.response?.data?.message || err.message,
+    });
+    return {
+      success: false,
+      message: err.response?.data?.message || err.message,
+    };
+  } finally {
+    dispatch({ type: 'SET_LOADING', payload: false });
   }
 };

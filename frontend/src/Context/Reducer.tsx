@@ -23,6 +23,7 @@ type Action =
   | { type: 'UPDATE_TASK'; payload: any }
   | { type: 'DELETE_TASK'; payload: string }
   | { type: 'SET_SUBTASKS'; payload: any[] }
+  | { type: 'APPEND_SUBTASKS'; payload: any[] }
   | { type: 'ADD_SUBTASK'; payload: any }
   | { type: 'UPDATE_SUBTASK'; payload: any }
   | { type: 'DELETE_SUBTASK'; payload: string }
@@ -32,7 +33,8 @@ type Action =
   | { type: 'SET_SPRINTS'; payload: any[] }
   | { type: 'SET_SELECTED_SPRINT'; payload: any }
   | { type: 'ADD_SPRINT'; payload: any }
-  | { type: 'DELETE_SPRINT'; payload: string };
+  | { type: 'DELETE_SPRINT'; payload: string }
+  | { type: 'UPDATE_USER'; payload: any };
 
 export const AppReducer = (state: typeof initialState, action: Action) => {
   switch (action.type) {
@@ -78,6 +80,18 @@ export const AppReducer = (state: typeof initialState, action: Action) => {
       };
     case 'SET_SUBTASKS':
       return { ...state, subtasks: action.payload };
+    // APPEND merges new subtasks without wiping existing ones from other tasks
+    case 'APPEND_SUBTASKS': {
+      const incoming = action.payload as any[];
+      if (incoming.length === 0) return state;
+      const taskId = incoming[0].task?._id ?? incoming[0].task;
+      // Remove any old subtasks belonging to this task, then add the fresh ones
+      const filtered = state.subtasks.filter((s: any) => {
+        const sTaskId = typeof s.task === 'string' ? s.task : s.task?._id;
+        return sTaskId !== taskId;
+      });
+      return { ...state, subtasks: [...filtered, ...incoming] };
+    }
     case 'ADD_SUBTASK':
       return { ...state, subtasks: [...state.subtasks, action.payload] };
     case 'UPDATE_SUBTASK':
@@ -109,6 +123,8 @@ export const AppReducer = (state: typeof initialState, action: Action) => {
         ...state,
         sprints: state.sprints.filter((s) => s._id !== action.payload),
       };
+    case 'UPDATE_USER':
+      return { ...state, user: { ...state.user, ...action.payload } };
     default:
       return state;
   }
