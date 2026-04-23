@@ -1,33 +1,109 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
+import { Colors } from '../../constants/Colors';
+import { Text, View } from 'react-native';
 
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+function TabIcon({ emoji, focused }: { emoji: string; focused: boolean }) {
+  return (
+    <View
+      style={{
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 30,
+        height: 30,
+        borderRadius: 9,
+        backgroundColor: focused ? 'rgba(255,255,255,0.18)' : 'transparent',
+      }}
+    >
+      <Text style={{ fontSize: 16 }}>{emoji}</Text>
+    </View>
+  );
+}
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-        tabBarButton: HapticTab,
-      }}>
+        tabBarStyle: {
+          backgroundColor: Colors.primary,
+          borderTopWidth: 0,
+          height: 64,
+          paddingBottom: 8,
+          paddingTop: 6,
+        },
+        tabBarActiveTintColor: Colors.accentLight,
+        tabBarInactiveTintColor: '#4e78a8',
+        tabBarLabelStyle: { fontSize: 9, fontWeight: '600' },
+      }}
+    >
       <Tabs.Screen
-        name="index"
+        name='index'
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ focused }) => <TabIcon emoji='🏠' focused={focused} />,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name='tasks'
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Tasks',
+          tabBarIcon: ({ focused }) => <TabIcon emoji='✓' focused={focused} />,
+        }}
+      />
+      <Tabs.Screen
+        name='subtasks'
+        options={{
+          title: 'Subtasks',
+          tabBarIcon: ({ focused }) => <TabIcon emoji='❐' focused={focused} />,
+        }}
+      />
+      <Tabs.Screen
+        name='kanban'
+        options={{
+          title: 'Kanban',
+          tabBarIcon: ({ focused }) => <TabIcon emoji='⠿' focused={focused} />,
+        }}
+      />
+      <Tabs.Screen
+        name='scrum'
+        options={{
+          title: 'Scrum',
+          tabBarIcon: ({ focused }) => <TabIcon emoji='⟳' focused={focused} />,
+        }}
+      />
+      <Tabs.Screen
+        name='plan'
+        options={{
+          title: 'Plan',
+          tabBarIcon: ({ focused }) => <TabIcon emoji='▦' focused={focused} />,
+        }}
+      />
+      <Tabs.Screen
+        name='gamification'
+        options={{
+          title: 'XP',
+          tabBarIcon: ({ focused }) => <TabIcon emoji='✦' focused={focused} />,
+        }}
+      />
+      <Tabs.Screen
+        name='mails'
+        options={{
+          title: 'Mails',
+          tabBarIcon: ({ focused }) => <TabIcon emoji='✉' focused={focused} />,
+        }}
+      />
+      <Tabs.Screen
+        name='log'
+        options={{
+          title: 'Log',
+          tabBarIcon: ({ focused }) => <TabIcon emoji='◎' focused={focused} />,
+        }}
+      />
+      <Tabs.Screen
+        name='account'
+        options={{
+          title: 'Account',
+          tabBarIcon: ({ focused }) => <TabIcon emoji='👤' focused={focused} />,
         }}
       />
     </Tabs>
