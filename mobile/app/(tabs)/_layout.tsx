@@ -1,4 +1,4 @@
-import { Tabs, useRouter, useSegments } from 'expo-router';
+import { Tabs } from 'expo-router';
 import { Colors } from '../../constants/Colors';
 import {
   View,
@@ -8,21 +8,136 @@ import {
   StyleSheet,
   Platform,
 } from 'react-native';
+import {
+  Ionicons,
+  MaterialCommunityIcons,
+  FontAwesome5,
+} from '@expo/vector-icons';
 
 // ── Tab definitions ────────────────────────────────────────────────────────────
 
-const TABS = [
-  { name: 'index', label: 'Home', icon: '⌂' },
-  { name: 'tasks', label: 'Tasks', icon: '✓' },
-  { name: 'subtasks', label: 'Subtasks', icon: '❐' },
-  { name: 'kanban', label: 'Kanban', icon: '⊞' },
-  { name: 'scrum', label: 'Scrum', icon: '⟳' },
-  { name: 'plan', label: 'Plan', icon: '▦' },
-  { name: 'gamification', label: 'XP', icon: '✦' },
-  { name: 'mails', label: 'Mails', icon: '✉' },
-  { name: 'log', label: 'Log', icon: '◎' },
-  { name: 'account', label: 'Account', icon: '◯' },
-] as const;
+// Ikonok megegyeznek a frontend react-icons választásával:
+// AiFillHome       → Ionicons home
+// BsFillKanbanFill → MaterialCommunityIcons view-column
+// PiProjectorScreen→ Ionicons stats-chart
+// FaGamepad        → MaterialCommunityIcons gamepad-variant
+// TbBrandWikipedia → FontAwesome5 wikipedia-w (itt: book-open)
+// + extra tabek a mobilon
+
+type TabDef = {
+  name: string;
+  label: string;
+  icon: (focused: boolean) => React.ReactNode;
+};
+
+const TABS: TabDef[] = [
+  {
+    name: 'index',
+    label: 'Home',
+    icon: (focused) => (
+      <Ionicons name='home' size={26} color={focused ? '#ffffff' : '#4e78a8'} />
+    ),
+  },
+  {
+    name: 'tasks',
+    label: 'Tasks',
+    icon: (focused) => (
+      <Ionicons
+        name='checkmark-circle-outline'
+        size={26}
+        color={focused ? '#ffffff' : '#4e78a8'}
+      />
+    ),
+  },
+  {
+    name: 'subtasks',
+    label: 'Subtasks',
+    icon: (focused) => (
+      <MaterialCommunityIcons
+        name='checkbox-multiple-outline'
+        size={26}
+        color={focused ? '#ffffff' : '#4e78a8'}
+      />
+    ),
+  },
+  {
+    name: 'kanban',
+    label: 'Kanban',
+    icon: (focused) => (
+      <MaterialCommunityIcons
+        name='view-column-outline'
+        size={26}
+        color={focused ? '#ffffff' : '#4e78a8'}
+      />
+    ),
+  },
+  {
+    name: 'scrum',
+    label: 'Scrum',
+    icon: (focused) => (
+      <Ionicons
+        name='stats-chart-outline'
+        size={26}
+        color={focused ? '#ffffff' : '#4e78a8'}
+      />
+    ),
+  },
+  {
+    name: 'plan',
+    label: 'Plan',
+    icon: (focused) => (
+      <Ionicons
+        name='grid-outline'
+        size={26}
+        color={focused ? '#ffffff' : '#4e78a8'}
+      />
+    ),
+  },
+  {
+    name: 'gamification',
+    label: 'XP',
+    icon: (focused) => (
+      <MaterialCommunityIcons
+        name='gamepad-variant-outline'
+        size={26}
+        color={focused ? '#ffffff' : '#4e78a8'}
+      />
+    ),
+  },
+  {
+    name: 'mails',
+    label: 'Mails',
+    icon: (focused) => (
+      <Ionicons
+        name='mail-outline'
+        size={26}
+        color={focused ? '#ffffff' : '#4e78a8'}
+      />
+    ),
+  },
+  {
+    name: 'log',
+    label: 'Log',
+    icon: (focused) => (
+      <Ionicons
+        name='time-outline'
+        size={26}
+        color={focused ? '#ffffff' : '#4e78a8'}
+      />
+    ),
+  },
+  {
+    name: 'account',
+    label: 'Account',
+    icon: (focused) => (
+      <Ionicons
+        name='person-outline'
+        size={26}
+        color={focused ? '#ffffff' : '#4e78a8'}
+      />
+    ),
+  },
+];
 
 // ── Custom scrollable tab bar ──────────────────────────────────────────────────
 
@@ -45,9 +160,7 @@ function CustomTabBar({ state, navigation }: { state: any; navigation: any }) {
               onPress={() => navigation.navigate(tab.name)}
               activeOpacity={0.75}
             >
-              <Text style={[styles.tabIcon, focused && styles.tabIconActive]}>
-                {tab.icon}
-              </Text>
+              {tab.icon(focused)}
               <Text style={[styles.tabLabel, focused && styles.tabLabelActive]}>
                 {tab.label}
               </Text>
@@ -115,14 +228,6 @@ const styles = StyleSheet.create({
   },
   tabItemActive: {
     backgroundColor: 'rgba(255,255,255,0.15)',
-  },
-  tabIcon: {
-    fontSize: 24,
-    color: '#4e78a8',
-    lineHeight: 28,
-  },
-  tabIconActive: {
-    color: '#ffffff',
   },
   tabLabel: {
     fontSize: 10,
