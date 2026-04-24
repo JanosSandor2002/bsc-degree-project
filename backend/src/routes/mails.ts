@@ -91,8 +91,13 @@ router.post('/send', protect, async (req: AuthRequest, res: Response) => {
 // PUT mark as read
 router.put('/:id/read', protect, async (req: AuthRequest, res: Response) => {
   try {
-    const mail = await Mail.findOne({ _id: req.params.id, to: req.user!._id });
+    const mail = await Mail.findById(req.params.id);
     if (!mail) return res.status(404).json({ message: 'Mail not found' });
+
+    if (mail.to.toString() !== req.user!._id.toString()) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+
     mail.read = true;
     await mail.save();
     res.json(mail);
