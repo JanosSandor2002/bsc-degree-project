@@ -37,6 +37,27 @@ export const loginUser = async (dispatch: Dispatch<any>, data: any) => {
   } finally {
     dispatch({ type: 'SET_LOADING', payload: false });
   }
+  /*const json2 = {
+    user: {
+      _id: '69c29478077cb7ef7c40963b',
+      username: 'admin',
+      email: 'admin@gmail.com',
+      password: '$2b$10$9yCV2PHyFOItmbDJYuHu.eSGwB7/koU5lvATGpCOGv5Gy5XwqstbO',
+      role: 'user',
+      xp: 0,
+      level: 1,
+      prestige: 0,
+      verified: false,
+      avatar: '',
+      createdAt: '2026-03-24T13:41:12.124Z',
+      updatedAt: '2026-03-24T13:41:12.124Z',
+      __v: 0,
+    },
+    token:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YzI5NDc4MDc3Y2I3ZWY3YzQwOTYzYiIsImlhdCI6MTc3NTQwMzM3MiwiZXhwIjoxNzc2MDA4MTcyfQ.UJk3JTYsGTSqh2k-RyveEA5_aiEo2QsyowmMpii3WME',
+  };
+  dispatch({ type: 'SET_USER', payload: json2 });
+  dispatch({ type: 'SET_LOADING', payload: false });*/
 };
 
 // ── PROJECTS ──────────────────────────────────────────────────────────────────
@@ -57,11 +78,18 @@ export const fetchProjects = async (dispatch: Dispatch<any>, token: string) => {
   }
 };
 
-export const addProject = async (dispatch: Dispatch<any>, token: string, project: any) => {
+export const addProject = async (
+  dispatch: Dispatch<any>,
+  token: string,
+  project: any,
+) => {
   try {
     const res = await fetch(`${API_URL}/projects`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(project),
     });
     const json = await res.json();
@@ -72,7 +100,11 @@ export const addProject = async (dispatch: Dispatch<any>, token: string, project
   }
 };
 
-export const deleteProject = async (dispatch: Dispatch<any>, token: string, projectId: string) => {
+export const deleteProject = async (
+  dispatch: Dispatch<any>,
+  token: string,
+  projectId: string,
+) => {
   try {
     const res = await fetch(`${API_URL}/projects/${projectId}`, {
       method: 'DELETE',
@@ -87,7 +119,11 @@ export const deleteProject = async (dispatch: Dispatch<any>, token: string, proj
 
 // ── TASKS ─────────────────────────────────────────────────────────────────────
 
-export const fetchTasks = async (dispatch: Dispatch<any>, token: string, projectId: string) => {
+export const fetchTasks = async (
+  dispatch: Dispatch<any>,
+  token: string,
+  projectId: string,
+) => {
   try {
     const res = await fetch(`${API_URL}/tasks/project/${projectId}`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -100,11 +136,18 @@ export const fetchTasks = async (dispatch: Dispatch<any>, token: string, project
   }
 };
 
-export const addTask = async (dispatch: Dispatch<any>, token: string, task: any) => {
+export const addTask = async (
+  dispatch: Dispatch<any>,
+  token: string,
+  task: any,
+) => {
   try {
     const res = await fetch(`${API_URL}/tasks`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(task),
     });
     const json = await res.json();
@@ -115,11 +158,19 @@ export const addTask = async (dispatch: Dispatch<any>, token: string, task: any)
   }
 };
 
-export const updateTask = async (dispatch: Dispatch<any>, token: string, taskId: string, data: any) => {
+export const updateTask = async (
+  dispatch: Dispatch<any>,
+  token: string,
+  taskId: string,
+  data: any,
+) => {
   try {
     const res = await fetch(`${API_URL}/tasks/${taskId}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(data),
     });
     const json = await res.json();
@@ -132,11 +183,19 @@ export const updateTask = async (dispatch: Dispatch<any>, token: string, taskId:
   }
 };
 
-export const completeTask = async (dispatch: Dispatch<any>, token: string, taskId: string, data?: any) => {
+export const completeTask = async (
+  dispatch: Dispatch<any>,
+  token: string,
+  taskId: string,
+  data?: any,
+) => {
   try {
     const res = await fetch(`${API_URL}/tasks/${taskId}/complete`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(data || {}),
     });
     const json = await res.json();
@@ -149,7 +208,11 @@ export const completeTask = async (dispatch: Dispatch<any>, token: string, taskI
   }
 };
 
-export const deleteTask = async (dispatch: Dispatch<any>, token: string, taskId: string) => {
+export const deleteTask = async (
+  dispatch: Dispatch<any>,
+  token: string,
+  taskId: string,
+) => {
   try {
     const res = await fetch(`${API_URL}/tasks/${taskId}`, {
       method: 'DELETE',
@@ -164,7 +227,11 @@ export const deleteTask = async (dispatch: Dispatch<any>, token: string, taskId:
 
 // ── SUBTASKS ──────────────────────────────────────────────────────────────────
 
-export const fetchSubtasks = async (dispatch: Dispatch<any>, token: string, taskId: string) => {
+export const fetchSubtasks = async (
+  dispatch: Dispatch<any>,
+  token: string,
+  taskId: string,
+) => {
   try {
     const res = await fetch(`${API_URL}/subtasks/task/${taskId}`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -177,11 +244,18 @@ export const fetchSubtasks = async (dispatch: Dispatch<any>, token: string, task
   }
 };
 
-export const addSubtask = async (dispatch: Dispatch<any>, token: string, subtask: any) => {
+export const addSubtask = async (
+  dispatch: Dispatch<any>,
+  token: string,
+  subtask: any,
+) => {
   try {
     const res = await fetch(`${API_URL}/subtasks`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(subtask),
     });
     const json = await res.json();
@@ -194,11 +268,19 @@ export const addSubtask = async (dispatch: Dispatch<any>, token: string, subtask
   }
 };
 
-export const updateSubtask = async (dispatch: Dispatch<any>, token: string, subtaskId: string, data: any) => {
+export const updateSubtask = async (
+  dispatch: Dispatch<any>,
+  token: string,
+  subtaskId: string,
+  data: any,
+) => {
   try {
     const res = await fetch(`${API_URL}/subtasks/${subtaskId}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(data),
     });
     const json = await res.json();
@@ -211,11 +293,19 @@ export const updateSubtask = async (dispatch: Dispatch<any>, token: string, subt
   }
 };
 
-export const completeSubtask = async (dispatch: Dispatch<any>, token: string, subtaskId: string, data?: any) => {
+export const completeSubtask = async (
+  dispatch: Dispatch<any>,
+  token: string,
+  subtaskId: string,
+  data?: any,
+) => {
   try {
     const res = await fetch(`${API_URL}/subtasks/${subtaskId}/complete`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(data || {}),
     });
     const json = await res.json();
@@ -228,7 +318,11 @@ export const completeSubtask = async (dispatch: Dispatch<any>, token: string, su
   }
 };
 
-export const deleteSubtask = async (dispatch: Dispatch<any>, token: string, subtaskId: string) => {
+export const deleteSubtask = async (
+  dispatch: Dispatch<any>,
+  token: string,
+  subtaskId: string,
+) => {
   try {
     const res = await fetch(`${API_URL}/subtasks/${subtaskId}`, {
       method: 'DELETE',
@@ -243,7 +337,11 @@ export const deleteSubtask = async (dispatch: Dispatch<any>, token: string, subt
 
 // ── SPRINTS ───────────────────────────────────────────────────────────────────
 
-export const fetchSprints = async (dispatch: Dispatch<any>, token: string, projectId: string) => {
+export const fetchSprints = async (
+  dispatch: Dispatch<any>,
+  token: string,
+  projectId: string,
+) => {
   try {
     const res = await fetch(`${API_URL}/sprints/project/${projectId}`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -256,12 +354,24 @@ export const fetchSprints = async (dispatch: Dispatch<any>, token: string, proje
   }
 };
 
-export const createSprint = async (dispatch: Dispatch<any>, token: string, sprint: any) => {
+export const createSprint = async (
+  dispatch: Dispatch<any>,
+  token: string,
+  sprint: any,
+) => {
   try {
     const res = await fetch(`${API_URL}/sprints`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ name: sprint.name, project: sprint.projectId, startDate: sprint.startDate, endDate: sprint.endDate }),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        name: sprint.name,
+        project: sprint.projectId,
+        startDate: sprint.startDate,
+        endDate: sprint.endDate,
+      }),
     });
     const json = await res.json();
     if (!res.ok) throw new Error(json.message);
@@ -271,7 +381,12 @@ export const createSprint = async (dispatch: Dispatch<any>, token: string, sprin
   }
 };
 
-export const assignTaskToSprint = async (dispatch: Dispatch<any>, token: string, sprintId: string, taskId: string) => {
+export const assignTaskToSprint = async (
+  dispatch: Dispatch<any>,
+  token: string,
+  sprintId: string,
+  taskId: string,
+) => {
   try {
     const res = await fetch(`${API_URL}/sprints/${sprintId}/tasks/${taskId}`, {
       method: 'POST',
@@ -285,7 +400,11 @@ export const assignTaskToSprint = async (dispatch: Dispatch<any>, token: string,
   }
 };
 
-export const deleteSprint = async (dispatch: Dispatch<any>, token: string, sprintId: string) => {
+export const deleteSprint = async (
+  dispatch: Dispatch<any>,
+  token: string,
+  sprintId: string,
+) => {
   try {
     const res = await fetch(`${API_URL}/sprints/${sprintId}`, {
       method: 'DELETE',
@@ -300,12 +419,19 @@ export const deleteSprint = async (dispatch: Dispatch<any>, token: string, sprin
 
 // ── USER ──────────────────────────────────────────────────────────────────────
 
-export const updateUser = async (dispatch: Dispatch<any>, token: string, data: any) => {
+export const updateUser = async (
+  dispatch: Dispatch<any>,
+  token: string,
+  data: any,
+) => {
   dispatch({ type: 'SET_LOADING', payload: true });
   try {
     const res = await fetch(`${API_URL}/users/me`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(data),
     });
     const json = await res.json();
@@ -341,7 +467,10 @@ export const fetchSent = async (token: string) => {
 export const sendMail = async (token: string, data: any) => {
   const res = await fetch(`${API_URL}/mails/send`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify(data),
   });
   const json = await res.json();
@@ -385,7 +514,11 @@ export const fetchGithubRepos = async (githubToken: string) => {
   return json;
 };
 
-export const fetchGithubIssues = async (githubToken: string, owner: string, repo: string) => {
+export const fetchGithubIssues = async (
+  githubToken: string,
+  owner: string,
+  repo: string,
+) => {
   const res = await fetch(`${API_URL}/github/${owner}/${repo}/issues`, {
     headers: { Authorization: `Bearer ${githubToken}` },
   });
@@ -396,7 +529,10 @@ export const fetchGithubIssues = async (githubToken: string, owner: string, repo
 
 // ── GAMIFICATION ──────────────────────────────────────────────────────────────
 
-export const fetchProjectContributors = async (token: string, projectId: string) => {
+export const fetchProjectContributors = async (
+  token: string,
+  projectId: string,
+) => {
   const res = await fetch(`${API_URL}/projects/${projectId}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
