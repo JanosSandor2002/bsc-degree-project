@@ -5,7 +5,8 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "setup": "cd frontend && npm install && cd ../backend && npm install"
+    "setup": "cd frontend && npm install && cd ../backend && npm install && cd ../mobile && npm install",
+    "reset": "rm -rf frontend/node_modules frontend/package-lock.json backend/node_modules backend/package-lock.json mobile/node_modules mobile/package-lock.json"
   },
   "repository": {
     "type": "git",
