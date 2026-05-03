@@ -1,7 +1,62 @@
 \Chapter{Összefoglalás}
 
-Hasonló szerepe van, mint a bevezetésnek.
-Itt már múltidőben lehet beszélni.
-A szerző saját meglátása szerint kell összegezni és értékelni a dolgozat fontosabb eredményeit.
-Meg lehet benne említeni, hogy mi az ami jobban, mi az ami kevésbé jobban sikerült a tervezettnél.
-El lehet benne mondani, hogy milyen további tervek, fejlesztési lehetőségek vannak még a témával kapcsolatban.
+% ─────────────────────────────────────────────────────────────────────────────
+\Section{A munka összegzése}
+% ─────────────────────────────────────────────────────────────────────────────
+
+A dolgozat egy modern, háromplatformos projektmenedzsment rendszer, az Acxor teljes körű tervezését és implementációját mutatta be. A rendszer egy közös Node.js/Express backend API köré épül, amelyhez egy React alapú webes alkalmazás és egy React Native/Expo alapú mobil alkalmazás csatlakozik kliensként. Mindhárom platform TypeScript-ben íródott, ami egységes kódbázis-szemléletet és típusbiztonságot biztosít az egész rendszerben.
+
+A bevezetőben megfogalmazott alapproblémára -- miszerint a meglévő projektmenedzsment eszközök vagy túlságosan komplexek, vagy túlságosan egyszerűek, és ritkán párosítják a professzionális funkcionalitást motivációs elemekkel -- az Acxor egy letisztult, vizuálisan koherens és gamifikációs elemekkel dúsított megoldást kínál. A koncepciós fejezetben elvégzett piackutatás alapján az Acxor a Trello vizuális egyszerűségét, a JIRA sprint-alapú munkaszervezési képességét és a rendszerek által általában elhanyagolt motivációs réteget ötvözi egyetlen platformban.
+
+A tervezési fejezetben részletesen bemutatásra kerültek az architektúrális döntések: a háromrétegű kliens-szerver modell, a MongoDB adatbázis-séma és a hét Mongoose modell (User, Project, Task, Subtask, Sprint, Log, Mail), a RESTful API tervezési elvei és a JWT alapú hitelesítési folyamat. A felhasználói felület tervezésekor a hangsúly az egységes vizuális identitáson és a három platform közötti konzisztens élményen volt.
+
+Az implementációs fejezetben a legfontosabb megvalósítási részletek kerültek terítékre: a backend route-ok és service-ek, az XP és szintlépési algoritmus, a Context API alapú állapotkezelés, a nézetek és komponensek felépítése, valamint a GitHub integrációs megoldás. A mobil alkalmazásnál külön figyelmet kapott az egyedi tab bar megoldás és a fizikai eszközön való fejlesztést lehetővé tevő dinamikus API URL konfiguráció.
+
+A tesztelési fejezetben összesen 86 teszteset kerül bemutatásra: 61 backend integrációs teszt (Jest + Supertest + mongodb-memory-server) és 25 frontend unit teszt (Vitest + React Testing Library). A tesztek lefedik a hitelesítési logikát, a projekt és feladat CRUD műveleteket, az XP service szintlépési algoritmusát, a GitHub service adat-transzformációját és a legfontosabb React komponensek renderelési viselkedését.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\Section{Elért eredmények}
+% ─────────────────────────────────────────────────────────────────────────────
+
+A fejlesztés során az alábbi főbb eredmények születtek:
+
+\begin{itemize}
+  \item \textbf{Teljes körű REST API}: Kilenc végpontcsoport (auth, projects, tasks, subtasks, sprints, logs, users, mails, github) mindegyike authentikált hozzáférést biztosít, és következetesen kezeli a hibákat.
+  \item \textbf{Gamifikációs rendszer}: A befejezett feladatokért és alfeladatokért XP jár, amelynek mértéke szintlépéskor csökkenti a fennmaradó értéket, és automatikusan növeli a szintet. A prestige rendszer tovább mélyíti a hosszú távú motivációt.
+  \item \textbf{Webes alkalmazás}: Kanban board, Scrum sprint kezelés, Plan nézet projekt-szintű statisztikákkal, alfeladat kezelés, aktivitásnapló, belső levelezési rendszer, gamifikáció rangsor, wiki és fiókkezelés -- mind egyetlen oldalas, Context API alapú alkalmazásban.
+  \item \textbf{Mobil alkalmazás}: Az összes fő funkció elérhető Expo Router alapú, tíz tapos navigációval rendelkező React Native alkalmazásban, fizikai Android és iOS eszközön egyaránt.
+  \item \textbf{GitHub integráció}: Repozitóriumok listázása és issue-k importálása feladatokként, szerver oldalon proxyzva a GitHub API-n keresztül.
+  \item \textbf{Tesztlefedettség}: 86 automatizált teszteset, amelyek a rendszer kritikus üzleti logikáját és API viselkedését verifikálják.
+\end{itemize}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\Section{Jövőbeli fejlesztési lehetőségek}
+% ─────────────────────────────────────────────────────────────────────────────
+
+A rendszer számos irányban tovább fejleszthető. A legfontosabb jövőbeli lehetőségek az alábbiak:
+
+\textbf{Drag-and-drop a Kanban boardon}: A jelenlegi implementáció statikus kártyákat jelenít meg. A feladatok húzással való áthelyezése oszlopok között -- és ezzel egyidejűleg az állapot módosítása -- jelentősen javítaná a felhasználói élményt. Ez webes oldalon például a \texttt{@dnd-kit} könyvtárral valósítható meg.
+
+\textbf{Valós idejű frissítések}: A jelenlegi rendszer lekérdezés alapú: az adatok akkor frissülnek, ha a felhasználó navigál vagy manuálisan frissít. WebSocket vagy Server-Sent Events alapú megoldással (pl. Socket.io) a csapat tagjai valós időben láthatnák egymás változtatásait.
+
+\textbf{E-mail értesítések}: Feladat hozzárendeléskor vagy határidő közeledésekor automatikus e-mail értesítés küldése (pl. Nodemailer és egy SMTP szolgáltató segítségével).
+
+\textbf{Sprint törlés és feladat konzisztencia}: Jelenleg sprint törlésekor a hozzá rendelt feladatok \texttt{sprint} mezője nem törlődik automatikusan a backendben, ami konzisztencia-problémát okozhat. Ezt egy MongoDB aggregációs pipeline-nal vagy Mongoose middleware-rel lehetne kezelni.
+
+\textbf{Szerepkör-alapú jogosultságkezelés}: A jelenlegi rendszer megkülönböztet adminisztrátor és közreműködő szerepköröket, de a végrehajtási logika nem minden végponton érvényes egységesen. Egy részletesebb middleware-alapú permission réteg pontosabb hozzáférésvezérlést biztosítana.
+
+\textbf{Prestige és class badge rendszer teljes kiépítése}: A gamifikációs tervezés tartalmaz egy class badge rendszert (szintenként három osztály közül lehet választani), amelynek UI-ja elkészült, de a mögötte lévő adatmodell (választott osztály tárolása) még nem implementált.
+
+\textbf{Tesztlefedettség bővítése}: A mail rendszer backend integrációs tesztjei, a sprint tesztek és a mobil alkalmazás komponens tesztjei mind hasznos kiegészítések lennének a jövőbeli fejlesztések során.
+
+\textbf{Swagger/OpenAPI dokumentáció}: Az API végpontok automatikus dokumentálása swagger-jsdoc vagy tsoa segítségével interaktív, böngészhető dokumentációt biztosítana a jövőbeli integrációs partnerek és fejlesztők számára.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\Section{Zárszó}
+% ─────────────────────────────────────────────────────────────────────────────
+
+Az Acxor fejlesztése megmutatta, hogy egy közepes komplexitású, háromplatformos alkalmazás megtervezése és implementálása egyetlen fejlesztőként is megvalósítható, ha a technológiai döntések jól vannak meghozva és a kódstruktúra kezdettől fogva gondosan ki van alakítva. A közös backend API, az újrafelhasznált üzleti logika és a konzisztens állapotkezelési minta lehetővé tette, hogy a három platform -- webes, mobil és szerver -- szorosan összehangoltan működjön.
+
+A dolgozat elkészítése során személyes fejlődés is tapasztalható volt: a TypeScript alkalmazása kikényszerítette a pontosabb gondolkodást az adatstruktúrák körül, az automatizált tesztelés megkövetelte a moduláris kódszervezést, a mobil fejlesztés pedig új kihívásokat hozott a navigáció, a natív UI komponensek és a fizikai eszközön való fejlesztés terén.
+
+Az Acxor jelenlegi formájában egy funkcionális, tesztelt és bővíthető alapot jelent. A jövőbeli fejlesztési lehetőségek gazdag tárháza nyitva áll, és a rendszer architektúrája ezeket a bővítményeket lehetővé teszi anélkül, hogy az alap kódbázist drasztikusan át kellene alakítani.

@@ -1,78 +1,258 @@
 \Chapter{Tervezés}
 
-Itt kezdődik a dolgozat lényegi része, úgy értve, hogy a saját munka bemutatása.
-Jellemzően ebben szerepelni szoktak blokkdiagramok, a program struktúrájával foglalkozó leírások.
-Ehhez célszerű UML ábrákat (például osztály- és szekvenciadiagramokat) használni.
+A tervezési fejezet célja az Acxor rendszer architektúrájának, adatmodelljének és felhasználói felületének részletes bemutatása. Ebben a fejezetben kerülnek ismertetésre azok a döntések, amelyek a fejlesztés irányvonalát meghatározták, beleértve a technológiai stack kiválasztását, az adatbázis-séma kialakítását, az API tervezését és a komponensstruktúrát. A tervezési fázis különösen fontos volt, hiszen a rendszernek három platformon – webes böngészőben, mobil eszközön és szerver oldalon – egyidejűleg kellett megfelelően működnie, miközben közös üzleti logikát és adatréteget használt.
 
-Amennyiben a dolgozat inkább kutatás jellegű, úgy itt lehet konkretizálni a kutatási módszertant, a kutatás tervezett lépéseit, az indoklást, hogy mit, miért és miért pont úgy érdemes csinálni, ahogyan az a későbbiekben majd részletezésre kerül.
+% ─────────────────────────────────────────────────────────────────────────────
+\Section{Rendszerarchitektúra}
+% ─────────────────────────────────────────────────────────────────────────────
 
-Ebben a fejezetben az implementáció nem kell, hogy túl nagy szerepet kapjon.
-Ez még csak a tervezési fázis.
-(Nyilván ha olyan a téma, hogy magának az implementációnak a módjával foglalkozik, adott formális nyelvet mutat be, úgy a kódpéldákat már innen sem lehet kihagyni.)
+Az Acxor rendszer három jól elkülönülő részből áll: a webes frontend alkalmazásból, a React Native alapú mobil alkalmazásból és a Node.js backend API-ból. Mindhárom rész egyetlen közös RESTful API-on keresztül kommunikál, amelyet a backend szolgáltat. Ez a megközelítés lehetővé teszi, hogy a kliens oldalak teljesen független életet éljenek, miközben ugyanazokat az adatokat, autentikációs mechanizmust és üzleti szabályokat alkalmazzák. Az architektúra tehát klasszikus kliens-szerver modellt követ, azzal a kiegészítéssel, hogy két teljesen különböző típusú kliens is ugyanahhoz a backendhez csatlakozik.
 
-\Section{Táblázatok}
-
-Táblázatokhoz a \texttt{table} környezetet ajánlott használni.
-Erre egy minta \aref{tab:minta}. táblázat.
-A hivatkozáshoz az egyedi \texttt{label} értéke konvenció szerint \texttt{tab:} prefixszel kezdődik.
-
-\begin{table}[h]
+\begin{figure}[h!]
 \centering
-\caption{Minta táblázat. A táblázat felirata a táblázat felett kell legyen!}
-\label{tab:minta}
-\begin{tabular}{l|c|c|}
-a & b & c \\
-\hline
-1 & 2 & 3 \\
-4 & 5 & 6 \\
-\hline
-\end{tabular}
-\end{table}
-
-\Section{Ábrák}
-
-Ábrákat a \texttt{figure} környezettel lehet használni.
-A használatára egy példa \aref{fig:cimer}. ábrán látható.
-Az \texttt{includegraphics} parancsba 
-Az ábrák felirata az ábra alatt kell legyen.
-Az ábrák hivatkozásához használt nevet konvenció szerint \texttt{fig:}-el célszerű kezdeni.
-
-\begin{figure}[h]
-\centering
-\includegraphics[scale=0.3]{images/me_logo.png}
-\caption{A Miskolci Egyetem címere.}
-\label{fig:cimer}
+% IDE KERÜL: Rendszerarchitektúra diagram (három réteg: Mobile App, Web App, Backend API + MongoDB)
+\fbox{\parbox{12cm}{\centering\vspace{3cm} [Rendszerarchitektúra-diagram: Web (React/Vite) $\leftrightarrow$ REST API (Node.js/Express) $\leftrightarrow$ MongoDB, Mobile (React Native/Expo) $\leftrightarrow$ REST API] \vspace{3cm}}}
+\caption{Az Acxor rendszer magas szintű architektúrája}
+\label{fig:architecture}
 \end{figure}
 
-\Section{További környezetek}
+A backend alkalmazás Express.js keretrendszeren alapul, és a következő főbb feladatokat látja el: felhasználói hitelesítés (JWT), projektek, feladatok és alfeladatok kezelése, sprintek és napló bejegyzések tárolása, XP-alapú gamifikációs logika végrehajtása, valamint GitHub API-val való integráció. Az adatok MongoDB adatbázisban tárolódnak, amelyhez a Mongoose ODM biztosít séma-alapú hozzáférést.
 
-A matematikai témájú dolgozatokban szükség lehet tételek és bizonyításaik megadására.
-Ehhez szintén vannak készen elérhető környezetek.
+A webes frontend Vite segítségével épített React alkalmazás, amely Tailwind CSS-t használ a stílusok kialakítására. Az állapotkezelés React Context API-n és \texttt{useReducer} hookson alapul, amelyek Redux-szerű, de külső könyvtártól független megoldást nyújtanak. A mobil alkalmazás Expo keretrendszerre épített React Native projekt, amely ugyanolyan üzleti logikát követ, mint a webes változat, azonban natív mobil UI komponenseket alkalmaz.
 
-\begin{definition}
-Ez egy definíció
-\end{definition}
+% ─────────────────────────────────────────────────────────────────────────────
+\Section{Technológiai stack}
+% ─────────────────────────────────────────────────────────────────────────────
 
-\begin{lemma}
-Ez egy lemma
-\end{lemma}
+A fejlesztés során a technológiai döntések több szempontot is figyelembe vettek: a fejlesztői ökoszisztéma érettségét, a közösségi támogatottságot, a típusbiztonságot, valamint azt, hogy a választott technológiák lehetővé tegyék a gyors prototípuskészítést anélkül, hogy a kód minőségét veszélyeztetnék.
 
-\begin{theorem}
-Ez egy tétel
-\end{theorem}
+\SubSection{Backend}
 
-\begin{proof}
-Ez egy bizonyítás
-\end{proof}
+A backend Node.js és TypeScript kombinációjára épül. A TypeScript alkalmazása biztosítja a statikus típusellenőrzést, ami különösen hasznos az API végpontok bemeneti és kimeneti adatainak validálásakor. Az Express.js a defacto standard REST API keretrendszer Node.js alatt, amelynek middleware-alapú felépítése rugalmasan bővíthető. A MongoDB dokumentumorientált adatbázis jól illeszkedik a projektmenedzsment adatok természetéhez, ahol a rugalmas sémák lehetővé teszik a feladatok, alfeladatok és projektek összetett struktúráinak tárolását. A Mongoose ODM séma validációt és referencia-alapú kapcsolatokat biztosít a dokumentumok között.
 
-\begin{corollary}
-Ez egy tétel
-\end{corollary}
+A hitelesítés JSON Web Token alapon működik. Bejelentkezéskor a szerver egy 7 napos érvényességű tokent állít ki, amelyet a kliens minden API kéréshez csatol az \texttt{Authorization} fejlécben. A jelszavak bcryptjs segítségével kerülnek hashelésre, 10-es salt rounds értékkel. A védett végpontokat egy \texttt{protect} middleware védi, amely ellenőrzi a token érvényességét és azonosítja a felhasználót.
 
-\begin{remark}
-Ez egy megjegyzés
-\end{remark}
+\SubSection{Webes frontend}
 
-\begin{example}
-Ez egy példa
-\end{example}
+A webes alkalmazás React 18-ra épül, Vite fejlesztői szerverrel és build eszközzel. A Tailwind CSS utility-first megközelítése lehetővé tette a gyors és következetes stílusok kialakítását anélkül, hogy külön CSS fájlokat kellett volna karbantartani. Az állapotkezelés teljesen egyedi megoldást alkalmaz: a \texttt{GlobalContext} tárolja az alkalmazás fő adatait (felhasználó, projektek, feladatok, alfeladatok, sprintek), míg a \texttt{ViewContext} a nézetek közötti navigációért felelős. Az axios könyvtár HTTP kérések küldésére szolgál a webes kliensben.
+
+\SubSection{Mobil frontend}
+
+A mobil alkalmazás React Native alapú, Expo keretrendszerrel. Az Expo lehetővé teszi a gyors fejlesztést és az eszközön való tesztelést Expo Go segítségével. A navigáció Expo Router révén fájlrendszer-alapú, ami közelebb áll a Next.js szemléletéhez. A mobil alkalmazás a fetch API-t alkalmazza HTTP kérésekhez, és a backend ugyanazon végpontjait éri el, mint a webes kliens. Az állapotkezelés megegyezik a webes verzióéval: Context API és useReducer kombináció.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\Section{Adatbázis-tervezés}
+% ─────────────────────────────────────────────────────────────────────────────
+
+Az adatbázis tervezésekor a legfontosabb szempontok a normalizált, de praktikusan használható séma kialakítása volt. A MongoDB dokumentumorientált természete lehetővé tette a referencia-alapú kapcsolatok (ObjectId hivatkozások) és a beágyazott dokumentumok vegyítését. A rendszer összesen hét Mongoose modellt alkalmaz.
+
+\SubSection{Adatmodellek}
+
+A \texttt{User} modell tartalmazza a felhasználói adatokat, köztük a gamifikációhoz szükséges \texttt{xp}, \texttt{level} és \texttt{prestige} mezőket. A \texttt{Project} dokumentum tárolja az adminisztrátor, a közreműködők és a megtekintők referenciáit, ezáltal biztosítva az alapszintű hozzáférésvezérlést. A \texttt{Task} modell egy projektre és opcionálisan egy sprintre mutat, emellett tartalmaz \texttt{xpReward}, \texttt{deadline} és \texttt{assignedTo} mezőket. A \texttt{Subtask} modell szülő feladathoz kapcsolódik, és hasonló szerkezetet követ. A \texttt{Sprint} modell projekthez tartozik, és dátumtartománnyal rendelkezik. A \texttt{Log} modell eseménynaplózásra szolgál, projekt-szinten. A \texttt{Mail} modell a felhasználók közötti üzenetküldést teszi lehetővé.
+
+\begin{figure}[h!]
+\centering
+% IDE KERÜL: ER diagram (Entity-Relationship) az összes modellel és kapcsolataikkal
+% User -- Project (admin, contributors, viewers, members)
+% Project -- Task (project ref)
+% Task -- Subtask (task ref)
+% Project -- Sprint (project ref)
+% Task -- Sprint (sprint ref, opcionális)
+% Project -- Log (project ref)
+% User -- Log (user ref, opcionális)
+% User -- Mail (from, to ref)
+\fbox{\parbox{14cm}{\centering\vspace{5cm} [ER-diagram: User, Project, Task, Subtask, Sprint, Log, Mail entitások és kapcsolataik (ObjectId referenciák jelölve)] \vspace{5cm}}}
+\caption{Az Acxor adatbázis-séma ER-diagramja}
+\label{fig:er-diagram}
+\end{figure}
+
+Az alábbi táblázat összefoglalja a főbb modellek legfontosabb mezőit:
+
+\begin{table}[h!]
+\centering
+\small
+\begin{tabularx}{\textwidth}{|l|l|Y|}
+\hline
+\textbf{Modell} & \textbf{Mező} & \textbf{Leírás} \\
+\hline
+User & username, email, password & Alapadatok, egyedi azonosítók \\
+     & xp, level, prestige & Gamifikációs állapot \\
+     & role, verified, avatar & Jogosultság és profil \\
+\hline
+Project & name, description & Projekt azonosítása \\
+        & admin, contributors, viewers, members & Hozzáférésvezérlés (ObjectId ref.) \\
+        & createdBy & Tulajdonos \\
+\hline
+Task & title, status & Feladat neve és állapota \\
+     & project, sprint & Szülő referenciák \\
+     & assignedTo, deadline, xpReward & Hozzárendelés és jutalom \\
+\hline
+Subtask & title, status & Alfeladat neve és állapota \\
+        & task, assignedTo, xpReward & Szülő feladat és jutalom \\
+\hline
+Sprint & name, project, startDate, endDate & Sprint adatok \\
+\hline
+Log & project, message, user & Naplóbejegyzés \\
+\hline
+Mail & from, to, subject, body, read & Üzenet adatok \\
+\hline
+\end{tabularx}
+\caption{Az adatmodellek főbb mezői}
+\label{tab:models}
+\end{table}
+
+\SubSection{XP és szintlépési rendszer tervezése}
+
+A gamifikációs rendszer tervezésekor fontos szempont volt, hogy a szintlépési formula megfelelően skálázódjon: az alacsonyabb szinteken legyen könnyen teljesíthető, de magasabb szinteken és presztízs értéknél egyre több munkát igényeljen. A választott formula:
+
+\begin{equation}
+\text{XP szükséges} = 20 + (\text{következő szint} \times 10) + (\text{prestige} \times \text{szint} \times 10)
+\label{eq:xp-formula}
+\end{equation}
+
+Ez a formula biztosítja, hogy az első szintlépés viszonylag kevés XP-vel elérhető, ugyanakkor a prestige rendszer exponálisan növeli a szintenként szükséges XP mennyiséget. Az \texttt{addXP} service függvény a szintlépési logikát egy \texttt{while} ciklusban kezeli, hogy egyszerre több szinten is lehetséges legyen lépni, ha elég XP gyűlik össze. A jutalmak a következők: befejezett feladat esetén alapértelmezetten 5 XP, befejezett alfeladat esetén 3 XP jár a felelős felhasználónak.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\Section{API tervezés}
+% ─────────────────────────────────────────────────────────────────────────────
+
+Az API RESTful elveket követ: az erőforrások azonosítása URL-eken keresztül történik, az HTTP metódusok (GET, POST, PUT, DELETE) jelölik a szándékot, a válaszok JSON formátumúak, és a megfelelő HTTP státuszkódok kerülnek visszaadásra. Az összes érzékeny végponthoz Bearer token alapú hitelesítés szükséges.
+
+\SubSection{Végpont-struktúra}
+
+Az API végpontjai a következő fő útvonalcsoportokra oszthatók:
+
+\begin{itemize}
+\item \texttt{/api/auth} -- Regisztráció és bejelentkezés
+\item \texttt{/api/projects} -- Projektek CRUD műveletek
+\item \texttt{/api/tasks} -- Feladatok kezelése, befejezés XP-vel
+\item \texttt{/api/subtasks} -- Alfeladatok kezelése, befejezés XP-vel
+\item \texttt{/api/sprints} -- Sprintek és feladat hozzárendelés
+\item \texttt{/api/logs} -- Projektek aktivitásnaplója
+\item \texttt{/api/users} -- Saját profil lekérése és módosítása
+\item \texttt{/api/mails} -- Belső üzenetrendszer
+\item \texttt{/api/github} -- GitHub integrációs végpontok
+\end{itemize}
+
+\begin{figure}[h!]
+\centering
+% IDE KERÜL: Swagger UI képernyőkép a főbb API végpontokkal
+% (pl. a /api/tasks, /api/projects, /api/auth végpontok listája a Swagger dokumentációban)
+\fbox{\parbox{14cm}{\centering\vspace{4cm} [Swagger UI képernyőkép: az API végpontok listája csoportosítva (auth, projects, tasks, subtasks, sprints, logs, users, mails, github)] \vspace{4cm}}}
+\caption{Az Acxor REST API dokumentációja (Swagger UI)}
+\label{fig:swagger}
+\end{figure}
+
+\SubSection{Hitelesítési folyamat}
+
+A hitelesítés kétlépéses folyamat: regisztrációkor a szerver bcrypt segítségével hasheli a jelszót, majd JWT tokent állít ki. Bejelentkezéskor az elküldött jelszót összehasonlítja a tárolt hashsel, és sikeres egyezés esetén új tokent bocsát ki. A token tartalmazza a felhasználó azonosítóját (\texttt{id} mező), 7 napos érvényességgel. A védett middleware a tokent dekódolja, megkeresi az adatbázisban a felhasználót, és ha megtalálja, csatolja a \texttt{req.user} objektumhoz a további feldolgozáshoz.
+
+\begin{figure}[h!]
+\centering
+% IDE KERÜL: Szekvenciadiagram a bejelentkezési folyamatról
+% Client -> POST /api/auth/login -> Server -> bcrypt.compare -> JWT sign -> Client (token)
+% Következő kérés: Client -> Bearer token -> protect middleware -> User lookup -> Controller
+\fbox{\parbox{12cm}{\centering\vspace{3.5cm} [Szekvenciadiagram: bejelentkezési és hitelesítési folyamat (JWT kiállítás és validálás)] \vspace{3.5cm}}}
+\caption{A JWT alapú hitelesítési folyamat szekvenciadiagramja}
+\label{fig:auth-sequence}
+\end{figure}
+
+\SubSection{Feladat-befejezési folyamat}
+
+A feladatok befejezése nem az általános UPDATE végponton keresztül történik, hanem egy dedikált \texttt{PUT /api/tasks/:id/complete} végponton. Ez a döntés azért született, mert a befejezéshez kapcsolódó logika (XP jóváírás, naplóbejegyzés írása) komplex mellékhatásokat von maga után, amelyeket el kell különíteni az egyszerű adatmódosítástól. A befejezési végpont ellenőrzi, hogy a feladat korábban már el volt-e végezve (\texttt{alreadyDone} jelző), és csak az első befejezéskor ír jóvá XP-t. Hasonló logika érvényes az alfeladatokra is.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\Section{Use case tervezés}
+% ─────────────────────────────────────────────────────────────────────────────
+
+A rendszer főbb használati esetei a következő szereplők köré szerveződnek: vendég felhasználó (nem bejelentkezett), alapfelhasználó (bejelentkezett), és projekt adminisztrátor (a projekt létrehozója). A vendég felhasználók csak a főoldalt és a wiki oldalt tekinthetik meg. Az alapfelhasználók projekteket hozhatnak létre és kezelhetnek, feladatokat adhatnak hozzá és zárhatnak le, belső üzeneteket küldhetnek, és követhetik a gamifikációs előrehaladásukat. A projekt adminisztrátor emellett módosíthatja és törölheti a projektet, és kezelheti a közreműködők listáját.
+
+\begin{figure}[h!]
+\centering
+% IDE KERÜL: Use case diagram (UML)
+% Actors: Vendég, Felhasználó, Projekt Admin
+% Use cases: Regisztráció, Bejelentkezés, Projekt létrehozás (GitHub / kézi),
+%            Feladat hozzáadás, Feladat szerkesztés/törlés, Alfeladat kezelés,
+%            Sprint kezelés, Kanban megtekintés, Plan megtekintés,
+%            Gamifikáció megtekintés, Mail küldés, Log megtekintés,
+%            Profil szerkesztés, Projekt törlés
+\fbox{\parbox{14cm}{\centering\vspace{5cm} [UML Use Case diagram: Vendég, Felhasználó, Projekt Admin szerepkörök és a hozzájuk tartozó használati esetek] \vspace{5cm}}}
+\caption{Az Acxor rendszer use case diagramja}
+\label{fig:use-case}
+\end{figure}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\Section{Felhasználói felület tervezése}
+% ─────────────────────────────────────────────────────────────────────────────
+
+A felhasználói felület tervezésekor a vezérelv az volt, hogy a rendszer egyszerre legyen professzionális és könnyen kezelhető. Az esztétikai döntések a kék szín különböző árnyalataira épülnek, amelyek egységes vizuális identitást biztosítanak a három platform között.
+
+\SubSection{Webes alkalmazás elrendezése}
+
+A webes felület három fő területre osztható: oldalsó navigációs sáv (Sidebar), felső eszköztár (Topbar) és a fő tartalmi terület. Az oldalsó sáv öt ikont tartalmaz: főoldal, Kanban, Scrum, gamifikáció és wiki. A felső eszköztár tartalmaz nézetek közötti váltógombokat (Plan, Tasks, Subtasks, Log), egy projekt-választó legördülő menüt és egy felhasználói menüt. A tartalmi terület minden nézetben egységes „hero" fejléccel kezdődik, amely gradiens háttérrel, projekt nevével és releváns statisztikákkal indul.
+
+\begin{figure}[h!]
+\centering
+% IDE KERÜL: A webes alkalmazás képernyőképe -- főoldal vagy Kanban nézet
+% (a három részes elrendezés: Sidebar bal oldalon, Topbar felül, tartalom középen)
+\fbox{\parbox{14cm}{\centering\vspace{5cm} [Webes alkalmazás képernyőképe: főoldal vagy Kanban nézet, bemutatva a Sidebar -- Topbar -- Tartalom elrendezést] \vspace{5cm}}}
+\caption{A webes alkalmazás főoldalának elrendezése}
+\label{fig:web-layout}
+\end{figure}
+
+\SubSection{Mobil alkalmazás elrendezése}
+
+A mobil alkalmazásban a navigáció egy vízszintesen görgethető tab sávon keresztül valósul meg, amely tíz lapot tartalmaz. Minden egyes lap egy-egy főnézetet jelenít meg. A tartalom ScrollView-ban jelenik meg, SafeAreaView burkolóval. A hero fejlécek megmaradtak a webes verzióhoz képest, de a komponensek natív React Native komponensek (View, Text, TouchableOpacity, StyleSheet). A projektválasztás egy modal alapú picker segítségével történik.
+
+\begin{figure}[h!]
+\centering
+% IDE KERÜL: Mobil alkalmazás képernyőképe -- Tasks nézet vagy Home nézet
+% (a tab bar alul, a hero fejléc felül, a tartalom középen látható)
+\fbox{\parbox{6cm}{\centering\vspace{8cm} [Mobil alkalmazás képernyőképe: Tasks vagy Home nézet, tab bar és hero fejléc látható] \vspace{8cm}}}
+\caption{A mobil alkalmazás elrendezése}
+\label{fig:mobile-layout}
+\end{figure}
+
+\SubSection{Nézetek és navigáció}
+
+A webes alkalmazásban a navigáció egy egyedi \texttt{ViewContext} alapú rendszeren keresztül valósul meg, amely a hagyományos URL-alapú útválasztás helyett állapot-alapú nézetes rendszert alkalmaz. Ez azt jelenti, hogy az összes nézet egyetlen oldalon belül jelenik meg, és a \texttt{SET\_VIEW} action típusú dispatch hívás váltja azokat. Védett nézetek esetén (pl. Kanban, Tasks, Scrum) a rendszer bejelentkezési képernyőre irányítja a nem azonosított felhasználókat.
+
+A mobil alkalmazásban az Expo Router fájlrendszer-alapú navigációt alkalmaz: a \texttt{(tabs)} mappában lévő fájlok automatikusan tab lapokként kerülnek regisztrálásra. Az önálló képernyők (Sign, Create Project) Stack navigáció részeként jelennek meg.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\Section{Állapotkezelés tervezése}
+% ─────────────────────────────────────────────────────────────────────────────
+
+Az állapotkezelés mindkét kliensalkalmazásban React Context API-ra és useReducer hookra épül. Ez a megközelítés a Redux tároló-action-reducer mintáját követi, de anélkül, hogy külső könyvtár függőséget vonna be. A webes alkalmazásban két Context létezik párhuzamosan: a \texttt{GlobalContext} és a \texttt{ViewContext}.
+
+A \texttt{GlobalContext} a következő állapotmezőket tartalmazza: \texttt{user} (bejelentkezett felhasználó adatai), \texttt{token} (JWT token), \texttt{projects} (projektek listája), \texttt{tasks} (aktuális projekt feladatai), \texttt{subtasks} (feladatokhoz tartozó alfeladatok), \texttt{sprints} (sprintek), \texttt{selectedProject} (kiválasztott projekt), \texttt{loading} és \texttt{error} (kérés állapot jelzők).
+
+Az \texttt{APPEND\_SUBTASKS} action típus különösen figyelemre méltó: mivel több feladat alfeladatait töltjük be párhuzamosan, a hagyományos \texttt{SET\_SUBTASKS} felülírná a korábbi eredményeket. Az \texttt{APPEND\_SUBTASKS} ezért az adott feladathoz tartozó korábbi alfeladatokat kiszűri, majd hozzáfűzi az új eredményt, így az összes betöltött alfeladat megmarad az állapotban.
+
+\begin{figure}[h!]
+\centering
+% IDE KERÜL: Állapotkezelési folyamatábra
+% Component -> dispatch(action) -> Reducer -> new state -> Context -> Component re-render
+% Külön ábra az Actions.ts és a reducer kapcsolatáról
+\fbox{\parbox{12cm}{\centering\vspace{3cm} [Állapotkezelési folyamatábra: Component -- dispatch -- Reducer -- Context -- re-render körfolyamat] \vspace{3cm}}}
+\caption{A Context API alapú állapotkezelés folyamata}
+\label{fig:state-management}
+\end{figure}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\Section{GitHub integráció tervezése}
+% ─────────────────────────────────────────────────────────────────────────────
+
+Az Acxor egyik kiegészítő funkciója a GitHub repozitóriumokból való projektimportálás. A tervezés során el kellett dönteni, hogy ez a funkció szerver oldalon vagy kliens oldalon menjen végbe. A szerver oldali megközelítés mellett döntöttünk, mivel a GitHub API tokent nem célszerű közvetlenül a kliensből küldeni a GitHub felé: a szerver közvetítőként működik, ami lehetővé teszi a jövőbeli token validációs logika hozzáadását is.
+
+A folyamat a következő lépésekből áll: a felhasználó megadja GitHub felhasználónevét és személyes hozzáférési tokenét, a kliens ezeket elküldi a backendbeli \texttt{/api/github/user/repos/names} végpontra, a szerver a GitHub API segítségével lekéri a repozitóriumok listáját, majd visszaküldi a neveket. A felhasználó kiválaszt egy repozitóriumot, amelynek issue-it a backend lekéri a \texttt{/api/github/:owner/:repo/issues} végponton keresztül. Az issues-ek feladatokká alakulnak, és egy projektlétrehozási hívással együtt kerülnek az adatbázisba.
+
+\begin{figure}[h!]
+\centering
+% IDE KERÜL: GitHub integráció folyamatábrája
+% User -> Acxor Web/Mobile -> Acxor Backend -> GitHub API -> repos list -> select repo
+% -> issues fetch -> project create with tasks
+\fbox{\parbox{12cm}{\centering\vspace{3cm} [GitHub integráció folyamatábrája: felhasználó -- Acxor kliens -- Acxor backend -- GitHub API -- issue importálás] \vspace{3cm}}}
+\caption{A GitHub integráció adatfolyam-ábrája}
+\label{fig:github-flow}
+\end{figure}
