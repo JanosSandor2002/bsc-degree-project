@@ -277,7 +277,7 @@ A mobil \texttt{SubtasksScreen} egy kinyitható/becsukható struktúrát alkalma
 
 \SubSection{API kommunikáció}
 
-A mobil alkalmazás a webes klienstől eltérően nem axio-st, hanem a beépített \texttt{fetch} API-t használja a HTTP kérésekhez. Ez tudatos döntés volt: csökkenti a függőségek számát, és a React Native fejlesztők által is preferált megoldás. Az API URL-t a \texttt{constants/api.ts} fájl konfigurálja dinamikusan: Expo Go fejlesztői módban a \texttt{Constants.expoConfig.hostUri} alapján automatikusan meghatározza a fejlesztői gép LAN IP-jét, így fizikai eszközön is működik a fejlesztés.
+A mobil alkalmazás a webes klienstől eltérően nem axios-t, hanem a beépített \texttt{fetch} API-t használja a HTTP kérésekhez. Ez tudatos döntés volt: csökkenti a függőségek számát, és a React Native fejlesztők által is preferált megoldás. Az API URL-t a \texttt{constants/api.ts} fájl konfigurálja dinamikusan: Expo Go fejlesztői módban a \texttt{Constants.expoConfig.hostUri} alapján automatikusan meghatározza a fejlesztői gép LAN IP-jét, így fizikai eszközön is működik a fejlesztés.
 
 \begin{lstlisting}[language=JavaScript, caption={Dinamikus API URL (constants/api.ts)}]
 const debuggerHost =

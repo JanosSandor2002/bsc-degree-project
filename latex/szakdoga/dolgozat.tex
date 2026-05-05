@@ -2,14 +2,40 @@
 \usepackage{tabularx}
 \usepackage{array}
 \usepackage{makecell}
+\usepackage{listings}
 \usepackage{styles/dolgozat}
 \usepackage{svg}
 \usepackage{graphicx}
-\usepackage{listings}
 \usepackage{styles/cpp}
 \usepackage{styles/python}
 
 \usepackage{hyperref}
+
+% ── Globális listings beállítás (tördelés + magyar ékezetek) ─────────────────
+\lstset{
+  basicstyle=\small\ttfamily,
+  breaklines=true,
+  breakatwhitespace=false,
+  breakindent=0pt,
+  postbreak=\mbox{\textcolor{gray}{$\hookrightarrow$}\space},
+  columns=flexible,
+  keepspaces=true,
+  showstringspaces=false,
+  frame=single,
+  frameround=tttt,
+  backgroundcolor=\color[rgb]{0.95,0.95,0.95},
+  rulecolor=\color[rgb]{0.85,0.85,0.85},
+  framesep=6pt,
+  xleftmargin=6pt,
+  xrightmargin=6pt,
+  literate=
+    {á}{{\'{a}}}1 {é}{{\'{e}}}1 {í}{{\'\i}}1 {ó}{{\'{o}}}1
+    {ö}{{\"o}}1  {ő}{{\H{o}}}1  {ú}{{\'{u}}}1 {ü}{{\"u}}1
+    {ű}{{\H{u}}}1
+    {Á}{{\'{A}}}1 {É}{{\'{E}}}1 {Í}{{\'{I}}}1 {Ó}{{\'{O}}}1
+    {Ö}{{\"O}}1  {Ő}{{\H{O}}}1  {Ú}{{\'{U}}}1 {Ü}{{\"U}}1
+    {Ű}{{\H{U}}}1,
+}
 
 \begin{document}
 

@@ -24,7 +24,7 @@ A tesztelési megközelítés a következő elveket követi:
 
 A backend tesztek Jest tesztelési keretrendszert és Supertest HTTP tesztkönyvtárat alkalmaznak. A Jest biztosítja a tesztfuttatót, az assertionokat és a mock funkcionalitást. A Supertest lehetővé teszi, hogy az Express alkalmazásnak valódi HTTP kéréseket küldjünk anélkül, hogy portot kellene foglalni, így a tesztek gyorsan és izoláltan futnak.
 
-Az adatbázis szintű izoláció érdekében a \texttt{mongodb-memory-server} könyvtár egy in-memory MongoDB példányt indít el minden tesztfájl futtatásakor. Ez azt jelenti, hogy a tesztek semmilyen körülmények között nem érintik az éles vagy fejlesztési adatbázist. A \texttt{\_\_tests\_\_/setup.ts} fájl konfigurálja ezt a mechanizmust, és a Jest \texttt{globalSetup} vagy \texttt{setupFilesAfterFramework} konfigurációján keresztül kerül betöltésre.
+Az adatbázis szintű izoláció érdekében a \texttt{mongodb-memory-server} könyvtár egy in-memory MongoDB példányt indít el minden tesztfájl futtatásakor. Ez azt jelenti, hogy a tesztek semmilyen körülmények között nem érintik az éles vagy fejlesztési adatbázist. A \texttt{\_\_tests\_\_/setup.ts} fájl konfigurálja ezt a mechanizmust, és a Jest \texttt{globalSetup} vagy \texttt{setupFilesAfterEnv} konfigurációján keresztül kerül betöltésre.
 
 \SubSection{Auth tesztek}
 

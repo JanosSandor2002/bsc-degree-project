@@ -27,7 +27,7 @@ A fejlesztés során a technológiai döntések több szempontot is figyelembe v
 
 \SubSection{Backend}
 
-A backend Node.js és TypeScript kombinációjára épül. A TypeScript alkalmazása biztosítja a statikus típusellenőrzést, ami különösen hasznos az API végpontok bemeneti és kimeneti adatainak validálásakor. Az Express.js a defacto standard REST API keretrendszer Node.js alatt, amelynek middleware-alapú felépítése rugalmasan bővíthető. A MongoDB dokumentumorientált adatbázis jól illeszkedik a projektmenedzsment adatok természetéhez, ahol a rugalmas sémák lehetővé teszik a feladatok, alfeladatok és projektek összetett struktúráinak tárolását. A Mongoose ODM séma validációt és referencia-alapú kapcsolatokat biztosít a dokumentumok között.
+A backend Node.js és TypeScript kombinációjára épül. A TypeScript alkalmazása biztosítja a statikus típusellenőrzést, ami különösen hasznos az API végpontok bemeneti és kimeneti adatainak validálásakor. Az Express.js a de facto standard REST API keretrendszer Node.js alatt, amelynek middleware-alapú felépítése rugalmasan bővíthető. A MongoDB dokumentumorientált adatbázis jól illeszkedik a projektmenedzsment adatok természetéhez, ahol a rugalmas sémák lehetővé teszik a feladatok, alfeladatok és projektek összetett struktúráinak tárolását. A Mongoose ODM séma validációt és referencia-alapú kapcsolatokat biztosít a dokumentumok között.
 
 A hitelesítés JSON Web Token alapon működik. Bejelentkezéskor a szerver egy 7 napos érvényességű tokent állít ki, amelyet a kliens minden API kéréshez csatol az \texttt{Authorization} fejlécben. A jelszavak bcryptjs segítségével kerülnek hashelésre, 10-es salt rounds értékkel. A védett végpontokat egy \texttt{protect} middleware védi, amely ellenőrzi a token érvényességét és azonosítja a felhasználót.
 
@@ -86,7 +86,7 @@ A \texttt{User} modell tartalmazza a felhasználói adatokat, köztük a gamifik
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.8\textwidth]{images/acxor_er_diagram_v2.png}
-\caption{Az Acxor rendszer Osztálydiagramra}
+\caption{Az Acxor rendszer Osztálydiagramja}
 \label{fig:architecture}
 \end{figure}
 

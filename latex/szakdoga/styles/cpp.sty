@@ -18,18 +18,23 @@
 language=c++,
 basicstyle=\ttm,
 backgroundcolor=\color{codebg},
-otherkeywords={self},             % Add keywords here
+otherkeywords={self},
 keywordstyle=\ttb\color{deepblue},
-emphstyle=\ttb\color{deepred},    % Custom highlighting style
+emphstyle=\ttb\color{deepred},
 stringstyle=\color{deepgreen},
-frame=single,                         % Any extra options here
+frame=single,
 frameround=tttt,
-showstringspaces=false,            % 
-% numbers=left,
-% numberstyle=\color{gray},
+showstringspaces=false,
 framesep=6pt,
 rulecolor=\color{framecolor},
-numbersep=16pt
+numbersep=16pt,
+literate=
+  {á}{{\'{a}}}1 {é}{{\'{e}}}1 {í}{{\'\i}}1 {ó}{{\'{o}}}1
+  {ö}{{\"o}}1  {ő}{{\H{o}}}1  {ú}{{\'{u}}}1 {ü}{{\"u}}1
+  {ű}{{\H{u}}}1
+  {Á}{{\'{A}}}1 {É}{{\'{E}}}1 {Í}{{\'{I}}}1 {Ó}{{\'{O}}}1
+  {Ö}{{\"O}}1  {Ő}{{\H{O}}}1  {Ú}{{\'{U}}}1 {Ü}{{\"U}}1
+  {Ű}{{\H{U}}}1
 }}
 
 % C++ environment
@@ -47,4 +52,3 @@ numbersep=16pt
 
 % C++ for inline
 \newcommand\cppinline[1]{{\pythonstyle\lstinline!#1!}}
-
