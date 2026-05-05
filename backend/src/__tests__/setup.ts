@@ -1,16 +1,14 @@
 import mongoose from 'mongoose';
-import { MongoMemoryServer } from 'mongodb-memory-server';
 
-let mongoServer: MongoMemoryServer;
+process.env.JWT_SECRET = 'test-secret-key';
 
-// Minden tesztfájl futása előtt: in-memory MongoDB indítása
+const TEST_URI =
+  process.env.MONGO_TEST_URI || 'mongodb://localhost:27017/jest_test_db';
+
 beforeAll(async () => {
-  mongoServer = await MongoMemoryServer.create();
-  const uri = mongoServer.getUri();
-  await mongoose.connect(uri);
+  await mongoose.connect(TEST_URI);
 });
 
-// Minden egyes teszt után: összes kollekció ürítése (izolált tesztek)
 afterEach(async () => {
   const collections = mongoose.connection.collections;
   for (const key in collections) {
@@ -18,8 +16,6 @@ afterEach(async () => {
   }
 });
 
-// Minden tesztfájl futása után: kapcsolat lezárása
 afterAll(async () => {
   await mongoose.disconnect();
-  await mongoServer.stop();
 });

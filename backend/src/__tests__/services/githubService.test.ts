@@ -5,8 +5,12 @@ jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe('githubService', () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.restoreAllMocks();
   });
 
   // ─── getRepoNames ────────────────────────────────────────────────────────────
@@ -35,7 +39,7 @@ describe('githubService', () => {
         'https://api.github.com/user/repos',
         expect.objectContaining({
           params: { visibility: 'all', affiliation: 'owner,collaborator' },
-        })
+        }),
       );
     });
 
@@ -50,7 +54,7 @@ describe('githubService', () => {
           headers: expect.objectContaining({
             Authorization: 'Bearer my-secret-token',
           }),
-        })
+        }),
       );
     });
 
@@ -70,7 +74,14 @@ describe('githubService', () => {
 
     it('csak a repo neveket adja vissza, más mezőket nem', async () => {
       mockedAxios.get.mockResolvedValueOnce({
-        data: [{ name: 'only-name', id: 12345, full_name: 'user/only-name', private: false }],
+        data: [
+          {
+            name: 'only-name',
+            id: 12345,
+            full_name: 'user/only-name',
+            private: false,
+          },
+        ],
       });
 
       const names = await getRepoNames('fake-token');
@@ -110,7 +121,11 @@ describe('githubService', () => {
     it('visszaadja a szűrt issue mezőket', async () => {
       mockedAxios.get.mockResolvedValueOnce({ data: mockIssues });
 
-      const issues = await getRepoIssues('sando', 'acxor-backend', 'fake-token');
+      const issues = await getRepoIssues(
+        'sando',
+        'acxor-backend',
+        'fake-token',
+      );
 
       expect(issues).toHaveLength(2);
       expect(issues[0]).toEqual({
@@ -128,7 +143,11 @@ describe('githubService', () => {
     it('nem tartalmaz nyers GitHub mezőket (user, html_url)', async () => {
       mockedAxios.get.mockResolvedValueOnce({ data: mockIssues });
 
-      const issues = await getRepoIssues('sando', 'acxor-backend', 'fake-token');
+      const issues = await getRepoIssues(
+        'sando',
+        'acxor-backend',
+        'fake-token',
+      );
 
       expect(issues[0]).not.toHaveProperty('user');
       expect(issues[0]).not.toHaveProperty('html_url');
@@ -141,14 +160,18 @@ describe('githubService', () => {
 
       expect(mockedAxios.get).toHaveBeenCalledWith(
         'https://api.github.com/repos/sando/acxor-backend/issues',
-        expect.any(Object)
+        expect.any(Object),
       );
     });
 
     it('null body-t is helyesen kezeli', async () => {
       mockedAxios.get.mockResolvedValueOnce({ data: mockIssues });
 
-      const issues = await getRepoIssues('sando', 'acxor-backend', 'fake-token');
+      const issues = await getRepoIssues(
+        'sando',
+        'acxor-backend',
+        'fake-token',
+      );
 
       expect(issues[1].body).toBeNull();
     });
@@ -162,11 +185,13 @@ describe('githubService', () => {
     });
 
     it('hibát dob 401-es GitHub válasz esetén', async () => {
-      const authError = { response: { status: 401, data: { message: 'Bad credentials' } } };
+      const authError = {
+        response: { status: 401, data: { message: 'Bad credentials' } },
+      };
       mockedAxios.get.mockRejectedValueOnce(authError);
 
       await expect(
-        getRepoIssues('sando', 'private-repo', 'bad-token')
+        getRepoIssues('sando', 'private-repo', 'bad-token'),
       ).rejects.toMatchObject({ response: { status: 401 } });
     });
   });

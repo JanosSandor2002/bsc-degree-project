@@ -1,45 +1,24 @@
+// logService.test.ts - így kellene kinéznie
 import { logEvent } from '../../services/logService';
+import Log from '../../models/Log';
+import mongoose from 'mongoose';
 
 describe('logService – logEvent', () => {
-  beforeEach(() => {
-    jest.spyOn(console, 'log').mockImplementation(() => {});
+  it('elmenti a log bejegyzést az adatbázisba', async () => {
+    const projectId = new mongoose.Types.ObjectId().toString();
+    await logEvent(projectId, 'Task completed: Fix login bug');
+
+    const log = await Log.findOne({ message: 'Task completed: Fix login bug' });
+    expect(log).not.toBeNull();
+    expect(log?.message).toBe('Task completed: Fix login bug');
   });
 
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
+  it('userId-t is elmenti, ha meg van adva', async () => {
+    const projectId = new mongoose.Types.ObjectId().toString();
+    const userId = new mongoose.Types.ObjectId().toString();
+    await logEvent(projectId, 'Task completed', userId);
 
-  it('naplóz projekt-azonosítóval és üzenettel', async () => {
-    await logEvent('proj123', 'Task completed: Fix login bug');
-
-    expect(console.log).toHaveBeenCalledWith(
-      '[PROJECT proj123] Task completed: Fix login bug'
-    );
-  });
-
-  it('naplóz felhasználói azonosítóval együtt, ha meg van adva', async () => {
-    await logEvent('proj123', 'Task completed: Fix login bug', 'user456');
-
-    expect(console.log).toHaveBeenCalledWith(
-      '[PROJECT proj123] Task completed: Fix login bug by user user456'
-    );
-  });
-
-  it('nem dob hibát, ha userId hiányzik', async () => {
-    await expect(logEvent('proj123', 'Valami esemény')).resolves.not.toThrow();
-  });
-
-  it('pontosan egyszer hív console.log-ot', async () => {
-    await logEvent('proj999', 'Egyszeri esemény');
-
-    expect(console.log).toHaveBeenCalledTimes(1);
-  });
-
-  it('eltérő projekt ID-vel eltérő log üzenetet generál', async () => {
-    await logEvent('projAAA', 'Esemény A');
-    await logEvent('projBBB', 'Esemény B');
-
-    expect(console.log).toHaveBeenNthCalledWith(1, '[PROJECT projAAA] Esemény A');
-    expect(console.log).toHaveBeenNthCalledWith(2, '[PROJECT projBBB] Esemény B');
+    const log = await Log.findOne({ message: 'Task completed' });
+    expect(log?.user?.toString()).toBe(userId);
   });
 });

@@ -2,7 +2,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { ViewProvider, useViewContext } from '../../Context/ViewContext';
 import { describe, it, expect } from 'vitest';
 
-// Egyszerű tesztkomponens a context használatához
 const TestComponent = () => {
   const { activeView, dispatch } = useViewContext();
 

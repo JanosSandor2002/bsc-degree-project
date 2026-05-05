@@ -8,7 +8,7 @@ A dolgozat egy modern, háromplatformos projektmenedzsment rendszer, az Acxor te
 
 A bevezetőben megfogalmazott alapproblémára -- miszerint a meglévő projektmenedzsment eszközök vagy túlságosan komplexek, vagy túlságosan egyszerűek, és ritkán párosítják a professzionális funkcionalitást motivációs elemekkel -- az Acxor egy letisztult, vizuálisan koherens és gamifikációs elemekkel dúsított megoldást kínál. A koncepciós fejezetben elvégzett piackutatás alapján az Acxor a Trello vizuális egyszerűségét, a JIRA sprint-alapú munkaszervezési képességét és a rendszerek által általában elhanyagolt motivációs réteget ötvözi egyetlen platformban.
 
-A tervezési fejezetben részletesen bemutatásra kerültek az architektúrális döntések: a háromrétegű kliens-szerver modell, a MongoDB adatbázis-séma és a hét Mongoose modell (User, Project, Task, Subtask, Sprint, Log, Mail), a RESTful API tervezési elvei és a JWT alapú hitelesítési folyamat. A felhasználói felület tervezésekor a hangsúly az egységes vizuális identitáson és a három platform közötti konzisztens élményen volt.
+A tervezési fejezetben részletesen bemutatásra kerültek az architektúrális döntések: a háromrétegű kliens-szerver modell, a MongoDB adatbázis-séma és a hét Mongoose modell (User, Project, Task, Subtask, Sprint, Log, Mail), a RESTful API tervezési elvei és a JWT alapú hitelesítési folyamat. A felhasználói felület tervezésekor a hangsúly az egységes vizuális identitáson és a három platform közötti konzisztens élményen volt. Külön figyelmet kapott a karbantarthatóság kérdése: a közös állapotkezelési minta, az API contract szerepe és a tudatosan vállalt kódduplikáció mint kezelt technikai adósság mind a tervezési döntések szerves részét képezték.
 
 Az implementációs fejezetben a legfontosabb megvalósítási részletek kerültek terítékre: a backend route-ok és service-ek, az XP és szintlépési algoritmus, a Context API alapú állapotkezelés, a nézetek és komponensek felépítése, valamint a GitHub integrációs megoldás. A mobil alkalmazásnál külön figyelmet kapott az egyedi tab bar megoldás és a fizikai eszközön való fejlesztést lehetővé tevő dinamikus API URL konfiguráció.
 
@@ -27,13 +27,40 @@ A fejlesztés során az alábbi főbb eredmények születtek:
   \item \textbf{Mobil alkalmazás}: Az összes fő funkció elérhető Expo Router alapú, tíz tapos navigációval rendelkező React Native alkalmazásban, fizikai Android és iOS eszközön egyaránt.
   \item \textbf{GitHub integráció}: Repozitóriumok listázása és issue-k importálása feladatokként, szerver oldalon proxyzva a GitHub API-n keresztül.
   \item \textbf{Tesztlefedettség}: 86 automatizált teszteset, amelyek a rendszer kritikus üzleti logikáját és API viselkedését verifikálják.
+  \item \textbf{Karbantartható architektúra}: Egységes állapotkezelési minta a webes és mobil kliensben, service réteg szétválasztása a route handlerektől, TypeScript típusbiztonság mindhárom platformon, és közös backend mint egyetlen igazságforrás a két kliens számára.
 \end{itemize}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\Section{A karbantarthatóság értékelése}
+% ─────────────────────────────────────────────────────────────────────────────
+
+A rendszer fejlesztése során a karbantarthatóság nem utólagos szempont volt, hanem tervezési alapelv. Ennek értékelése három dimenzióban végezhető el: a kódbázis struktúrája, a web–mobil összehangoltság és a jövőbeli bővíthetőség szempontjából.
+
+\SubSection{Kódbázis struktúrájának karbantarthatósága}
+
+A backend kódja jól elkülönített rétegekre épül: a route handlerek kizárólag a HTTP kérések fogadásáért és a válasz küldéséért felelősek, az üzleti logika a service rétegben él (\texttt{xpService}, \texttt{logService}, \texttt{githubService}), az adathozzáférés pedig a Mongoose modelleken keresztül valósul meg. Ez a háromrétegű szétválasztás azt jelenti, hogy például az XP számítási logika megváltoztatásához egyetlen fájlt (\texttt{xpService.ts}) kell módosítani, és az összes érintett végpont automatikusan az új logikát alkalmazza. Az ilyen jellegű, jól lokalizálható módosíthatóság a karbantartható szoftverek egyik legfontosabb jellemzője.
+
+A TypeScript használata mindhárom platformon szintén közvetlen karbantarthatósági előnyt jelent: a típusrendszer fordítási időben jelzi az inkompatibilis változásokat, amelyek dinamikusan típusos kódban csak futásidőben derülnének ki. Ez különösen értékes akkor, amikor az adatmodell változik, és a változásnak mindhárom platformon át kell propagálódnia.
+
+\SubSection{Web és mobil kliens összehangoltsága}
+
+A webes React alkalmazás és a React Native mobil alkalmazás közötti karbantarthatóság legfőbb biztosítéka a közös állapotkezelési minta. Mindkét kliens ugyanolyan struktúrájú Context-et, Reducer-t és action creator függvényeket alkalmaz, ami azt jelenti, hogy egy fejlesztő, aki az egyik kliensben eligazodik, minimális tanulással képes a másikban is hatékonyan dolgozni. A közös backend API pedig garantálja, hogy az adatmodell változásai mindkét klienshez egyszerre jutnak el, és nem lehetséges, hogy a két kliens eltérő adatszerkezettel dolgozzon.
+
+Ugyanakkor a dolgozat őszintén elismeri a jelenlegi architektúra korlátait is. Az \texttt{Actions.ts} fájlban lévő aszinkron action creator logika, a TypeScript interfész definíciók és a hibakezelési konvenciók mindkét kliensben kézzel vannak karbantartva, ami azt jelenti, hogy egy üzleti logika változásakor két helyen kell elvégezni az azonos módosítást. Ez a duplikáció kontrollált és tudatosan vállalt, de hosszú távon -- különösen csapatnövekedés esetén -- érdemes lenne megszüntetni egy megosztott csomag (shared package) bevezetésével.
+
+\SubSection{Összegző értékelés}
+
+Összességében az Acxor architektúrája a karbantarthatóság szempontjából egyensúlyt tart a pragmatizmus és az elvek között. A rendszer nem törekszik a tökéletes kódduplikáció-mentességre, ha az azzal járó komplexitás nem arányos az előnyökkel – de minden fontosabb architekturális döntés mögött felismerhető a karbantarthatósági szempont: a service réteg szétválasztása, a közös állapotkezelési minta, a TypeScript típusbiztonság és a tesztlefedettség együtt olyan rendszert alkotnak, amelyen egy új fejlesztő a belépéstől kezdve hatékonyan tud dolgozni, és amelyen a változtatások hatása előre látható és kontrollálható.
 
 % ─────────────────────────────────────────────────────────────────────────────
 \Section{Jövőbeli fejlesztési lehetőségek}
 % ─────────────────────────────────────────────────────────────────────────────
 
 A rendszer számos irányban tovább fejleszthető. A legfontosabb jövőbeli lehetőségek az alábbiak:
+
+\textbf{Monorepo és megosztott csomag}: A karbantarthatóság legjelentősebb javítása egy monorepo struktúra (pl. Nx vagy Turborepo) bevezetése lenne, amelyen belül egy \texttt{shared} csomag tartalmazná a TypeScript interfész definíciókat, az action típusokat és a közös üzleti logikát. Ez megszüntetné a jelenlegi kódduplikációt a webes és mobil kliens között, és garantálná, hogy az adatmodell változásai automatikusan és konzisztensen érvényre jutnak mindkét kliensben -- jelentősen csökkentve az összehangolási hibák kockázatát.
+
+\textbf{API contract és típusgenerálás}: A backend TypeScript interfészeit jelenleg kézzel másolják a kliensek. Egy OpenAPI/Swagger séma alapú típusgenerálási pipeline (pl. \texttt{openapi-typescript} eszközzel) lehetővé tenné, hogy a backend interfészei automatikusan generált típusként legyenek elérhetők mindkét kliensben. Ez az API contract szinkronizálási problémát teljesen megszüntetné: ha a backend változik, a következő generálási lépés után a kliensek azonnal látják a típusinkompatibilitást.
 
 \textbf{Drag-and-drop a Kanban boardon}: A jelenlegi implementáció statikus kártyákat jelenít meg. A feladatok húzással való áthelyezése oszlopok között -- és ezzel egyidejűleg az állapot módosítása -- jelentősen javítaná a felhasználói élményt. Ez webes oldalon például a \texttt{@dnd-kit} könyvtárral valósítható meg.
 
@@ -47,7 +74,7 @@ A rendszer számos irányban tovább fejleszthető. A legfontosabb jövőbeli le
 
 \textbf{Prestige és class badge rendszer teljes kiépítése}: A gamifikációs tervezés tartalmaz egy class badge rendszert (szintenként három osztály közül lehet választani), amelynek UI-ja elkészült, de a mögötte lévő adatmodell (választott osztály tárolása) még nem implementált.
 
-\textbf{Tesztlefedettség bővítése}: A mail rendszer backend integrációs tesztjei, a sprint tesztek és a mobil alkalmazás komponens tesztjei mind hasznos kiegészítések lennének a jövőbeli fejlesztések során.
+\textbf{Tesztlefedettség bővítése}: A mail rendszer backend integrációs tesztjei, a sprint tesztek és a mobil alkalmazás komponens tesztjei mind hasznos kiegészítések lennének a jövőbeli fejlesztések során. A mobil tesztelés hiánya elsősorban az Expo tesztkörnyezet konfigurálásának összetettsége miatt maradt el, de egy \texttt{jest-expo} alapú konfiguráció ezt orvosolhatná.
 
 \textbf{Swagger/OpenAPI dokumentáció}: Az API végpontok automatikus dokumentálása swagger-jsdoc vagy tsoa segítségével interaktív, böngészhető dokumentációt biztosítana a jövőbeli integrációs partnerek és fejlesztők számára.
 
@@ -57,6 +84,8 @@ A rendszer számos irányban tovább fejleszthető. A legfontosabb jövőbeli le
 
 Az Acxor fejlesztése megmutatta, hogy egy közepes komplexitású, háromplatformos alkalmazás megtervezése és implementálása egyetlen fejlesztőként is megvalósítható, ha a technológiai döntések jól vannak meghozva és a kódstruktúra kezdettől fogva gondosan ki van alakítva. A közös backend API, az újrafelhasznált üzleti logika és a konzisztens állapotkezelési minta lehetővé tette, hogy a három platform -- webes, mobil és szerver -- szorosan összehangoltan működjön.
 
+A karbantarthatóság szempontjából a projekt egyik legfontosabb tanulsága az, hogy a webes és mobil kliens közötti konzisztencia nem jön magától: tudatos tervezési döntéseket igényel, amelyeket már az architektúra kialakításakor meg kell hozni. A közös állapotkezelési minta és a közös backend API mint egyetlen igazságforrás megfelelő alapot adott ehhez, ugyanakkor a kódduplikáció és az API contract manuális szinkronizálásának kérdése rámutat arra, hogy egy megosztott csomag alapú megközelítés a rendszer következő fejlődési lépése lehet.
+
 A dolgozat elkészítése során személyes fejlődés is tapasztalható volt: a TypeScript alkalmazása kikényszerítette a pontosabb gondolkodást az adatstruktúrák körül, az automatizált tesztelés megkövetelte a moduláris kódszervezést, a mobil fejlesztés pedig új kihívásokat hozott a navigáció, a natív UI komponensek és a fizikai eszközön való fejlesztés terén.
 
-Az Acxor jelenlegi formájában egy funkcionális, tesztelt és bővíthető alapot jelent. A jövőbeli fejlesztési lehetőségek gazdag tárháza nyitva áll, és a rendszer architektúrája ezeket a bővítményeket lehetővé teszi anélkül, hogy az alap kódbázist drasztikusan át kellene alakítani.
+Az Acxor jelenlegi formájában egy funkcionális, tesztelt és bővíthető alapot jelent. A jövőbeli fejlesztési lehetőségek gazdag tárháza nyitva áll, és a rendszer architektúrája -- különösen a service réteg szétválasztása, a TypeScript típusbiztonság és az egységes állapotkezelési minta -- ezeket a bővítményeket lehetővé teszi anélkül, hogy az alap kódbázist drasztikusan át kellene alakítani.

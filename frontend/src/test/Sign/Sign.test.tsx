@@ -16,46 +16,52 @@ describe('Sign', () => {
     loading: false,
     error: null,
     selectedProject: null,
+    sprints: [],
+    selectedSprint: null,
   };
 
   beforeEach(() => {
     vi.clearAllMocks();
 
-    // Mockoljuk a useGlobalContext-et alapértelmezett állapottal
     vi.spyOn(GlobalContext, 'useGlobalContext').mockReturnValue({
       state: { ...fullMockState },
       dispatch,
     });
 
-    // Mockoljuk az Actions függvényeket
     vi.spyOn(Actions, 'loginUser').mockImplementation(vi.fn());
     vi.spyOn(Actions, 'registerUser').mockImplementation(vi.fn());
   });
 
-  it('rendereli a Sign komponenst', () => {
+  it('rendereli a Sign komponenst alapértelmezetten login nézettel', () => {
     render(<Sign />);
 
-    // H2 elemeket külön szűrjük
-    const headings = screen.getAllByRole('heading');
-    expect(
-      headings.find((h) => h.textContent === 'Register'),
-    ).toBeInTheDocument();
-    expect(headings.find((h) => h.textContent === 'Login')).toBeInTheDocument();
+    // Default tab is 'login' — the Sign in tab button is active
+    expect(screen.getByRole('button', { name: 'Sign in' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Register' })).toBeInTheDocument();
+  });
 
-    // Input mezők ellenőrzése
-    expect(screen.getByPlaceholderText('Username')).toBeInTheDocument();
-    const emailInputs = screen.getAllByPlaceholderText('Email');
-    expect(emailInputs.length).toBe(2);
-    const passwordInputs = screen.getAllByPlaceholderText('Password');
-    expect(passwordInputs.length).toBe(2);
+  it('login form megjelenik alapértelmezetten', () => {
+    render(<Sign />);
+
+    expect(screen.getByPlaceholderText('you@example.com')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('••••••••')).toBeInTheDocument();
+  });
+
+  it('regisztrációs form megjelenik Register fülre kattintva', () => {
+    render(<Sign />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Register' }));
+
+    expect(screen.getByPlaceholderText('cooldev42')).toBeInTheDocument();
   });
 
   it('login form submit meghívja a loginUser-t', () => {
     render(<Sign />);
 
-    const emailInput = screen.getAllByPlaceholderText('Email')[1]; // login email
-    const passwordInput = screen.getAllByPlaceholderText('Password')[1]; // login pw
-    const loginButton = screen.getByRole('button', { name: 'Login' });
+    const emailInput = screen.getByPlaceholderText('you@example.com');
+    const passwordInput = screen.getByPlaceholderText('••••••••');
+    // Use exact text "Sign in →" to avoid matching the "Sign in" tab button
+    const loginButton = screen.getByRole('button', { name: 'Sign in →' });
 
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
     fireEvent.change(passwordInput, { target: { value: '123456' } });
@@ -70,10 +76,13 @@ describe('Sign', () => {
   it('register form submit meghívja a registerUser-t', () => {
     render(<Sign />);
 
-    const usernameInput = screen.getByPlaceholderText('Username');
-    const emailInput = screen.getAllByPlaceholderText('Email')[0]; // register email
-    const passwordInput = screen.getAllByPlaceholderText('Password')[0]; // register pw
-    const registerButton = screen.getByRole('button', { name: 'Register' });
+    // Switch to register tab
+    fireEvent.click(screen.getByRole('button', { name: 'Register' }));
+
+    const usernameInput = screen.getByPlaceholderText('cooldev42');
+    const emailInput = screen.getByPlaceholderText('you@example.com');
+    const passwordInput = screen.getByPlaceholderText('••••••••');
+    const registerButton = screen.getByRole('button', { name: /create account/i });
 
     fireEvent.change(usernameInput, { target: { value: 'TestUser' } });
     fireEvent.change(emailInput, { target: { value: 'reg@example.com' } });
@@ -87,15 +96,25 @@ describe('Sign', () => {
     });
   });
 
-  it('loading és error szövegek megjelennek', () => {
+  it('loading szöveg megjelenik', () => {
     vi.spyOn(GlobalContext, 'useGlobalContext').mockReturnValueOnce({
-      state: { ...fullMockState, loading: true, error: 'Hiba történt' },
+      state: { ...fullMockState, loading: true, error: null },
       dispatch,
     });
 
     render(<Sign />);
 
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(screen.getByText(/signing in/i)).toBeInTheDocument();
+  });
+
+  it('error szöveg megjelenik', () => {
+    vi.spyOn(GlobalContext, 'useGlobalContext').mockReturnValueOnce({
+      state: { ...fullMockState, loading: false, error: 'Hiba történt' },
+      dispatch,
+    });
+
+    render(<Sign />);
+
     expect(screen.getByText('Hiba történt')).toBeInTheDocument();
   });
 });

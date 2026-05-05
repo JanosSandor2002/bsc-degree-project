@@ -189,10 +189,9 @@ A \texttt{TasksView} komponens például az edíciós állapotot lokálisan, a \
 
 \begin{figure}[h!]
 \centering
-% IDE KERÜL: TasksView képernyőkép -- a feladatlista, a szerkesztési form és az XP toast látható
-\fbox{\parbox{14cm}{\centering\vspace{4.5cm} [TasksView képernyőkép: feladatlista kártyákkal, inline szerkesztési form, XP toast értesítés] \vspace{4.5cm}}}
+\includegraphics[width=0.8\textwidth]{images/frontend_tasks.png}
 \caption{A TasksView komponens megjelenése}
-\label{fig:tasks-view}
+\label{fig:architecture}
 \end{figure}
 
 \SubSection{Kanban nézet}
@@ -201,10 +200,9 @@ A \texttt{KanbanView} három oszlopban jeleníti meg a feladatokat (\texttt{Open
 
 \begin{figure}[h!]
 \centering
-% IDE KERÜL: KanbanView képernyőkép -- három oszlop: To Do, In Progress, Done
-\fbox{\parbox{14cm}{\centering\vspace{4.5cm} [KanbanView képernyőkép: három oszlop (To Do, In Progress, Done) feladatkártyákkal] \vspace{4.5cm}}}
+\includegraphics[width=0.8\textwidth]{images/frontend_kanban.png}
 \caption{A KanbanView komponens megjelenése}
-\label{fig:kanban-view}
+\label{fig:architecture}
 \end{figure}
 
 \SubSection{Scrum nézet}
@@ -213,10 +211,9 @@ A \texttt{ScrumView} a legösszetettebb nézetek egyike: egyszerre kezeli a spri
 
 \begin{figure}[h!]
 \centering
-% IDE KERÜL: ScrumView képernyőkép -- sprint selector gombok, sprint info bar, Kanban oszlopok, Backlog szekció
-\fbox{\parbox{14cm}{\centering\vspace{4.5cm} [ScrumView képernyőkép: sprint váltógombok, sprint statisztika, Kanban board, backlog szekció] \vspace{4.5cm}}}
+\includegraphics[width=0.8\textwidth]{images/frontend_scrum.png}
 \caption{A ScrumView komponens megjelenése}
-\label{fig:scrum-view}
+\label{fig:architecture}
 \end{figure}
 
 \SubSection{Gamifikáció nézet}
@@ -225,10 +222,9 @@ A \texttt{GamificationView} egy ranglistát jelenít meg a projekt tagjai szám�
 
 \begin{figure}[h!]
 \centering
-% IDE KERÜL: GamificationView képernyőkép -- rangsor kártyák XP progress barral, badge-ekkel
-\fbox{\parbox{14cm}{\centering\vspace{4.5cm} [GamificationView képernyőkép: rangsor kártyák, XP progress bar, badge szintek, accordion panel] \vspace{4.5cm}}}
+\includegraphics[width=0.8\textwidth]{images/frontend_game.png}
 \caption{A GamificationView komponens megjelenése}
-\label{fig:gamification-view}
+\label{fig:architecture}
 \end{figure}
 
 \SubSection{Mail rendszer}
@@ -296,10 +292,9 @@ export const API_URL = BASE;
 
 \begin{figure}[h!]
 \centering
-% IDE KERÜL: Mobil alkalmazás képernyőképek -- Tasks, Subtasks és Kanban nézetek egymás mellett
-\fbox{\parbox{14cm}{\centering\vspace{6cm} [Mobil alkalmazás képernyőképek: Tasks nézet, Subtasks összecsukható listával, Kanban oszlopok mobilon] \vspace{6cm}}}
+\includegraphics[width=0.8\textwidth]{images/mobile_screens.png}
 \caption{A mobil alkalmazás főbb nézetei}
-\label{fig:mobile-screens}
+\label{fig:architecture}
 \end{figure}
 
 % ─────────────────────────────────────────────────────────────────────────────
@@ -334,11 +329,9 @@ Az integrációs tesztek a Supertest könyvtár segítségével közvetlenül az
 
 \begin{figure}[h!]
 \centering
-% IDE KERÜL: Jest teszteredmények terminál képernyőkép
-% (zöld pipákkal a sikeres tesztek: auth, projects, tasks, subtasks, services)
-\fbox{\parbox{14cm}{\centering\vspace{3.5cm} [Jest teszteredmények: terminál kimenet zöld pipákkal, az összes tesztcsomag és teszteset listájával] \vspace{3.5cm}}}
+\includegraphics[width=0.8\textwidth]{images/jest_tests.png}
 \caption{A backend tesztek futtatásának eredménye}
-\label{fig:jest-results}
+\label{fig:architecture}
 \end{figure}
 
 \SubSection{Frontend tesztelés}
@@ -375,11 +368,9 @@ it('rendereli a TasksView-t', () => {
 
 \begin{figure}[h!]
 \centering
-% IDE KERÜL: Vitest teszteredmények terminál képernyőkép
-% (zöld pipákkal a sikeres frontend tesztek listája)
-\fbox{\parbox{14cm}{\centering\vspace{3.5cm} [Vitest teszteredmények: terminál kimenet a frontend unit tesztek eredményével (Reducer, Context, Actions, Components)] \vspace{3.5cm}}}
+\includegraphics[width=0.8\textwidth]{images/vitest_tests.png}
 \caption{A frontend tesztek futtatásának eredménye}
-\label{fig:vitest-results}
+\label{fig:architecture}
 \end{figure}
 
 \SubSection{GitHub service tesztelés}

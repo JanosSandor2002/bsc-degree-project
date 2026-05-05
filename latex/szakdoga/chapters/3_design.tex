@@ -10,8 +10,7 @@ Az Acxor rendszer három jól elkülönülő részből áll: a webes frontend al
 
 \begin{figure}[h!]
 \centering
-% IDE KERÜL: Rendszerarchitektúra diagram (három réteg: Mobile App, Web App, Backend API + MongoDB)
-\fbox{\parbox{12cm}{\centering\vspace{3cm} [Rendszerarchitektúra-diagram: Web (React/Vite) $\leftrightarrow$ REST API (Node.js/Express) $\leftrightarrow$ MongoDB, Mobile (React Native/Expo) $\leftrightarrow$ REST API] \vspace{3cm}}}
+\includegraphics[width=0.8\textwidth]{images/acxor_architecture_v2.png}
 \caption{Az Acxor rendszer magas szintű architektúrája}
 \label{fig:architecture}
 \end{figure}
@@ -41,6 +40,40 @@ A webes alkalmazás React 18-ra épül, Vite fejlesztői szerverrel és build es
 A mobil alkalmazás React Native alapú, Expo keretrendszerrel. Az Expo lehetővé teszi a gyors fejlesztést és az eszközön való tesztelést Expo Go segítségével. A navigáció Expo Router révén fájlrendszer-alapú, ami közelebb áll a Next.js szemléletéhez. A mobil alkalmazás a fetch API-t alkalmazza HTTP kérésekhez, és a backend ugyanazon végpontjait éri el, mint a webes kliens. Az állapotkezelés megegyezik a webes verzióéval: Context API és useReducer kombináció.
 
 % ─────────────────────────────────────────────────────────────────────────────
+\Section{Karbantarthatósági szempontok a kliens architektúrában}
+% ─────────────────────────────────────────────────────────────────────────────
+
+A háromplatformos architektúra egyik legkritikusabb tervezési kérdése az volt, hogy hogyan lehet a webes React alkalmazás és a React Native mobil alkalmazás között a kódot és az üzleti logikát úgy szervezni, hogy a rendszer hosszú távon karbantartható maradjon. Ez a szempont már a tervezési fázisban meghatározó szerepet játszott, hiszen a két kliens párhuzamos fejlesztése és jövőbeli módosítása komoly konzisztenciaproblémákat vethet fel, ha az architektúra nem veszi figyelembe a karbantarthatóság elveit.
+
+\SubSection{Közös állapotkezelési minta}
+
+A karbantarthatóság szempontjából az egyik legfontosabb döntés az volt, hogy mindkét kliensalkalmazás ugyanazt az állapotkezelési mintát alkalmazza: React Context API-t és \texttt{useReducer} hookot. Ez azt jelenti, hogy a \texttt{GlobalContext}, a \texttt{Reducer} és az \texttt{Actions} struktúrája, valamint az action típusok elnevezési konvenciói azonosak a webes és a mobil alkalmazásban egyaránt.
+
+Ennek a döntésnek két közvetlen karbantarthatósági előnye van. Egyrészt, ha egy fejlesztő a webes kliensben elsajátítja az állapotkezelési mintát, azonnal képes a mobil kliensben is eligazodni és módosításokat végezni – nincs szükség egy teljesen eltérő paradigma megismerésére. Másrészt, ha az üzleti logika változik (például új mezők kerülnek a feladatmodellbe), az action típusok és a reducer ágak mindkét kliensben ugyanolyan struktúrájú módosítást igényelnek, ami csökkenti az elcsúszás (divergencia) kockázatát.
+
+\SubSection{Kódduplikáció és annak tudatos kezelése}
+
+A két kliens között azonban szükségszerűen van kódduplikáció: az \texttt{Actions.ts} fájlban található aszinkron action creator függvények lényegében ugyanazt az API-hívási logikát valósítják meg mindkét platformon, csupán a HTTP könyvtár tér el (axios a weben, fetch a mobilon). Ez a duplikáció tudatos kompromisszum: az alternatíva egy közös, megosztott csomag (shared package) kialakítása lett volna, ami monorepo struktúrát igényelt volna (például Nx vagy Turborepo segítségével).
+
+A monorepo megközelítés karbantarthatósági előnye vitathatatlan: a közös logikát egyetlen helyen kellene módosítani, és a változás automatikusan érvényre jutna mindkét kliensben. Ugyanakkor a monorepo bevezetése jelentős konfigurációs többletmunkával jár, és egy egyszemélyes fejlesztői projekt keretein belül az ebből fakadó komplexitás nem arányos az előnyökkel. Ezért a jelen implementációban a két kliens egymástól független repositoryként él, a duplikált logika pedig manuálisan szinkronizált. Ez egy tudatosan vállalt karbantarthatósági adósság (technical debt), amelynek felszámolása a jövőbeli fejlesztések egyik iránya lehet.
+
+\SubSection{A közös backend mint karbantarthatósági horgony}
+
+A két kliens közötti konzisztencia legfőbb biztosítéka a közös backend API. Mivel mindkét kliens ugyanazokat a végpontokat hívja, ugyanazokat a JSON struktúrákat kapja válaszul, és ugyanazokat a hibaüzeneteket kezeli, a backend az egyetlen igazságforrás (single source of truth) a rendszerben. Ha az adatmodell változik – például egy új mező kerül a \texttt{Task} dokumentumba –, a backend egyetlen módosítása elegendő ahhoz, hogy mindkét kliens az új adatot megkapja. A klienseknek csak a megjelenítési réteget kell frissíteniük.
+
+Ez az elv különösen jól érvényesül a TypeScript-alapú fejlesztés kontextusában: a backend Mongoose modelljeihez tartozó TypeScript interfészek (\texttt{ITask}, \texttt{IProject} stb.) elméletileg exportálhatók és a kliensekben importálhatók lennének egy megosztott típuscsomagból. A jelenlegi implementációban ezek a típusok mindkét kliensben kézzel vannak definiálva, ami azt jelenti, hogy egy adatmodell-változáskor mindhárom helyen (backend, webes kliens, mobil kliens) szükséges a frissítés. Ez az API contract szinkronizálási kihívás szintén a jövőbeli fejlesztések egyik prioritása.
+
+\SubSection{Tesztelhetőség mint karbantarthatósági alap}
+
+A karbantarthatóság és a tesztelhetőség szorosan összefügg: egy jól tesztelt rendszerben a módosítások hatása kontrollálható, a regressziók gyorsan felismerhetők. Az Acxor architektúrájában a karbantarthatóságot szolgáló tesztelési döntések közé tartozik a backend service réteg (xpService, logService, githubService) elkülönítése a route handlererektől. Ez a szétválasztás lehetővé teszi, hogy az üzleti logika önállóan, a HTTP réteg nélkül tesztelhető legyen, ami egyszerre növeli a tesztek megbízhatóságát és csökkenti a tesztek futási idejét.
+
+A frontend oldalon a Context API és useReducer pattern szintén a tesztelhetőséget szolgálja: a reducer tiszta függvény, amelynek teszteléséhez nincs szükség se böngészőre, se mockolt hálózati rétegre. Ez azt jelenti, hogy az állapotkezelési logika változásakor a regressziók azonnal felismerhetők anélkül, hogy teljes komponens-renderelést kellene végezni.
+
+\SubSection{Navigációs architektúra és karbantarthatóság}
+
+A webes és a mobil alkalmazás navigációs megközelítése szándékosan különbözik egymástól, és ez a különbség szintén karbantarthatósági szempontból indokolt. A webes alkalmazás állapot-alapú, \texttt{ViewContext}-vezérelt navigációt alkalmaz, míg a mobil alkalmazás Expo Router fájlrendszer-alapú navigációt használ. Bár ez a különbség kódduplikációt okoz a navigációs logikában, mindkét megközelítés a saját platformján a legtermészetesebb és legkarbantarthatóbb megoldás: a webes SPA kontextusában az állapot-alapú nézetes navigáció egyszerűbb és kevesebb függőséget igényel, míg a mobilon a fájlrendszer-alapú routing a React Native ökoszisztéma bevett, jól dokumentált konvenciója, amelynek követése csökkenti a jövőbeli fejlesztők betanulási idejét.
+
+% ─────────────────────────────────────────────────────────────────────────────
 \Section{Adatbázis-tervezés}
 % ─────────────────────────────────────────────────────────────────────────────
 
@@ -52,18 +85,9 @@ A \texttt{User} modell tartalmazza a felhasználói adatokat, köztük a gamifik
 
 \begin{figure}[h!]
 \centering
-% IDE KERÜL: ER diagram (Entity-Relationship) az összes modellel és kapcsolataikkal
-% User -- Project (admin, contributors, viewers, members)
-% Project -- Task (project ref)
-% Task -- Subtask (task ref)
-% Project -- Sprint (project ref)
-% Task -- Sprint (sprint ref, opcionális)
-% Project -- Log (project ref)
-% User -- Log (user ref, opcionális)
-% User -- Mail (from, to ref)
-\fbox{\parbox{14cm}{\centering\vspace{5cm} [ER-diagram: User, Project, Task, Subtask, Sprint, Log, Mail entitások és kapcsolataik (ObjectId referenciák jelölve)] \vspace{5cm}}}
-\caption{Az Acxor adatbázis-séma ER-diagramja}
-\label{fig:er-diagram}
+\includegraphics[width=0.8\textwidth]{images/acxor_er_diagram_v2.png}
+\caption{Az Acxor rendszer Osztálydiagramra}
+\label{fig:architecture}
 \end{figure}
 
 Az alábbi táblázat összefoglalja a főbb modellek legfontosabb mezőit:
@@ -136,11 +160,9 @@ Az API végpontjai a következő fő útvonalcsoportokra oszthatók:
 
 \begin{figure}[h!]
 \centering
-% IDE KERÜL: Swagger UI képernyőkép a főbb API végpontokkal
-% (pl. a /api/tasks, /api/projects, /api/auth végpontok listája a Swagger dokumentációban)
-\fbox{\parbox{14cm}{\centering\vspace{4cm} [Swagger UI képernyőkép: az API végpontok listája csoportosítva (auth, projects, tasks, subtasks, sprints, logs, users, mails, github)] \vspace{4cm}}}
+\includegraphics[width=0.8\textwidth]{images/apis.png}
 \caption{Az Acxor REST API dokumentációja (Swagger UI)}
-\label{fig:swagger}
+\label{fig:architecture}
 \end{figure}
 
 \SubSection{Hitelesítési folyamat}
@@ -149,12 +171,9 @@ A hitelesítés kétlépéses folyamat: regisztrációkor a szerver bcrypt segí
 
 \begin{figure}[h!]
 \centering
-% IDE KERÜL: Szekvenciadiagram a bejelentkezési folyamatról
-% Client -> POST /api/auth/login -> Server -> bcrypt.compare -> JWT sign -> Client (token)
-% Következő kérés: Client -> Bearer token -> protect middleware -> User lookup -> Controller
-\fbox{\parbox{12cm}{\centering\vspace{3.5cm} [Szekvenciadiagram: bejelentkezési és hitelesítési folyamat (JWT kiállítás és validálás)] \vspace{3.5cm}}}
+\includegraphics[width=0.8\textwidth]{images/acxor_auth_sequence.png}
 \caption{A JWT alapú hitelesítési folyamat szekvenciadiagramja}
-\label{fig:auth-sequence}
+\label{fig:architecture}
 \end{figure}
 
 \SubSection{Feladat-befejezési folyamat}
@@ -169,16 +188,9 @@ A rendszer főbb használati esetei a következő szereplők köré szerveződne
 
 \begin{figure}[h!]
 \centering
-% IDE KERÜL: Use case diagram (UML)
-% Actors: Vendég, Felhasználó, Projekt Admin
-% Use cases: Regisztráció, Bejelentkezés, Projekt létrehozás (GitHub / kézi),
-%            Feladat hozzáadás, Feladat szerkesztés/törlés, Alfeladat kezelés,
-%            Sprint kezelés, Kanban megtekintés, Plan megtekintés,
-%            Gamifikáció megtekintés, Mail küldés, Log megtekintés,
-%            Profil szerkesztés, Projekt törlés
-\fbox{\parbox{14cm}{\centering\vspace{5cm} [UML Use Case diagram: Vendég, Felhasználó, Projekt Admin szerepkörök és a hozzájuk tartozó használati esetek] \vspace{5cm}}}
+\includegraphics[width=0.8\textwidth]{images/acxor_use_case_v2.png}
 \caption{Az Acxor rendszer use case diagramja}
-\label{fig:use-case}
+\label{fig:architecture}
 \end{figure}
 
 % ─────────────────────────────────────────────────────────────────────────────
@@ -193,11 +205,9 @@ A webes felület három fő területre osztható: oldalsó navigációs sáv (Si
 
 \begin{figure}[h!]
 \centering
-% IDE KERÜL: A webes alkalmazás képernyőképe -- főoldal vagy Kanban nézet
-% (a három részes elrendezés: Sidebar bal oldalon, Topbar felül, tartalom középen)
-\fbox{\parbox{14cm}{\centering\vspace{5cm} [Webes alkalmazás képernyőképe: főoldal vagy Kanban nézet, bemutatva a Sidebar -- Topbar -- Tartalom elrendezést] \vspace{5cm}}}
+\includegraphics[width=0.8\textwidth]{images/frontend_scr.png}
 \caption{A webes alkalmazás főoldalának elrendezése}
-\label{fig:web-layout}
+\label{fig:architecture}
 \end{figure}
 
 \SubSection{Mobil alkalmazás elrendezése}
@@ -206,11 +216,9 @@ A mobil alkalmazásban a navigáció egy vízszintesen görgethető tab sávon k
 
 \begin{figure}[h!]
 \centering
-% IDE KERÜL: Mobil alkalmazás képernyőképe -- Tasks nézet vagy Home nézet
-% (a tab bar alul, a hero fejléc felül, a tartalom középen látható)
-\fbox{\parbox{6cm}{\centering\vspace{8cm} [Mobil alkalmazás képernyőképe: Tasks vagy Home nézet, tab bar és hero fejléc látható] \vspace{8cm}}}
+\includegraphics[width=0.8\textwidth]{images/mobile_start.jpeg}
 \caption{A mobil alkalmazás elrendezése}
-\label{fig:mobile-layout}
+\label{fig:architecture}
 \end{figure}
 
 \SubSection{Nézetek és navigáció}
@@ -231,12 +239,9 @@ Az \texttt{APPEND\_SUBTASKS} action típus különösen figyelemre méltó: mive
 
 \begin{figure}[h!]
 \centering
-% IDE KERÜL: Állapotkezelési folyamatábra
-% Component -> dispatch(action) -> Reducer -> new state -> Context -> Component re-render
-% Külön ábra az Actions.ts és a reducer kapcsolatáról
-\fbox{\parbox{12cm}{\centering\vspace{3cm} [Állapotkezelési folyamatábra: Component -- dispatch -- Reducer -- Context -- re-render körfolyamat] \vspace{3cm}}}
+\includegraphics[width=0.8\textwidth]{images/acxor_state_management_v2.png}
 \caption{A Context API alapú állapotkezelés folyamata}
-\label{fig:state-management}
+\label{fig:architecture}
 \end{figure}
 
 % ─────────────────────────────────────────────────────────────────────────────
@@ -249,10 +254,7 @@ A folyamat a következő lépésekből áll: a felhasználó megadja GitHub felh
 
 \begin{figure}[h!]
 \centering
-% IDE KERÜL: GitHub integráció folyamatábrája
-% User -> Acxor Web/Mobile -> Acxor Backend -> GitHub API -> repos list -> select repo
-% -> issues fetch -> project create with tasks
-\fbox{\parbox{12cm}{\centering\vspace{3cm} [GitHub integráció folyamatábrája: felhasználó -- Acxor kliens -- Acxor backend -- GitHub API -- issue importálás] \vspace{3cm}}}
+\includegraphics[width=0.8\textwidth]{images/acxor_github_flow_v2.png}
 \caption{A GitHub integráció adatfolyam-ábrája}
-\label{fig:github-flow}
+\label{fig:architecture}
 \end{figure}

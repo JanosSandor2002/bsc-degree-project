@@ -2,7 +2,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { GlobalProvider, useGlobalContext } from '../../Context/GlobalContext';
 import { describe, it, expect, vi } from 'vitest';
 
-// Egyszerű komponens a context teszteléséhez
 const TestComponent = () => {
   const { state, dispatch } = useGlobalContext();
 
