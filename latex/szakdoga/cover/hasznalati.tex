@@ -1,20 +1,89 @@
 \pagestyle{empty}
 
-\noindent \textbf{\Large CD Használati útmutató}
+\noindent \textbf{\Large Adathordozó használati útmutató}
 
 \vskip 1cm
 
-Ennek a címe lehet például \textit{A mellékelt CD tartalma} vagy \textit{Adathordozó használati útmutató} is.
+Az adathordozón a \textit{bsc-degree-project} nevű projekt forráskódja és dokumentációja található, amely három fő részből áll: egy Node.js/Express alapú backend, egy React alapú webes frontend, valamint egy Expo alapú mobilalkalmazás.
 
-Ez jellemzően csak egy fél-egy oldalas leírás.
-Arra szolgál, hogy ha valaki kézhez kapja a szakdolgozathoz tartozó CD-t, akkor tudja, hogy mi hol van rajta.
-Jellemzően elég csak felsorolni, hogy milyen jegyzékek vannak, és azokban mi található.
-Az elkészített programok telepítéséhez, futtatásához tartozó instrukciók kerülhetnek ide.
+\vskip 0.5cm
 
-A CD lemezre mindenképpen rá kell tenni
+\noindent \textbf{Az adathordozó tartalma:}
+
 \begin{itemize}
-\item a dolgozatot egy \texttt{dolgozat.pdf} fájl formájában,
-\item a LaTeX forráskódját a dolgozatnak,
-\item az elkészített programot, fontosabb futási eredményeket (például ha kép a kimenet),
-\item egy útmutatót a CD használatához (ami lehet ez a fejezet külön PDF-be vagy MarkDown fájlként kimentve).
+    \item \texttt{dolgozat.pdf} -- a szakdolgozat végleges változata,
+    \item \texttt{latex/} -- a dolgozat \LaTeX{} forráskódja,
+    \item \texttt{backend/} -- a szerveroldali alkalmazás forráskódja (Node.js, Express, TypeScript, MongoDB),
+    \item \texttt{frontend/} -- a webes felhasználói felület forráskódja (React, Vite, TypeScript, Tailwind CSS),
+    \item \texttt{mobile/} -- a mobilalkalmazás forráskódja (React Native, Expo),
+    \item \texttt{README.md} -- telepítési és használati útmutató.
 \end{itemize}
+
+\vskip 0.5cm
+
+\noindent \textbf{Szükséges szoftverek telepítése:}
+
+Az alábbi szoftvereket globálisan kell telepíteni a rendszerre a projekt futtatása előtt.
+
+\vskip 0.3cm
+
+\noindent \textit{1. Node.js (18-as vagy újabb verzió)}
+
+\noindent Letölthető: \texttt{https://nodejs.org}
+
+\noindent Telepítés ellenőrzése:
+\begin{verbatim}
+node -v
+npm -v
+\end{verbatim}
+
+\noindent \textit{2. MongoDB Community Edition}
+
+\noindent Letölthető: \texttt{https://www.mongodb.com/try/download/community}
+
+\noindent Telepítés után az adatbázis-szerver indítása:
+\begin{verbatim}
+mongod --dbpath /data/db
+\end{verbatim}
+
+\noindent A MongoDB alapértelmezetten a \texttt{mongodb://localhost:27017} címen fut.
+
+\vskip 0.3cm
+
+\noindent \textit{3. Expo Go (opcionális, fizikai eszközön való teszteléshez)}
+
+\noindent Telepíthető az iOS App Store-ból vagy a Google Play áruházból. A mobilalkalmazás indítása után a terminálban megjelenő QR-kódot kell beolvasni.
+
+\vskip 0.5cm
+
+\noindent \textbf{Telepítés és indítás:}
+
+A függőségek telepítése a projekt gyökérkönyvtárából egyetlen paranccsal elvégezhető:
+
+\begin{verbatim}
+npm run setup
+\end{verbatim}
+
+Ha újratelepítés szükséges (például verziókonfliktus esetén):
+
+\begin{verbatim}
+npm run reset
+npm run setup
+\end{verbatim}
+
+Ezt követően az egyes komponensek az alábbi sorrendben indítandók el, mindegyik külön terminálablakban:
+
+\begin{enumerate}
+    \item A MongoDB szerver elindítása: \texttt{mongod}
+    \item A backend szerver: \texttt{cd backend \&\& npm run dev} \hfill (port: \texttt{5000})
+    \item A webes frontend: \texttt{cd frontend \&\& npm run dev} \hfill (port: \texttt{5173})
+    \item A mobilalkalmazás: \texttt{cd mobile \&\& npx expo start}
+\end{enumerate}
+
+A backend működéséhez szükséges egy \texttt{backend/.env} konfigurációs fájl, amely az alábbi változókat tartalmazza:
+
+\begin{verbatim}
+PORT=5000
+MONGO_URI=mongodb://localhost:27017/<adatbázisnév>
+JWT_SECRET=<titkos_kulcs>
+\end{verbatim}
