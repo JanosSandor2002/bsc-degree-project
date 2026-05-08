@@ -4,13 +4,15 @@ dolgozat.synctex.gz
 dolgozat.thm
 dolgozat.toc
 dolgozat.out
-
+dolgozat.bbl
+dolgozat.blg
 cimlap.aux
 feladatkiiras.aux
 hasznalati.aux
 
 1_introduction.aux
 2_concept.aux
+2_concept.log
 3_design.aux
 3_design.log
 4_implementation.aux

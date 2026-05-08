@@ -1,10 +1,6 @@
-\Chapter{Tesztelés}
+\Chapter{Tesztelési stratégia és eredmények}
 
 A tesztelési fejezet részletesen bemutatja az Acxor rendszer tesztelési stratégiáját, az alkalmazott eszközöket, a tesztesetek felépítését és az elért eredményeket. A tesztelés célja annak igazolása, hogy az implementált funkciók az elvárásoknak megfelelően működnek, és hogy a jövőbeli módosítások regressziót ne okozzanak a meglévő működésben.
-
-% ─────────────────────────────────────────────────────────────────────────────
-\Section{Tesztelési stratégia}
-% ─────────────────────────────────────────────────────────────────────────────
 
 A rendszer tesztelése két jól elkülönített rétegben valósult meg. A backend oldalon integrációs tesztek ellenőrzik a teljes kérés-válasz ciklust, beleértve az adatbázissal való interakciót, a hitelesítési logikát és az üzleti szabályok érvényesítését. A frontend oldalon egységtesztek verifikálják az állapotkezelési logikát, az action creator függvényeket és a legfontosabb UI komponensek helyes renderelését.
 
@@ -22,7 +18,7 @@ A tesztelési megközelítés a következő elveket követi:
 
 \SubSection{Eszközök és konfiguráció}
 
-A backend tesztek Jest tesztelési keretrendszert és Supertest HTTP tesztkönyvtárat alkalmaznak. A Jest biztosítja a tesztfuttatót, az assertionokat és a mock funkcionalitást. A Supertest lehetővé teszi, hogy az Express alkalmazásnak valódi HTTP kéréseket küldjünk anélkül, hogy portot kellene foglalni, így a tesztek gyorsan és izoláltan futnak.
+A backend tesztek Jest \cite{jest} tesztelési keretrendszert és Supertest HTTP tesztkönyvtárat alkalmaznak. A Jest biztosítja a tesztfuttatót, az assertionokat és a mock funkcionalitást. A Supertest lehetővé teszi, hogy az Express alkalmazásnak valódi HTTP kéréseket küldjünk anélkül, hogy portot kellene foglalni, így a tesztek gyorsan és izoláltan futnak.
 
 Az adatbázis szintű izoláció érdekében a \texttt{mongodb-memory-server} könyvtár egy in-memory MongoDB példányt indít el minden tesztfájl futtatásakor. Ez azt jelenti, hogy a tesztek semmilyen körülmények között nem érintik az éles vagy fejlesztési adatbázist. A \texttt{\_\_tests\_\_/setup.ts} fájl konfigurálja ezt a mechanizmust, és a Jest \texttt{globalSetup} vagy \texttt{setupFilesAfterEnv} konfigurációján keresztül kerül betöltésre.
 
@@ -69,7 +65,7 @@ A projekt tesztek a teljes CRUD ciklust lefedik. Minden teszteset saját felhasz
   \item A létrehozó automatikusan adminisztrátor és tag lesz.
   \item TaskGroup-okkal való projektlétrehozáskor a feladatok és alfeladatok létrejönnek az adatbázisban.
   \item Érvénytelen tokennel való kísérlet 401-et ad vissza.
-  \item A projektek listázása csak a saját projektek tartalmazza (más felhasználóé nem jelenik meg).
+  \item A projektek listázása csak a saját projekteket tartalmazza (más felhasználóé nem jelenik meg).
   \item Az admin mező populálva érkezik vissza (jelszó nélkül).
   \item Projekt módosítása és törlése csak az adminisztrátornak engedélyezett (másnak 403).
   \item Törléskor a kapcsolódó feladatok és alfeladatok is törlődnek.
@@ -145,7 +141,7 @@ it('több szintet lép egyszerre, ha sok XP érkezik', async () => {
 
 \textbf{githubService tesztek}: Az axios modul teljes mocking-jával teszteljük, hogy a service a helyes GitHub API URL-eket hívja-e, a helyes Authorization headert küldi-e el, és a válasz adatait a várt formátumra alakítja-e (pl. \texttt{creator} mező a \texttt{user.login}-ból).
 
-\textbf{logService tesztek}: A \texttt{console.log} spy-olásával ellenőrizzük, hogy a naplóbejegyzések a várt formátumban (\texttt{[PROJECT id] üzenet}) kerülnek kiírásra. Ez a teszt a log mentési logikát is verifikálja, de mivel a log service az adatbázisba is ír, a tesztek in-memory DB-n futnak.
+\textbf{logService tesztek}: A tesztek az in-memory adatbázison ellenőrzik, hogy a \texttt{logEvent} hívása után a bejegyzés valóban létrejön-e a \texttt{Log} kollekcióban, a \texttt{message} mező helyesen tárolódik-e, és az opcionális \texttt{userId} paraméter esetén a \texttt{user} mező is perzisztálódik-e.
 
 % ─────────────────────────────────────────────────────────────────────────────
 \Section{Frontend tesztelés}
@@ -153,13 +149,13 @@ it('több szintet lép egyszerre, ha sok XP érkezik', async () => {
 
 \SubSection{Eszközök és konfiguráció}
 
-A frontend tesztek Vitest tesztelési keretrendszert és React Testing Library-t alkalmaznak. A Vitest Vite-alapú, és natívan kezeli a TypeScript-et és a JSX-et. A React Testing Library a komponensek felhasználói szemszögből való tesztelésére ösztönöz: nem az implementáció részleteit, hanem a látható és interakcióra képes elemeket ellenőrzi.
+A frontend tesztek Vitest \cite{vitest} tesztelési keretrendszert és React Testing Library-t alkalmaznak. A Vitest Vite-alapú, és natívan kezeli a TypeScript-et \cite{typescript} és a JSX-et. A React Testing Library a komponensek felhasználói szemszögből való tesztelésére ösztönöz: nem az implementáció részleteit, hanem a látható és interakcióra képes elemeket ellenőrzi.
 
-A tesztek konfigurációja a Vitest konfigurációs fájlban a \texttt{jsdom} tesztkörnyezetet alkalmazza, a \texttt{@testing-library/jest-dom} pedig bővíti a matchers listát (pl. \texttt{toBeInTheDocument}, \texttt{toHaveProperty}).
+A tesztek konfigurációja a Vitest konfigurációs fájlban a \texttt{jsdom} tesztkörnyezetet alkalmazza, a \texttt{@testing-library/jest-dom} pedig bővíti a matchers listát (pl.\ \texttt{toBeIn\-The\-Document}, \texttt{toHaveProperty}).
 
 \SubSection{Reducer tesztek}
 
-A reducer tesztek a legegyszerűbbek: tiszta függvényeket tesztelnek, amelyeknek nincs mellékhatásuk. Az \texttt{AppReducer} tesztjei ellenőrzik a \texttt{SET\_SUBTASKS}, \texttt{SET\_LOADING} és \texttt{SET\_SELECTED\_PROJECT} action típusokat. A \texttt{ViewReducer} tesztjei verifikálják az ismeretlen action típusra adott alapértelmezett viselkedést, és az összes \texttt{ViewState} értékkel való kompatibilitást.
+A reducer tesztek a legegyszerűbbek: tiszta függvényeket tesztelnek, amelyeknek nincs mellékhatásuk. Az \texttt{AppReducer} tesztjei tíz action típust ellenőriznek: \texttt{SET\_SUBTASKS}, \texttt{SET\_LOADING}, \texttt{SET\_SELECTED\_PROJECT}, \texttt{SET\_USER}, \texttt{LOGOUT}, \texttt{ADD\_TASK}, \texttt{DELETE\_TASK}, \texttt{ADD\_SPRINT}, \texttt{DELETE\_SPRINT} és \texttt{APPEND\_SUBTASKS}. A \texttt{ViewReducer} tesztjei verifikálják az ismeretlen action típusra adott alapértelmezett viselkedést, és az összes \texttt{ViewState} értékkel való kompatibilitást.
 
 \begin{lstlisting}[language=JavaScript, caption={ViewReducer tesztek (ViewReducer.test.tsx)}]
 it('SET_VIEW akció frissíti az activeView-t', () => {
@@ -198,17 +194,17 @@ it('dispatch frissíti a token-t és user-t', () => {
 
 \SubSection{Action tesztek}
 
-Az action tesztek az axios mock-olásával ellenőrzik, hogy a \texttt{fetchTasks} és \texttt{addTask} függvények a helyes URL-t hívják-e, a megfelelő headereket küldik-e el, és a szerver válasza alapján a helyes dispatch hívásokat indítják-e el. Hibaeset szimulációjával ellenőrizzük a \texttt{SET\_ERROR} dispatch-t is.
+Az action tesztek az axios mock-olásával ellenőrzik, hogy a \texttt{fetchTasks}, \texttt{addTask}, \texttt{fetchSubtasks}, \texttt{addSubtask}, \texttt{fetchProjects} és \texttt{addProject} függvények a helyes URL-t hívják-e, a megfelelő headereket küldik-e el, és a szerver válasza alapján a helyes dispatch hívásokat indítják-e el. Hibaeset szimulációjával ellenőrizzük a \texttt{SET\_ERROR} dispatch-t is.
 
 \SubSection{Komponens tesztek}
 
 \textbf{Sign komponens}: A tesztek ellenőrzik, hogy mindkét form (Register és Login) renderelésre kerül, a form submit az adatokkal meghívja a megfelelő action függvényt, és a loading / error állapotok megjelennek a felületen.
 
-\textbf{CreateProject komponens}: A tesztek verifikálják a kezdő lépés megjelenítését, a Manual flow következő lépésre váltást, a contributor hozzáadás működését, és hogy üres contributor nem adható hozzá.
+\textbf{CreateProject komponens}: A tesztek verifikálják a kezdő lépés megjelenítését, a Manual flow következő lépésre váltást, a contributor hozzáadás működését, és hogy üres contributor nem adható hozzá, valamint a Next gomb csak kitöltött projektnév esetén aktív.
 
-\textbf{TasksView és SubTasksView komponensek}: Mockolt globális állapottal ellenőrzik, hogy a feladatok és alfeladatok cím szerint megjelennek-e a nézetben.
+\textbf{TasksView és SubTasksView komponensek}: Mockolt globális állapottal ellenőrzik, hogy a feladatok és alfeladatok cím szerint megjelennek-e a nézetben, illetve hogy kiválasztott projekt hiányában a megfelelő üzenet jelenik-e meg.
 
-\textbf{Sidebar és Topbar}: Strukturális tesztek ellenőrzik, hogy a megfelelő számú gomb és a várt HTML elem (\texttt{header} szerepkör) megjelenik-e.
+\textbf{Sidebar és Topbar}: Strukturális tesztek ellenőrzik, hogy a megfelelő számú gomb, a navigációs elemek és a várt HTML elem (\texttt{header} szerepkör) megjelenik-e.
 
 \begin{table}[h!]
 \centering
@@ -217,35 +213,35 @@ Az action tesztek az axios mock-olásával ellenőrzik, hogy a \texttt{fetchTask
 \hline
 \textbf{Tesztkészlet} & \textbf{Lefedett esetek} & \textbf{Tesztek száma} \\
 \hline
-auth.test.ts & Regisztráció, bejelentkezés, token validáció & 9 \\
-projects.test.ts & CRUD, jogosultság, taskGroup import & 11 \\
-tasks.test.ts & CRUD, állapotváltás, határidő kezelés & 8 \\
-subtasks.test.ts & CRUD, alapértékek, XP mező & 8 \\
+auth.test.ts & Regisztráció, bejelentkezés, token validáció & 10 \\
+projects.test.ts & CRUD, jogosultság, taskGroup import & 17 \\
+tasks.test.ts & CRUD, állapotváltás, határidő kezelés & 10 \\
+subtasks.test.ts & CRUD, alapértékek, XP mező & 10 \\
 xpService.test.ts & XP hozzáadás, szintlépés, perzisztencia & 8 \\
-githubService.test.ts & API hívások, adat transzformáció & 11 \\
-logService.test.ts & Naplóformátum, userId kezelés & 5 \\
+githubService.test.ts & API hívások, adat transzformáció & 12 \\
+logService.test.ts & Naplóbejegyzés mentése, userId kezelés & 2 \\
 app.test.ts & Alapvető route ellenőrzés & 1 \\
 \hline
-\textbf{Backend összesen} & & \textbf{61} \\
+\textbf{Backend összesen} & & \textbf{70} \\
 \hline
-Reducer.test.tsx & AppReducer action típusok & 3 \\
+Reducer.test.tsx & AppReducer action típusok & 10 \\
 ViewReducer.test.tsx & ViewReducer állapotváltás & 3 \\
 GlobalContext.test.tsx & Context alapállapot, dispatch & 2 \\
 ViewContext.test.tsx & View váltás dispatch-csel & 2 \\
-Actions.test.ts & fetchTasks, addTask, hibakezelés & 3 \\
-Sign.test.tsx & Form render, submit, loading/error & 4 \\
-CreateProject.test.tsx & Lépések, contributor kezelés & 4 \\
-TasksView.test.tsx & Feladatlista renderelés & 1 \\
-SubTasksView.test.tsx & Alfeladatlista renderelés & 1 \\
-Sidebar.test.tsx & Ikonok száma & 1 \\
-Topbar.test.tsx & Banner elem & 1 \\
+Actions.test.ts & fetchTasks, addTask, fetchSubtasks és társaik & 8 \\
+Sign.test.tsx & Form render, submit, loading/error & 7 \\
+CreateProject.test.tsx & Lépések, contributor kezelés & 6 \\
+TasksView.test.tsx & Feladatlista renderelés & 2 \\
+SubTasksView.test.tsx & Alfeladatlista renderelés & 2 \\
+Sidebar.test.tsx & Ikonok száma, kattinthatóság & 2 \\
+Topbar.test.tsx & Banner elem, navigációs gombok & 3 \\
 \hline
-\textbf{Frontend összesen} & & \textbf{25} \\
+\textbf{Frontend összesen} & & \textbf{47} \\
 \hline
-\textbf{Összes teszteset} & & \textbf{86} \\
+\textbf{Összes teszteset} & & \textbf{117} \\
 \hline
 \end{tabularx}
-\caption{A tesztkészletek összefoglalása}
+\caption{A tesztkészletek összefoglalása \cite{jest, vitest}}
 \label{tab:test-summary}
 \end{table}
 
@@ -270,15 +266,15 @@ Az automatizált tesztek mellett a rendszer manuális tesztelésen is átesett. 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.8\textwidth]{images/vitest_results.png}
-\caption{A frontend unit tesztek futtatásának eredménye (Vitest)}
-\label{fig:architecture}
+\caption{A frontend unit tesztek futtatásának eredménye \cite{vitest}}
+\label{fig:test-vitest}
 \end{figure}
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.8\textwidth]{images/jest_results.png}
-\caption{A backend integrációs tesztek futtatásának eredménye (Jest)}
-\label{fig:architecture}
+\caption{A backend integrációs tesztek futtatásának eredménye \cite{jest}}
+\label{fig:test-jest}
 \end{figure}
 
 % ─────────────────────────────────────────────────────────────────────────────
@@ -286,5 +282,25 @@ Az automatizált tesztek mellett a rendszer manuális tesztelésen is átesett. 
 % ─────────────────────────────────────────────────────────────────────────────
 
 A tesztelés nem teljes körű, és számos terület kívül esett a tesztlefedettségen. A mail rendszer backend végpontjai nem kaptak dedikált integrációs teszteket, bár a modell és a route struktúrája megegyezik a többi, tesztelt erőforrással. A sprint feladat-hozzárendelési logika részletes edge case-jei (pl. egy feladat két sprinthez rendelése egymás után) szintén nem kerültek automatizált tesztekbe. A mobil alkalmazás frontend komponenseire nem készültek unit tesztek, elsősorban az Expo és React Native tesztkörnyezet konfigurálásának összetettsége miatt. A teljesítménytesztelés (load testing, stressz teszt) szintén nem volt a dolgozat keretein belül.
+
+A tesztlefedettség mérése a Jest, illetve a Vitest beépített coverage riportjával történt (\texttt{jest -{}-coverage} és \texttt{npx vitest -{}-coverage} parancsokkal).
+
+\SubSection{Backend tesztlefedettség}
+
+A backend esetén a 70 teszteset összesített eredménye: \textbf{61,33\% utasítás- (statement), 37,05\% ág- (branch), 51,11\% függvény- (function) és 62,67\% sorfedettség (line coverage)}. A rétegenkénti bontás a következőket mutatja:
+
+\begin{itemize}
+  \item \textbf{Modellek (src/models)}: 100\%-os lefedettség minden mérőszám szerint — a \texttt{Log}, \texttt{Mail}, \texttt{Project}, \texttt{Sprint}, \texttt{Subtask}, \texttt{Task} és \texttt{User} modellek teljes egészükben érintve vannak a tesztek által.
+  \item \textbf{Service-ek (src/services)}: 97,36\% utasítás- és 96,77\% sorfedettség. Az \texttt{xpService} és a \texttt{githubService} 100\%-on van, a \texttt{logService} kisebb hiányossággal (85,71\% utasítás).
+  \item \textbf{Middleware (src/middleware)}: 93,75\% utasítás- és sorfedettség, az auth middleware egyetlen lefedetlen sora a 35-ös sor.
+  \item \textbf{Route-ok (src/routes)}: 55,61\% utasítás- és 57,64\% sorfedettség. Az \texttt{auth.ts} (93,54\%) és a \texttt{projects.ts} (84,05\%) jól lefedett, míg a \texttt{mails.ts} (22,22\%), \texttt{users.ts} (21,62\%) és \texttt{sprints.ts} (27,27\%) route-ok teszteltsége alacsony — ezek felelnek a globálisan alacsonyabb értékekért.
+  \item \textbf{Controller (src/controllers)}: A \texttt{githubController.ts} teljes utasításfedettége 20,58\%, sorfedettége 14,28\%; a GitHub webhook-kezelő logika nagy része nem tesztelt.
+\end{itemize}
+
+\SubSection{Frontend tesztlefedettség}
+
+A frontend esetén a Vitest lefedettségmérése az összes 11 tesztfájlra és 47 tesztesetre kiterjedt. A konkrét sorlefedettségi számot a \texttt{--coverage} kapcsolóval futtatott mérés adja meg; a tesztek a következő területeket fedik le: \texttt{Sign}, \texttt{Topbar}, \texttt{Sidebar}, \texttt{CreateProject} komponensek, a \texttt{TasksView} és \texttt{SubTasksView} nézetek, valamint a \texttt{GlobalContext}, \texttt{ViewContext}, \texttt{Reducer}, \texttt{ViewReducer} és \texttt{Actions} állapotkezelő egységek. A mobil alkalmazás (React Native/Expo) frontend komponensei nem kerültek unit tesztelésre, ami a frontend összesített lefedettségi értékét érdemben csökkenti.
+
+A lefedettségmérés automatizálása CI/CD pipeline keretében a jövőbeli fejlesztések egyik lehetséges iránya.
 
 Ezek a hiányosságok tudatos döntések eredménye: az elérhető idő és erőforrás keretek között a legkritikusabb üzleti logika (auth, XP, project/task/subtask CRUD) kapta a legnagyobb tesztlefedettséget.

@@ -32,7 +32,7 @@ Az \texttt{app.ts} fájl az Express alkalmazást konfigurálja: engedélyezi a C
 
 \SubSection{Mongoose modellek}
 
-A modellek TypeScript interfészeket definiálnak (\texttt{IUser}, \texttt{IProject} stb.), amelyek lehetővé teszik a típusbiztos hozzáférést a dokumentum mezőkhöz. Az alábbiakban a \texttt{User} modell megvalósításának főbb részei láthatók:
+A modellek TypeScript interfészeket definiálnak \cite{typescript} (\texttt{IUser}, \texttt{IProject} stb.), amelyek lehetővé teszik a típusbiztos hozzáférést a dokumentum mezőkhöz. Az alábbiakban a \texttt{User} modell megvalósításának főbb részei láthatók:
 
 \begin{lstlisting}[language=JavaScript, caption={User modell (models/User.ts)}]
 const UserSchema = new Schema<IUser>(
@@ -156,7 +156,7 @@ frontend/
 
 \SubSection{Context API és állapotkezelés}
 
-A \texttt{GlobalContext} a \texttt{useReducer} hook segítségével kezel egy komplex állapotobjektumot. Az \texttt{AppReducer} minden lehetséges action típusra tartalmaz egy ágat, és mindig új állapotobjektumot ad vissza (immutable update). A \texttt{Actions.ts} fájl aszinkron action creator függvényeket tartalmaz, amelyek axios segítségével hívják az API-t, és dispatch hívásokkal frissítik a globális állapotot.
+A \texttt{GlobalContext} a \texttt{useReducer} hook segítségével kezel egy komplex állapotobjektumot. Az \texttt{AppReducer} minden lehetséges action típusra tartalmaz egy ágat, és mindig új állapotobjektumot ad vissza (immutable update). Az \texttt{Actions.ts} fájl aszinkron action creator függvényeket tartalmaz, amelyek axios segítségével hívják az API-t, és dispatch hívásokkal frissítik a globális állapotot.
 
 Az alábbi kódrészlet a feladatlekérési action megvalósítását mutatja be:
 
@@ -185,46 +185,46 @@ export const fetchTasks = async (
 
 Minden nézet-komponens (\texttt{TasksView}, \texttt{KanbanView}, \texttt{ScrumView} stb.) ugyanolyan struktúrát követ: a \texttt{useGlobalContext} hookkal hozzáfér az állapothoz, a \texttt{useEffect} hookkal a megfelelő adatokat tölti be (projekt-váltásra reagálva), és JSX-ben rendereli a tartalmat.
 
-A \texttt{TasksView} komponens például az edíciós állapotot lokálisan, a \texttt{useState} hook segítségével kezeli: az \texttt{editingTask} állapot tartalmazza az éppen szerkesztett feladatot, és a kártya inline szerkesztési formát jelenít meg. A törlési és befejezési műveletek megfelelő API végpontokat hívnak, és a reducer az állapotot szinkron frissíti a szerver válasza alapján.
+A \texttt{TasksView} komponens például az edíciós állapotot lokálisan, a \texttt{useState} hook segítségével kezeli: az \texttt{editingTask} állapot tartalmazza az éppen szerkesztett feladatot, és a kártya inline szerkesztési formát jelenít meg. A törlési és befejezési műveletek megfelelő API végpontokat hívnak, és a reducer az állapotot szinkron frissíti a szerver válasza alapján. A komponens megjelenése a \ref{fig:impl-tasks}. ábrán látható.
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.8\textwidth]{images/frontend_tasks.png}
 \caption{A TasksView komponens megjelenése}
-\label{fig:architecture}
+\label{fig:impl-tasks}
 \end{figure}
 
 \SubSection{Kanban nézet}
 
-A \texttt{KanbanView} három oszlopban jeleníti meg a feladatokat (\texttt{Open}, \texttt{InProgress}, \texttt{Done}). Az oszlopok dinamikusan kiszámított adatokat kapnak: minden oszlop szűri a globális \texttt{tasks} tömbből a saját státuszához tartozó elemeket. Az oszlopok fejlécein megjelenik a benne lévő feladatok száma, az egyes kártyákon látható a felelős felhasználó és a határidő.
+A \texttt{KanbanView} három oszlopban jeleníti meg a feladatokat (\texttt{Open}, \texttt{InProgress}, \texttt{Done}). Az oszlopok dinamikusan kiszámított adatokat kapnak: minden oszlop szűri a globális \texttt{tasks} tömbből a saját státuszához tartozó elemeket. Az oszlopok fejlécein megjelenik a benne lévő feladatok száma, az egyes kártyákon látható a felelős felhasználó és a határidő. A nézet megjelenése a \ref{fig:impl-kanban}. ábrán látható.
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.8\textwidth]{images/frontend_kanban.png}
 \caption{A KanbanView komponens megjelenése}
-\label{fig:architecture}
+\label{fig:impl-kanban}
 \end{figure}
 
 \SubSection{Scrum nézet}
 
-A \texttt{ScrumView} a legösszetettebb nézetek egyike: egyszerre kezeli a sprint kiválasztást, sprint létrehozást, feladatok sprinthez rendelését, és a Kanban-szerű sprint boardot. A sprinthez nem rendelt feladatok a „Backlog" szekcióban jelennek meg. A sprint kiválasztó gombok tetején az aktív sprint (amelynek dátumtartománya lefedi az aktuális dátumot) egy zöld „active" badget kap. A sprint törlése után az érintett feladatok automatikusan visszakerülnek a backlogba (a backend kezeli ezt a konzisztenciát).
+A \texttt{ScrumView} a legösszetettebb nézetek egyike: egyszerre kezeli a sprint kiválasztást, sprint létrehozást, feladatok sprinthez rendelését, és a Kanban-szerű sprint boardot. A sprinthez nem rendelt feladatok a „Backlog" szekcióban jelennek meg. A sprint kiválasztó gombok tetején az aktív sprint (amelynek dátumtartománya lefedi az aktuális dátumot) egy zöld „active" badget kap. A sprint törlése után az érintett feladatok automatikusan visszakerülnek a backlogba (a backend kezeli ezt a konzisztenciát). A nézet megjelenése a \ref{fig:impl-scrum}. ábrán látható.
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.8\textwidth]{images/frontend_scrum.png}
 \caption{A ScrumView komponens megjelenése}
-\label{fig:architecture}
+\label{fig:impl-scrum}
 \end{figure}
 
 \SubSection{Gamifikáció nézet}
 
-A \texttt{GamificationView} egy ranglistát jelenít meg a projekt tagjai számára. A felhasználókat XP és szint szerint rendezi, az első helyen lévő felhasználó kártyája arany szegéllyel kiemelve jelenik meg. Minden kártyán látható a felhasználó szintje, XP értéke, a következő szinthez szükséges XP, az XP progress bar és a megszerzett badge szintek. A gamifikációs rendszer magyarázatát egy kinyitható accordion panel tartalmazza, amelyben a szintlépési formula, a prestige rendszer és a class badge-ek kerülnek bemutatásra.
+A \texttt{GamificationView} egy ranglistát jelenít meg a projekt tagjai számára. A felhasználókat XP és szint szerint rendezi, az első helyen lévő felhasználó kártyája arany szegéllyel kiemelve jelenik meg. Minden kártyán látható a felhasználó szintje, XP értéke, a következő szinthez szükséges XP, az XP progress bar és a megszerzett badge szintek. A gamifikációs rendszer magyarázatát egy kinyitható accordion panel tartalmazza, amelyben a szintlépési formula, a prestige rendszer és a class badge-ek kerülnek bemutatásra. A nézet a \ref{fig:impl-game}. ábrán látható.
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.8\textwidth]{images/frontend_game.png}
 \caption{A GamificationView komponens megjelenése}
-\label{fig:architecture}
+\label{fig:impl-game}
 \end{figure}
 
 \SubSection{Mail rendszer}
@@ -239,7 +239,7 @@ A levelezési rendszer (\texttt{Mails} komponens) háromrészes elrendezést alk
 
 A mobil alkalmazás navigációja Expo Router segítségével valósul meg. A \texttt{(tabs)} csoportban tíz tab lap él: index (főoldal), tasks, subtasks, kanban, scrum, plan, gamification, mails, log, account. Az önálló képernyők (sign, create-project) a Stack navigátor részeként érhetők el. A tab bar egyedi komponensként lett megvalósítva (\texttt{CustomTabBar}), mivel az alapértelmezett Expo tab bar nem támogatta a vízszintes görgetést, amely tíz tab esetén szükségessé vált.
 
-\begin{lstlisting}[language=JavaScript, caption={Egyedi tab bar implementáció (_layout.tsx)}]
+\begin{lstlisting}[language=JavaScript, caption={Egyedi tab bar implementáció (layout.tsx)}]
 function CustomTabBar({ state, navigation }) {
   return (
     <View style={styles.tabBarWrapper}>
@@ -290,22 +290,22 @@ const BASE = debuggerHost
 export const API_URL = BASE;
 \end{lstlisting}
 
+A mobil alkalmazás főbb nézetei a \ref{fig:impl-mobile}. ábrán láthatók.
+
 \begin{figure}[h!]
-\centering
-\includegraphics[width=0.8\textwidth]{images/mobile_screens.jpeg}
 \caption{A mobil alkalmazás főbb nézetei}
-\label{fig:architecture}
+\label{fig:impl-mobile}
 \end{figure}
 
 % ─────────────────────────────────────────────────────────────────────────────
 \Section{Tesztelés implementációja}
 % ─────────────────────────────────────────────────────────────────────────────
 
-A rendszer tesztelése két szinten valósul meg: backend oldalon Jest és Supertest segítségével írt integrációs tesztek, frontend oldalon Vitest és React Testing Library alapú unit tesztek.
+A rendszer tesztelése két szinten valósul meg: backend oldalon Jest \cite{jest} és Supertest segítségével írt integrációs tesztek, frontend oldalon Vitest \cite{vitest} és React Testing Library alapú unit tesztek.
 
 \SubSection{Backend tesztelés}
 
-A backend tesztek in-memory MongoDB adatbázist alkalmaznak (\texttt{mongodb-memory-server}), ami azt jelenti, hogy a tesztek nem igényelnek élő adatbázis-kapcsolatot, és teljesen izoláltan futnak. A \texttt{setup.ts} fájl minden tesztfájl előtt elindítja a memóriaadatbázist, és minden egyes teszt után törli az összes kollekcióból az adatokat, hogy biztosítsa az izolált futtatást.
+A backend tesztek in-memory MongoDB adatbázist alkalmaznak (\texttt{mongodb-\allowbreak{}memory-\allowbreak{}server}), ami azt jelenti, hogy a tesztek nem igényelnek élő adatbázis-kapcsolatot, és teljesen izoláltan futnak. A \texttt{setup.ts} fájl minden tesztfájl előtt elindítja a memóriaadatbázist, és minden egyes teszt után törli az összes kollekcióból az adatokat, hogy biztosítsa az izolált futtatást.
 
 \begin{lstlisting}[language=JavaScript, caption={Teszt setup (\_\_tests\_\_/setup.ts)}]
 beforeAll(async () => {
@@ -325,18 +325,18 @@ afterAll(async () => {
 });
 \end{lstlisting}
 
-Az integrációs tesztek a Supertest könyvtár segítségével közvetlenül az Express alkalmazásnak küldenek HTTP kéréseket, és ellenőrzik a visszakapott státuszkódot, a válasz testét és az adatbázis állapotát. A tesztek lefedik az auth, project, task, subtask és service szintű működést.
+Az integrációs tesztek a Supertest könyvtár segítségével közvetlenül az Express alkalmazásnak küldenek HTTP kéréseket, és ellenőrzik a visszakapott státuszkódot, a válasz testét és az adatbázis állapotát. A tesztek lefedik az auth, project, task, subtask és service szintű működést. A futtatás eredménye a \ref{fig:impl-jest}. ábrán látható.
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.8\textwidth]{images/jest_tests.png}
-\caption{A backend tesztek futtatásának eredménye}
-\label{fig:architecture}
+\caption{A backend tesztek futtatásának eredménye \cite{jest}}
+\label{fig:impl-jest}
 \end{figure}
 
 \SubSection{Frontend tesztelés}
 
-A webes frontend tesztjei Vitest és React Testing Library segítségével készültek. A tesztek négy fő területet fednek le:
+A webes frontend tesztjei Vitest \cite{vitest} és React Testing Library segítségével készültek. A tesztek négy fő területet fednek le:
 
 \begin{enumerate}
 \item \textbf{Reducer tesztek}: Az \texttt{AppReducer} és \texttt{ViewReducer} függvények elszigetelt tesztelése, verifikálva, hogy minden action típus a várt állapotváltozást eredményezi.
@@ -369,13 +369,32 @@ it('rendereli a TasksView-t', () => {
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.8\textwidth]{images/vitest_tests.png}
-\caption{A frontend tesztek futtatásának eredménye}
-\label{fig:architecture}
+\caption{A frontend tesztek futtatásának eredménye \cite{vitest}}
+\label{fig:impl-vitest}
 \end{figure}
 
 \SubSection{GitHub service tesztelés}
 
-A \texttt{githubService.ts} tesztelése érdekes kihívást jelentett, mivel a GitHub API-t nem szerettük volna valóban hívni a tesztek során. Az axios mockolt verziójával (\texttt{jest.mock('axios')}) a tesztek ellenőrzik, hogy a service függvények a helyes URL-t hívják-e, a helyes headereket küldik-e el, és a válasz adatait a várt formátumra alakítják-e. A \texttt{logService.ts} tesztelésénél a \texttt{console.log} spy-olásával ellenőriztük, hogy a naplóbejegyzések a várt formátumban kerülnek kiírásra.
+A \texttt{githubService.ts} tesztelése érdekes kihívást jelentett, mivel a GitHub API-t nem szerettük volna valóban hívni a tesztek során. Az axios mockolt verziójával (\texttt{jest.\allowbreak{}mock(\allowbreak{}'axios')}) a tesztek ellenőrzik, hogy a service függvények a helyes URL-t hívják-e, a helyes headereket küldik-e el, és a válasz adatait a várt formátumra alakítják-e. A \texttt{logService.ts} tesztelésénél a \texttt{console.log} spy-olásával ellenőriztük, hogy a naplóbejegyzések a várt formátumban kerülnek kiírásra.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\Section{Fejlesztői és tesztkörnyezet}
+% ─────────────────────────────────────────────────────────────────────────────
+
+A rendszer fejlesztése és futtatása a következő környezetben történt, amelynek ismerete szükséges az eredmények reprodukálásához.
+
+\textbf{Szerveroldal}: Node.js 20 LTS, TypeScript 5, MongoDB 7 (lokálisan futtatva vagy MongoDB Atlas felhőszolgáltatáson keresztül). A backend indítása: \texttt{npm run dev} (ts-node-dev-vel), a tesztek futtatása: \texttt{npm test}.
+
+\textbf{Webes frontend}: Node.js 20 LTS, Vite 5, React 18. Fejlesztői szerver indítása: \texttt{npm run dev} (alapértelmezetten a \texttt{http://localhost:5173} címen érhető el). A tesztek futtatása: \texttt{npm run test} (Vitest).
+
+\textbf{Mobil alkalmazás}: Expo SDK 51, React Native 0.74. Előfeltétel az Expo CLI telepítése (\texttt{npm install -g expo-cli}), majd az alkalmazás indítható \texttt{npx expo start} paranccsal. Fizikai eszközön az Expo Go alkalmazáson keresztül futtatható, a fejlesztői gép és a mobileszköz azonos LAN hálózaton legyen.
+
+\textbf{Szükséges környezeti változók} (backend \texttt{.env} fájl):
+\begin{itemize}
+  \item \texttt{MONGO\_URI} -- MongoDB kapcsolati string,
+  \item \texttt{JWT\_SECRET} -- JWT aláíráshoz használt titkos kulcs,
+  \item \texttt{PORT} -- szerver portja (alapértelmezett: \texttt{5000}).
+\end{itemize}
 
 % ─────────────────────────────────────────────────────────────────────────────
 \Section{Fejlesztési kihívások és megoldások}
@@ -385,8 +404,34 @@ A fejlesztés során számos praktikus kihívással kellett szembenézni, amelye
 
 \textbf{Alfeladat betöltés párhuzamos kérésekkel}: Az alfeladatokat feladatonként kellett betölteni, ami azt jelentette, hogy ha egy projektnek 10 feladata van, 10 párhuzamos API kérés fut le. Ha a Redux-szerű \texttt{SET\_SUBTASKS} action-t használtuk volna, az egymást felülíró dispatch hívások miatt csak az utolsó kérés eredménye maradt volna meg. A megoldás az \texttt{APPEND\_SUBTASKS} action bevezetése volt, amely az adott feladathoz tartozó korábbi alfeladatokat kiszűri, majd az újakkal egészíti ki az állapotot.
 
-\textbf{Mobil eszköz és localhost}: Fizikai mobileszközön a \texttt{localhost} nem mutat a fejlesztői gépre, hanem magára az eszközre. Az Expo által elérhető \texttt{Constants.expoConfig.hostUri} mező tartalmazza a fejlesztői szerver IP-jét és portját, amelyből a gép LAN IP-je kinyerhető. Ez az automatikus konfiguráció tette lehetővé, hogy a mobil app fejlesztés közben fizikai eszközön is futtatható legyen.
+\textbf{Mobil eszköz és localhost}: Fizikai mobileszközön a \texttt{localhost} nem mutat a fejlesztői gépre, hanem magára az eszközre. Az Expo által elérhető \texttt{Constants.\allowbreak{}expoConfig.\allowbreak{}hostUri} mező tartalmazza a fejlesztői szerver IP-jét és portját, amelyből a gép LAN IP-je kinyerhető. Ez az automatikus konfiguráció tette lehetővé, hogy a mobil app fejlesztés közben fizikai eszközön is futtatható legyen.
 
 \textbf{Sprint törlés és feladat konzisztencia}: Sprint törlésekor a hozzá rendelt feladatokon is el kell végezni a sprint referencia törlését, különben azok sosem kerülnek vissza a backlogba. A backend sprint törlési route-ja azonban ezt nem oldja meg automatikusan – ez egy ismert hiányosság, amelyet az összefoglalóban is megemlítünk a jövőbeli fejlesztési irányok között.
 
 \textbf{Swagger dokumentáció hiánya}: Bár a tervezési fejezetben Swagger UI képernyőkép szerepel, a fejlesztés során külső Swagger dokumentáció nem készült automatikusan. Az API végpontok dokumentálása kézzel, \texttt{swagger-jsdoc} vagy hasonló eszközzel utólag is elvégezhető lett volna – ez szintén egy jövőbeli fejlesztési lehetőség.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\Section{Jövőbeli fejlesztési lehetőségek}
+% ─────────────────────────────────────────────────────────────────────────────
+
+A rendszer számos irányban tovább fejleszthető. A legfontosabb jövőbeli lehetőségek az alábbiak:
+
+\textbf{Monorepo és megosztott csomag}: A karbantarthatóság legjelentősebb javítása egy monorepo struktúra (pl. Nx vagy Turborepo) bevezetése lenne, amelyen belül egy \texttt{shared} csomag tartalmazná a TypeScript interfész definíciókat, az action típusokat és a közös üzleti logikát. Ez megszüntetné a jelenlegi kódduplikációt a webes és mobil kliens között, és garantálná, hogy az adatmodell változásai automatikusan és konzisztensen érvényre jutnak mindkét kliensben -- jelentősen csökkentve az összehangolási hibák kockázatát.
+
+\textbf{API contract és típusgenerálás}: A backend TypeScript interfészeit jelenleg kézzel másolják a kliensek. Egy OpenAPI/Swagger séma alapú típusgenerálási pipeline (pl. \texttt{openapi-typescript} eszközzel) lehetővé tenné, hogy a backend interfészei automatikusan generált típusként legyenek elérhetők mindkét kliensben. Ez az API contract szinkronizálási problémát teljesen megszüntetné: ha a backend változik, a következő generálási lépés után a kliensek azonnal látják a típusinkompatibilitást.
+
+\textbf{Drag-and-drop a Kanban boardon}: A jelenlegi implementáció statikus kártyákat jelenít meg. A feladatok húzással való áthelyezése oszlopok között -- és ezzel egyidejűleg az állapot módosítása -- jelentősen javítaná a felhasználói élményt. Ez webes oldalon például a \texttt{@dnd-kit} könyvtárral valósítható meg.
+
+\textbf{Valós idejű frissítések}: A jelenlegi rendszer lekérdezés alapú: az adatok akkor frissülnek, ha a felhasználó navigál vagy manuálisan frissít. WebSocket vagy Server-Sent Events alapú megoldással (pl. Socket.io) a csapat tagjai valós időben láthatnák egymás változtatásait.
+
+\textbf{E-mail értesítések}: Feladat hozzárendeléskor vagy határidő közeledésekor automatikus e-mail értesítés küldése (pl. Nodemailer és egy SMTP szolgáltató segítségével).
+
+\textbf{Sprint törlés és feladat konzisztencia}: Jelenleg sprint törlésekor a hozzá rendelt feladatok \texttt{sprint} mezője nem törlődik automatikusan a backendben, ami konzisztencia-problémát okozhat. Ezt egy MongoDB aggregációs pipeline-nal vagy Mongoose \texttt{mid\-dle\-ware}-rel lehetne kezelni.
+
+\textbf{Szerepkör-alapú jogosultságkezelés}: A jelenlegi rendszer megkülönböztet adminisztrátor és közreműködő szerepköröket, de a végrehajtási logika nem minden végponton érvényes egységesen. Egy részletesebb middleware-alapú permission réteg pontosabb hozzáférésvezérlést biztosítana.
+
+\textbf{Prestige és class badge rendszer teljes kiépítése}: A gamifikációs tervezés tartalmaz egy class badge rendszert (szintenként három osztály közül lehet választani), amelynek UI-ja elkészült, de a mögötte lévő adatmodell (választott osztály tárolása) még nem implementált.
+
+\textbf{Tesztlefedettség bővítése}: A mail rendszer backend integrációs tesztjei, a sprint tesztek és a mobil alkalmazás komponens tesztjei mind hasznos kiegészítések lennének a jövőbeli fejlesztések során. A mobil tesztelés hiánya elsősorban az Expo tesztkörnyezet konfigurálásának összetettsége miatt maradt el, de egy \texttt{jest-expo} alapú konfiguráció ezt orvosolhatná.
+
+\textbf{Swagger/OpenAPI dokumentáció}: Az API végpontok automatikus dokumentálása swagger-jsdoc vagy tsoa segítségével interaktív, böngészhető dokumentációt biztosítana a jövőbeli integrációs partnerek és fejlesztők számára.

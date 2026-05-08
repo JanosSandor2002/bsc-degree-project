@@ -10,6 +10,32 @@
 \usepackage{styles/python}
 
 \usepackage{hyperref}
+\usepackage[htt]{hyphenat}
+
+% ── Szín definíciók a szintaxiskiemeléshez ───────────────────────────────────
+\definecolor{kw}{rgb}{0.13,0.13,0.90}    % kulcsszavak - kék
+\definecolor{str}{rgb}{0.16,0.50,0.16}   % stringek - zöld
+\definecolor{cmt}{rgb}{0.50,0.50,0.50}   % kommentek - szürke
+\definecolor{num}{rgb}{0.60,0.0,0.60}    % számok - lila
+
+% ── JavaScript / TypeScript nyelv definíció ──────────────────────────────────
+\lstdefinelanguage{JavaScript}{
+  keywords={
+    break, case, catch, continue, debugger, default, delete,
+    do, else, finally, for, function, if, in, instanceof,
+    new, return, switch, this, throw, try, typeof, var, void,
+    while, with, class, const, enum, export, extends, import,
+    super, implements, interface, let, package, private,
+    protected, public, static, yield, async, await, of, from,
+    type, declare, require, module, undefined, null, true, false
+  },
+  sensitive=true,
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]",
+  morestring=[b]`,
+}
 
 % ── Globális listings beállítás (tördelés + magyar ékezetek) ─────────────────
 \lstset{
@@ -28,6 +54,11 @@
   framesep=6pt,
   xleftmargin=6pt,
   xrightmargin=6pt,
+  % ── Szintaxiskiemelés ─────────────────────────────────────────────────────
+  keywordstyle=\color{kw}\bfseries,
+  stringstyle=\color{str},
+  commentstyle=\color{cmt}\itshape,
+  numberstyle=\tiny\color{num},
   literate=
     {á}{{\'{a}}}1 {é}{{\'{e}}}1 {í}{{\'\i}}1 {ó}{{\'{o}}}1
     {ö}{{\"o}}1  {ő}{{\H{o}}}1  {ú}{{\'{u}}}1 {ü}{{\"u}}1
@@ -68,7 +99,7 @@
 
 \addcontentsline{toc}{chapter}{Irodalomjegyzék}
 \bibliographystyle{plain}
-\bibliography{dolgozat.bib}
+\bibliography{dolgozat}
 
 \newpage
 

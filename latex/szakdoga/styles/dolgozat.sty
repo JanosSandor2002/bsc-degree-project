@@ -1,5 +1,6 @@
 %A szükséges csomagok
 %méretek: margó, lap, fej~ és lábléc stb. NE MÓDOSÍTSUK!
+\usepackage{listings}
 \usepackage[paperwidth=210mm,paperheight=297mm,headheight=15.2pt,headsep=7.1mm,top=25mm,bottom=25mm,inner=30mm,outer=25mm,dvips]{geometry}
 %fejléc kezelõ csomag
 \usepackage{fancyhdr}
@@ -31,6 +32,18 @@
 \usepackage[T1]{fontenc}
 %elválasztást végzõ csomag
 \usepackage[magyar]{babel}
+
+\lstdefinelanguage{JavaScript}{
+  keywords={const, let, var, function, return, if, else, for,
+             while, new, class, import, export, default, from,
+             async, await, true, false, null, undefined, type,
+             interface, extends, implements, require, module},
+  sensitive=true,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+  morestring=[b]'
+}
 
 % \newcommand{\myinclude}[1]{%
 % 
