@@ -8,10 +8,15 @@
 \usepackage{graphicx}
 \usepackage{styles/cpp}
 \usepackage{styles/python}
-
+\usepackage{caption}
+\usepackage{float}
 \usepackage{hyperref}
 \usepackage[htt]{hyphenat}
 
+
+\renewcommand{\lstlistingname}{Kódpélda}
+\DeclareCaptionLabelFormat{kodpelda}{\arabic{chapter}.\arabic{lstlisting} Kódpélda}
+\captionsetup[lstlisting]{labelformat=kodpelda, labelsep=period}
 % ── Szín definíciók a szintaxiskiemeléshez ───────────────────────────────────
 \definecolor{kw}{rgb}{0.13,0.13,0.90}    % kulcsszavak - kék
 \definecolor{str}{rgb}{0.16,0.50,0.16}   % stringek - zöld
@@ -67,6 +72,7 @@
     {Ö}{{\"O}}1  {Ő}{{\H{O}}}1  {Ú}{{\'{U}}}1 {Ü}{{\"U}}1
     {Ű}{{\H{U}}}1,
 }
+
 
 \begin{document}
 

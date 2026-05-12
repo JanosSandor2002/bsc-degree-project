@@ -33,11 +33,11 @@ A hitelesítés JSON Web Token alapon működik. Bejelentkezéskor a szerver egy
 
 \SubSection{Webes frontend}
 
-A webes alkalmazás React 18-ra épül, Vite fejlesztői szerverrel és build eszközzel. A Tailwind CSS utility-first megközelítése lehetővé tette a gyors és következetes stílusok kialakítását anélkül, hogy külön CSS fájlokat kellett volna karbantartani. Az állapotkezelés teljesen egyedi megoldást alkalmaz: a \texttt{GlobalContext} tárolja az alkalmazás fő adatait (felhasználó, projektek, feladatok, alfeladatok, sprintek), míg a \texttt{ViewContext} a nézetek közötti navigációért felelős. Az axios könyvtár HTTP kérések küldésére szolgál a webes kliensben.
+A webes alkalmazás React 18-ra épül \cite{react}, Vite fejlesztői szerverrel és build eszközzel \cite{vite}. A Tailwind CSS \cite{tailwind} utility-first megközelítése lehetővé tette a gyors és következetes stílusok kialakítását anélkül, hogy külön CSS fájlokat kellett volna karbantartani. Az állapotkezelés teljesen egyedi megoldást alkalmaz: a \texttt{GlobalContext} tárolja az alkalmazás fő adatait (felhasználó, projektek, feladatok, alfeladatok, sprintek), míg a \texttt{ViewContext} a nézetek közötti navigációért felelős. Az axios könyvtár \cite{axios} HTTP kérések küldésére szolgál a webes kliensben.
 
 \SubSection{Mobil frontend}
 
-A mobil alkalmazás React Native alapú, Expo keretrendszerrel. Az Expo lehetővé teszi a gyors fejlesztést és az eszközön való tesztelést Expo Go segítségével. A navigáció Expo Router révén fájlrendszer-alapú, ami közelebb áll a Next.js szemléletéhez. A mobil alkalmazás a fetch API-t alkalmazza HTTP kérésekhez, és a backend ugyanazon végpontjait éri el, mint a webes kliens. Az állapotkezelés megegyezik a webes verzióéval: Context API és useReducer kombináció.
+A mobil alkalmazás React Native alapú \cite{reactnative}, Expo keretrendszerrel \cite{expo}. Az Expo lehetővé teszi a gyors fejlesztést és az eszközön való tesztelést Expo Go segítségével. A navigáció Expo Router révén \cite{exporouter} fájlrendszer-alapú, ami közelebb áll a Next.js szemléletéhez. A mobil alkalmazás a fetch API-t alkalmazza HTTP kérésekhez, és a backend ugyanazon végpontjait éri el, mint a webes kliens. Az állapotkezelés megegyezik a webes verzióéval: Context API és useReducer kombináció.
 
 % ─────────────────────────────────────────────────────────────────────────────
 \Section{Karbantarthatósági szempontok a kliens architektúrában}
@@ -169,23 +169,25 @@ még akkor is, ha ez rövid távon több párhuzamos kódot jelent.
 \Section{A karbantarthatóság értékelése}
 % ─────────────────────────────────────────────────────────────────────────────
 
-A rendszer fejlesztése során a karbantarthatóság nem utólagos szempont volt, hanem tervezési alapelv. Ennek értékelése három dimenzióban végezhető el: a kódbázis struktúrája, a web–mobil összehangoltság és a jövőbeli bővíthetőség szempontjából.
+A rendszer fejlesztése során a karbantarthatóság nem utólagos szempont volt, hanem tervezési alapelv. Martin megfogalmazásában a karbantartható kód egyik legfontosabb tulajdonsága, hogy minden egység egyetlen, jól meghatározott felelősséggel rendelkezzen \cite{martin2008clean} -- ezt az elvet az Acxor backend service rétege közvetlenül tükrözi. Ennek értékelése három dimenzióban végezhető el: a kódbázis struktúrája, a web--mobil összehangoltság és a jövőbeli bővíthetőség szempontjából.
 
 \SubSection{Kódbázis struktúrájának karbantarthatósága}
 
-A backend kódja jól elkülönített rétegekre épül: a route handlerek kizárólag a HTTP kérések fogadásáért és a válasz küldéséért felelősek, az üzleti logika a service rétegben él (\texttt{xpService}, \texttt{logService}, \texttt{githubService}), az adathozzáférés pedig a Mongoose modelleken keresztül valósul meg. Ez a háromrétegű szétválasztás azt jelenti, hogy például az XP számítási logika megváltoztatásához egyetlen fájlt (\texttt{xpService.ts}) kell módosítani, és az összes érintett végpont automatikusan az új logikát alkalmazza. Az ilyen jellegű, jól lokalizálható módosíthatóság a karbantartható szoftverek egyik legfontosabb jellemzője.
+A backend kódja jól elkülönített rétegekre épül: a route handlerek kizárólag a HTTP kérések fogadásáért és a válasz küldéséért felelősek, az üzleti logika a service rétegben él (\texttt{xpService}, \texttt{logService}, \texttt{githubService}), az adathozzáférés pedig a Mongoose modelleken keresztül valósul meg. Ez a háromrétegű szétválasztás a klasszikus rétegelt architektúra (layered architecture) elvét követi \cite{gamma1994design}, amelynek lényege, hogy az egyes rétegek csak a szomszédos réteggel kommunikálnak, és a felelősségek élesen elkülönülnek egymástól. A gyakorlatban ez azt jelenti, hogy például az XP számítási logika megváltoztatásához egyetlen fájlt (\texttt{xpService.ts}) kell módosítani, és az összes érintett végpont automatikusan az új logikát alkalmazza. Az ilyen jellegű, jól lokalizálható módosíthatóság a karbantartható szoftverek egyik legfontosabb jellemzője.
 
-A TypeScript használata mindhárom platformon szintén közvetlen karbantarthatósági előnyt jelent: a típusrendszer fordítási időben jelzi az inkompatibilis változásokat, amelyek dinamikusan típusos kódban csak futásidőben derülnének ki. Ez különösen értékes akkor, amikor az adatmodell változik, és a változásnak mindhárom platformon át kell propagálódnia.
+A szoftver életciklusa szempontjából különösen fontos a módosíthatóság (modifiability) és a bővíthetőség (extensibility) kérdése. Fowler szerint a kód refaktorálhatósága szorosan összefügg azzal, hogy az egyes komponensek mennyire függetlenek egymástól \cite{fowler2018refactoring}: ha egy változtatás csak egyetlen, jól körülhatárolt egységet érint, a regresszió kockázata minimális. Az Acxor service rétege ezt az elvet érvényesíti, mivel az \texttt{xpService.ts} vagy a \texttt{logService.ts} módosítása nem érinti a route handlerek kódját.
+
+A TypeScript használata mindhárom platformon szintén közvetlen karbantarthatósági előnyt jelent \cite{typescript}: a típusrendszer fordítási időben jelzi az inkompatibilis változásokat, amelyek dinamikusan típusos kódban csak futásidőben derülnének ki. Ez különösen értékes akkor, amikor az adatmodell változik, és a változásnak mindhárom platformon át kell propagálódnia.
 
 \SubSection{Web és mobil kliens összehangoltsága}
 
-A webes React alkalmazás és a React Native mobil alkalmazás közötti karbantarthatóság legfőbb biztosítéka a közös állapotkezelési minta. Mindkét kliens ugyanolyan struktúrájú Context-et, Reducer-t és action creator függvényeket alkalmaz, ami azt jelenti, hogy egy fejlesztő, aki az egyik kliensben eligazodik, minimális tanulással képes a másikban is hatékonyan dolgozni. A közös backend API pedig garantálja, hogy az adatmodell változásai mindkét klienshez egyszerre jutnak el, és nem lehetséges, hogy a két kliens eltérő adatszerkezettel dolgozzon.
+A webes React alkalmazás és a React Native mobil alkalmazás közötti karbantarthatóság legfőbb biztosítéka a közös állapotkezelési minta. Mindkét kliens ugyanolyan struktúrájú Context-et, Reducer-t és action creator függvényeket alkalmaz, ami azt jelenti, hogy egy fejlesztő, aki az egyik kliensben eligazodik, minimális tanulással képes a másikban is hatékonyan dolgozni. Ez az egységes minta a szoftver életciklusa szempontjából is előnyös: az onboarding ideje rövidebb, és a tudásátadás kevésbé függ az egyéni fejlesztői ismeretektől \cite{martin2008clean}. A közös backend API pedig garantálja, hogy az adatmodell változásai mindkét klienshez egyszerre jutnak el, és nem lehetséges, hogy a két kliens eltérő adatszerkezettel dolgozzon.
 
-Ugyanakkor a dolgozat őszintén elismeri a jelenlegi architektúra korlátait is. Az \texttt{Actions.ts} fájlban lévő aszinkron action creator logika, a TypeScript interfész definíciók és a hibakezelési konvenciók mindkét kliensben kézzel vannak karbantartva, ami azt jelenti, hogy egy üzleti logika változásakor két helyen kell elvégezni az azonos módosítást. Ez a duplikáció kontrollált és tudatosan vállalt, de hosszú távon -- különösen csapatnövekedés esetén -- érdemes lenne megszüntetni egy megosztott csomag (shared package) bevezetésével.
+Ugyanakkor a dolgozat őszintén elismeri a jelenlegi architektúra korlátait is. Az \texttt{Actions.ts} fájlban lévő aszinkron action creator logika, a TypeScript interfész definíciók és a hibakezelési konvenciók mindkét kliensben kézzel vannak karbantartva, ami azt jelenti, hogy egy üzleti logika változásakor két helyen kell elvégezni az azonos módosítást. Fowler terminológiájával élve ez egy tudatosan vállalt kódduplikáció \cite{fowler2018refactoring}, amelynek felszámolása -- egy megosztott csomag (shared package) bevezetésével -- a rendszer következő fejlődési lépése lehet.
 
 \SubSection{Összegző értékelés}
 
-Összességében az Acxor architektúrája a karbantarthatóság szempontjából egyensúlyt tart a pragmatizmus és az elvek között. A rendszer nem törekszik a tökéletes duplikáció\-mentességre, ha az azzal járó komplexitás nem arányos az előnyökkel – de minden fontosabb architekturális döntés mögött felismerhető a karbantarthatósági szempont: a service réteg szétválasztása, a közös állapotkezelési minta, a TypeScript típusbiztonság és a tesztlefedettség együtt olyan rendszert alkotnak, amelyen egy új fejlesztő a belépéstől kezdve hatékonyan tud dolgozni, és amelyen a változtatások hatása előre látható és kontrollálható.
+Összességében az Acxor architektúrája a karbantarthatóság szempontjából egyensúlyt tart a pragmatizmus és az elvek között. A rendszer nem törekszik a tökéletes duplikáció\-mentességre, ha az azzal járó komplexitás nem arányos az előnyökkel -- de minden fontosabb architekturális döntés mögött felismerhető a karbantarthatósági szempont: a service réteg szétválasztása \cite{gamma1994design}, a közös állapotkezelési minta, a TypeScript típusbiztonság \cite{typescript} és a tesztlefedettség együtt olyan rendszert alkotnak, amelyen egy új fejlesztő a belépéstől kezdve hatékonyan tud dolgozni, és amelyen a változtatások hatása előre látható és kontrollálható \cite{martin2008clean}.
 
 %────────────────────────────────────────────────────────────────────────────
 \Section{Adatbázis-tervezés}
@@ -196,13 +198,6 @@ Az adatbázis tervezésekor a legfontosabb szempontok a normalizált, de praktik
 \SubSection{Adatmodellek}
 
 A \texttt{User} modell tartalmazza a felhasználói adatokat, köztük a gamifikációhoz szükséges \texttt{xp}, \texttt{level} és \texttt{prestige} mezőket. A \texttt{Project} dokumentum tárolja az adminisztrátor, a közreműködők és a megtekintők referenciáit, ezáltal biztosítva az alapszintű hozzáférésvezérlést. A \texttt{Task} modell egy projektre és opcionálisan egy sprintre mutat, emellett tartalmaz \texttt{xpReward}, \texttt{deadline} és \texttt{assignedTo} mezőket. A \texttt{Subtask} modell szülő feladathoz kapcsolódik, és hasonló szerkezetet követ. A \texttt{Sprint} modell projekthez tartozik, és dátumtartománnyal rendelkezik. A \texttt{Log} modell eseménynaplózásra szolgál, projekt-szinten. A \texttt{Mail} modell a felhasználók közötti üzenetküldést teszi lehetővé. Az adatmodellek kapcsolati ábrája a \ref{fig:er-diagram}. ábrán látható.
-
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.8\textwidth]{images/acxor_er_diagram_v2.png}
-\caption{Az Acxor rendszer adatmodelljének kapcsolati ábrája}
-\label{fig:er-diagram}
-\end{figure}
 
 Az alábbi, \ref{tab:models}. táblázat összefoglalja a főbb modellek legfontosabb mezőit:
 
@@ -238,6 +233,14 @@ Mail & from, to, subject, body, read & Üzenet adatok \\
 \caption{Az adatmodellek főbb mezői}
 \label{tab:models}
 \end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{images/acxor_er_diagram_v2.png}
+\caption{Az Acxor rendszer adatmodelljének kapcsolati ábrája}
+\label{fig:er-diagram}
+\end{figure}
+\clearpage
 
 \SubSection{XP és szintlépési rendszer tervezése}
 
@@ -281,25 +284,32 @@ Az API végpontjai a következő fő útvonalcsoportokra oszthatók:
 \item \texttt{/api/github} -- GitHub integrációs végpontok
 \end{itemize}
 
-A teljes végpontlista a \ref{fig:swagger}. ábrán látható Swagger UI dokumentációban tekinthető meg, ahol a végpontok az érintett erőforrás szerint vannak csoportosítva.
+A teljes végpontlista az alábbi három ábrán látható Swagger UI dokumentációban tekinthető meg, ahol a végpontok az érintett erőforrás szerint vannak csoportosítva. A \ref{fig:swagger1}. ábra az Auth, GitHub és Projects, a \ref{fig:swagger2}. ábra a Tasks, SubTasks és Sprints, a \ref{fig:swagger3}. ábra a Logs, Users és Mails csoportokat mutatja.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \centering
-\includegraphics[width=0.8\textwidth]{images/apis.png}
-\caption{Az Acxor REST API dokumentációja (Swagger UI)}
-\label{fig:swagger}
+\includegraphics[width=0.8\textwidth]{images/apis1.png}
+\caption{Acxor Auth, Github és Projects REST API-k (Swagger UI)}
+\label{fig:swagger1}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{images/apis2.png}
+\caption{Acxor Tasks, SubTasks és Sprints REST API-k (Swagger UI)}
+\label{fig:swagger2}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{images/apis3.png}
+\caption{Acxor Logs, Users és Mails REST API-k (Swagger UI)}
+\label{fig:swagger3}
 \end{figure}
 
 \SubSection{Hitelesítési folyamat}
 
-A hitelesítés kétlépéses folyamat: regisztrációkor a szerver bcrypt segítségével hasheli a jelszót, majd JWT tokent állít ki. Bejelentkezéskor az elküldött jelszót összehasonlítja a tárolt hashsel, és sikeres egyezés esetén új tokent bocsát ki. A token tartalmazza a felhasználó azonosítóját (\texttt{id} mező), 7 napos érvényességgel. A védett middleware a tokent dekódolja, megkeresi az adatbázisban a felhasználót, és ha megtalálja, csatolja a \texttt{req.user} objektumhoz a további feldolgozáshoz. A folyamatot a \ref{fig:auth-sequence}. ábra szemlélteti.
-
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.8\textwidth]{images/acxor_auth_sequence.png}
-\caption{A JWT alapú hitelesítési folyamat szekvenciadiagramja}
-\label{fig:auth-sequence}
-\end{figure}
+A hitelesítés kétlépéses folyamat: regisztrációkor a szerver bcrypt segítségével hasheli a jelszót, majd JWT tokent állít ki. Bejelentkezéskor az elküldött jelszót összehasonlítja a tárolt hashsel, és sikeres egyezés esetén új tokent bocsát ki. A token tartalmazza a felhasználó azonosítóját (\texttt{id} mező), 7 napos érvényességgel. A védett middleware a tokent dekódolja, megkeresi az adatbázisban a felhasználót, és ha megtalálja, csatolja a \texttt{req.user} objektumhoz a további feldolgozáshoz.
 
 \SubSection{Feladat-befejezési folyamat}
 
@@ -309,14 +319,27 @@ A feladatok befejezése nem az általános UPDATE végponton keresztül történ
 \Section{Use case tervezés}
 % ─────────────────────────────────────────────────────────────────────────────
 
-A rendszer főbb használati esetei a következő szereplők köré szerveződnek: vendég felhasználó (nem bejelentkezett), alapfelhasználó (bejelentkezett), és projekt adminisztrátor (a projekt létrehozója). A vendég felhasználók csak a főoldalt és a wiki oldalt tekinthetik meg. Az alapfelhasználók projekteket hozhatnak létre és kezelhetnek, feladatokat adhatnak hozzá és zárhatnak le, belső üzeneteket küldhetnek, és követhetik a gamifikációs előrehaladásukat. A projekt adminisztrátor emellett módosíthatja és törölheti a projektet, és kezelheti a közreműködők listáját. A teljes use case modell a \ref{fig:use-case}. ábrán látható.
+A rendszer főbb használati esetei a következő szereplők köré szerveződnek: vendég felhasználó (nem bejelentkezett), alapfelhasználó (bejelentkezett), és projekt adminisztrátor (a projekt létrehozója). A vendég felhasználók csak a főoldalt és a wiki oldalt tekinthetik meg. Az alapfelhasználók projekteket hozhatnak létre és kezelhetnek, feladatokat adhatnak hozzá és zárhatnak le, belső üzeneteket küldhetnek, és követhetik a gamifikációs előrehaladásukat. A projekt adminisztrátor emellett módosíthatja és törölheti a projektet, és kezelheti a közreműködők listáját.
 
-\begin{figure}[h!]
+A \ref{fig:use-case}. ábrán látható use case diagram összefoglalja a három szereplőhöz rendelt műveleteket, kiemelve az adminisztrátor kizárólagos jogosultságait (projekt törlés, szerkesztés, tagkezelés).
+
+\clearpage
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{images/acxor_auth_sequence.png}
+\caption{A JWT alapú hitelesítési folyamat szekvenciadiagramja}
+\label{fig:auth-sequence}
+\end{figure}
+
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.8\textwidth]{images/acxor_use_case_v2.png}
 \caption{Az Acxor rendszer use case diagramja}
 \label{fig:use-case}
 \end{figure}
+\clearpage
+
+A fenti folyamatábra (\ref{fig:auth-sequence}. ábra) szemlélteti a két fázist: az első fázis a bejelentkezést, a második fázis a védett végpontok hívását mutatja be a Bearer token segítségével.
 
 % ─────────────────────────────────────────────────────────────────────────────
 \Section{Felhasználói felület tervezése}
@@ -326,9 +349,13 @@ A felhasználói felület tervezésekor a vezérelv az volt, hogy a rendszer egy
 
 \SubSection{Webes alkalmazás elrendezése}
 
-A webes felület három fő területre osztható: oldalsó navigációs sáv (Sidebar), felső eszköztár (Topbar) és a fő tartalmi terület. Az oldalsó sáv öt ikont tartalmaz: főoldal, Kanban, Scrum, gamifikáció és wiki. A felső eszköztár tartalmaz nézetek közötti váltógombokat (Plan, Tasks, Subtasks, Log), egy projekt-választó legördülő menüt és egy felhasználói menüt. A tartalmi terület minden nézetben egységes „hero" fejléccel kezdődik, amely gradiens háttérrel, projekt nevével és releváns statisztikákkal indul. Az elrendezés a \ref{fig:web-main}. ábrán látható.
+A webes felület három fő területre osztható: oldalsó navigációs sáv (Sidebar), felső eszköztár (Topbar) és a fő tartalmi terület. Az oldalsó sáv öt ikont tartalmaz: főoldal, Kanban, Scrum, gamifikáció és wiki. A felső eszköztár tartalmaz nézetek közötti váltógombokat (Plan, Tasks, Subtasks, Log), egy projekt-választó legördülő menüt és egy felhasználói menüt. A tartalmi terület minden nézetben egységes „hero" fejléccel kezdődik, amely gradiens háttérrel, projekt nevével és releváns statisztikákkal indul.
 
-\begin{figure}[h!]
+Ahogy a \ref{fig:web-main}. ábrán látható, a háromoszlopos elrendezés (navigációs sáv, eszköztár, tartalom) egységes keretet biztosít minden nézetnek.
+
+A \ref{fig:mobile-main}. ábrán látható a mobilalkalmazás főoldala, amelyen jól megfigyelhető a webes verzióhoz hasonló hero fejléc, a projekt statisztikák és az alsó görgethetős tab sáv.
+
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.8\textwidth]{images/frontend_scr.png}
 \caption{A webes alkalmazás főoldalának elrendezése}
@@ -337,9 +364,9 @@ A webes felület három fő területre osztható: oldalsó navigációs sáv (Si
 
 \SubSection{Mobil alkalmazás elrendezése}
 
-A mobil alkalmazásban a navigáció egy vízszintesen görgethető tab sávon keresztül valósul meg, amely tíz lapot tartalmaz. Minden egyes lap egy-egy főnézetet jelenít meg. A tartalom ScrollView-ban jelenik meg, SafeAreaView burkolóval. A hero fejlécek megmaradtak a webes verzióhoz képest, de a komponensek natív React Native komponensek (View, Text, TouchableOpacity, StyleSheet). A projektválasztás egy modal alapú picker segítségével történik. A mobil alkalmazás főoldala a \ref{fig:mobile-main}. ábrán látható.
+A mobil alkalmazásban a navigáció egy vízszintesen görgethető tab sávon keresztül valósul meg, amely tíz lapot tartalmaz. Minden egyes lap egy-egy főnézetet jelenít meg. A tartalom ScrollView-ban jelenik meg, SafeAreaView burkolóval. A hero fejlécek megmaradtak a webes verzióhoz képest, de a komponensek natív React Native komponensek (View, Text, TouchableOpacity, StyleSheet). A projektválasztás egy modal alapú picker segítségével történik.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.4\textwidth]{images/mobile_start.jpeg}
 \caption{A mobil alkalmazás főoldalának elrendezése}
@@ -360,14 +387,9 @@ Az állapotkezelés mindkét kliensalkalmazásban React Context API-ra és useRe
 
 A \texttt{GlobalContext} a következő állapotmezőket tartalmazza: \texttt{user} (bejelentkezett felhasználó adatai), \texttt{token} (JWT token), \texttt{projects} (projektek listája), \texttt{tasks} (aktuális projekt feladatai), \texttt{subtasks} (feladatokhoz tartozó alfeladatok), \texttt{sprints} (sprintek), \texttt{selectedProject} (kiválasztott projekt), \texttt{loading} és \texttt{error} (kérés állapot jelzők).
 
-Az \texttt{APPEND\_SUBTASKS} action típus különösen figyelemre méltó: mivel több feladat alfeladatait töltjük be párhuzamosan, a hagyományos \texttt{SET\_SUBTASKS} felülírná a korábbi eredményeket. Az \texttt{APPEND\_SUBTASKS} ezért az adott feladathoz tartozó korábbi alfeladatokat kiszűri, majd hozzáfűzi az új eredményt, így az összes betöltött alfeladat megmarad az állapotban. Az állapotkezelési folyamat áttekintő ábrája a \ref{fig:state-mgmt}. ábrán látható.
+Az \texttt{APPEND\_SUBTASKS} action típus különösen figyelemre méltó: mivel több feladat alfeladatait töltjük be párhuzamosan, a hagyományos \texttt{SET\_SUBTASKS} felülírná a korábbi eredményeket. Az \texttt{APPEND\_SUBTASKS} ezért az adott feladathoz tartozó korábbi alfeladatokat kiszűri, majd hozzáfűzi az új eredményt, így az összes betöltött alfeladat megmarad az állapotban.
 
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.8\textwidth]{images/acxor_state_management_v2.png}
-\caption{A Context API alapú állapotkezelés folyamata}
-\label{fig:state-mgmt}
-\end{figure}
+A \ref{fig:state-mgmt}. ábra a teljes adatfolyamot szemlélteti: a komponens dispatch hívást küld, a reducer új állapotot állít elő, a GlobalContext Providerén keresztül frissülnek a feliratkozott komponensek, miközben az Actions.ts fájl aszinkron módon kommunikál a backend API-val.
 
 % ─────────────────────────────────────────────────────────────────────────────
 \Section{GitHub integráció tervezése}
@@ -375,11 +397,22 @@ Az \texttt{APPEND\_SUBTASKS} action típus különösen figyelemre méltó: mive
 
 Az Acxor egyik kiegészítő funkciója a GitHub repozitóriumokból való projektimportálás. A tervezés során el kellett dönteni, hogy ez a funkció szerver oldalon vagy kliens oldalon menjen végbe. A szerver oldali megközelítés mellett döntöttünk, mivel a GitHub API tokent nem célszerű közvetlenül a kliensből küldeni a GitHub felé: a szerver közvetítőként működik, ami lehetővé teszi a jövőbeli token validációs logika hozzáadását is.
 
-A folyamat a következő lépésekből áll: a felhasználó megadja GitHub felhasználónevét és személyes hozzáférési tokenét, a kliens elküldi a backend \texttt{/api/github/user/\allowbreak{}repos/\allowbreak{}names} végpontra, a szerver a GitHub API segítségével lekéri a repozitóriumok listáját, majd visszaküldi a neveket. A felhasználó kiválaszt egy repozitóriumot, amelynek issue-it a backend lekéri a \texttt{/api/github/:owner/:repo/issues} végponton keresztül. Az issues-ek feladatokká alakulnak, és egy projektlétrehozási hívással együtt kerülnek az adatbázisba. A teljes adatfolyam a \ref{fig:github-flow}. ábrán látható.
+A folyamat a következő lépésekből áll: a felhasználó megadja GitHub felhasználónevét és személyes hozzáférési tokenét, a kliens elküldi a backend \texttt{/api/github/user/\allowbreak{}repos/\allowbreak{}names} végpontra, a szerver a GitHub API segítségével lekéri a repozitóriumok listáját, majd visszaküldi a neveket. A felhasználó kiválaszt egy repozitóriumot, amelynek issue-it a backend lekéri a \texttt{/api/github/:owner/:repo/issues} végponton keresztül. Az issues-ek feladatokká alakulnak, és egy projektlétrehozási hívással együtt kerülnek az adatbázisba.
 
-\begin{figure}[h!]
+A \ref{fig:github-flow}. ábra a teljes kétfázisú folyamatot mutatja: az első fázisban a repozitóriumlista lekérése, a másodikban az issue-k importálása és a projekt automatikus létrehozása történik. Az Issue~→~Task transzformáció során az issue címe a feladat neve lesz, státusza alapértelmezetten \texttt{Open}, határideje \texttt{null} marad.
+
+\clearpage
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{images/acxor_state_management_v2.png}
+\caption{A Context API alapú állapotkezelés folyamata}
+\label{fig:state-mgmt}
+\end{figure}
+
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.8\textwidth]{images/acxor_github_flow_v2.png}
 \caption{A GitHub integráció adatfolyam-ábrája}
 \label{fig:github-flow}
 \end{figure}
+\clearpage

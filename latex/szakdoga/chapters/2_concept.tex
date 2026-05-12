@@ -4,11 +4,11 @@
 
 \Chapter{Koncepció}
 
-\Section{Tartalom és felépítés}
-
 Ebben a fejezetben a dolgozat témáját körülhatároljuk, bemutatjuk a releváns projektmenedzsment rendszereket, azok főbb funkcióit, előnyeit és hátrányait, valamint azt, hogyan kapcsolódnak az Acxor fejlesztéséhez. A cél nem a saját eredmények részletezése, hanem egy átfogó, irodalmi és technológiai alap bemutatása, amelyre a dolgozat további részei építenek. A fejezet négy fő területre koncentrál: irodalomkutatás, technológia, piackutatás és követelmény-specifikáció. Az irodalomkutatás során áttekintjük a legfontosabb projektmenedzsment rendszereket, a technológiai részben bemutatjuk a rendszerek főbb funkcióit, a piackutatás során összehasonlítjuk a meglévő megoldásokat, míg a követelmény-specifikációban az Acxor fejlesztés céljait és alapelveit foglaljuk össze.
 
 \Section{Projektmenedzsment rendszerek áttekintése}
+
+Az áttekintésben négy elterjedt, iparban széles körben használt projektmenedzsment rendszer kerül bemutatásra: a JIRA, a Trello, az Asana és a Redmine. Minden eszköz azonos szempontok szerint kerül elemzésre: bemutatásra kerülnek főbb funkciói, előnyei és hátrányai, majd kitérünk arra, hogy az adott rendszer milyen inspirációt jelentett az Acxor tervezése és fejlesztése során. Az áttekintést egy összehasonlító táblázat zárja, amely az Acxort a vizsgált eszközökkel helyezi közös kontextusba.
 
 \SubSection{JIRA}
 
@@ -100,9 +100,11 @@ Az Acxor a közepes komplexitású fejlesztői csapatok számára készült, kie
 
 \begin{table}[h!]
 \centering
+\caption{Acxor összehasonlítása a Trello-val és a Jira-val \cite{trello, jira}}
+\label{tab:comparison1}
 \scriptsize
 \setlength{\arrayrulewidth}{0.5pt}
-\begin{tabularx}{\textwidth}{|l|Y|Y|Y|}
+\begin{tabularx}{\textwidth}{|l|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}p{3.0cm}|}
 \hline
 \textbf{Funkció / Eszköz} & \textbf{Acxor} & \textbf{Trello} & \textbf{Jira} \\
 \hline
@@ -110,22 +112,22 @@ Webes felület & Modern vizuális UI & Webes, vizuális & Webes, komplex \\
 Kanban board & Beépített, drag\&drop & Beépített & Részben, plugin szükséges \\
 Sprint / Iteration & Részben, egyszerű & -- & Teljes körű \\
 Gamifikáció & XP, szint, badge & -- & -- \\
-Task / Subtask & \makecell[l]{Epic $\rightarrow$ Story \\ Task $\rightarrow$ Subtask} & Kártya / checklist & \makecell[l]{Epic $\rightarrow$ Story \\ Task $\rightarrow$ Subtask} \\
+Task / Subtask & Epic $\rightarrow$ Story, Task $\rightarrow$ Subtask & Kártya / checklist & Epic $\rightarrow$ Story, Task $\rightarrow$ Subtask \\
 Chat / Log & Globális bot & Részben, kommentek & Részben, jegy alapú \\
 Workflow testreszabás & Részben, egyszerű & Részben, limitált & Részletes, szabály alapú \\
 Permission rendszer & Részben, egyszerű & Részben, egyszerű & Mély, szerepkör alapú \\
 Integrációk & Alap, kulcs szolgáltatások & Részben, Power-Ups & Széles (Confluence, GitHub, Slack\ldots) \\
 \hline
 \end{tabularx}
-\caption{Acxor összehasonlítása a Trello-val és a Jira-val \cite{trello, jira}}
-\label{tab:comparison1}
 \end{table}
 
 \begin{table}[h!]
 \centering
+\caption{Acxor összehasonlítása a Redmine-nel és az Asana-val \cite{redmine, asana}}
+\label{tab:comparison2}
 \scriptsize
 \setlength{\arrayrulewidth}{0.5pt}
-\begin{tabularx}{\textwidth}{|l|Y|Y|Y|}
+\begin{tabularx}{\textwidth}{|l|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}p{2.6cm}|>{\raggedright\arraybackslash}X|}
 \hline
 \textbf{Funkció / Eszköz} & \textbf{Acxor} & \textbf{Redmine} & \textbf{Asana} \\
 \hline
@@ -140,8 +142,6 @@ Permission rendszer & Részben, egyszerű & Roles alapú & Részben, alap \\
 Integrációk & Kulcs szolgáltatások & Részben, pluginok, SCM & Slack, GitHub, Google Workspace \\
 \hline
 \end{tabularx}
-\caption{Acxor összehasonlítása a Redmine-nel és az Asana-val \cite{redmine, asana}}
-\label{tab:comparison2}
 \end{table}
 
 A fenti rendszerek áttekintése rávilágít arra, hogy a projektmenedzsment eszközök széles skálán helyezkednek el komplexitás, testreszabhatóság és felhasználói élmény szempontjából. Az Acxor célja a különböző rendszerek előnyeinek ötvözése: a JIRA funkcionalitásának, a Trello vizuális egyszerűségének, az Asana átlátható task lifecycle-jának, valamint a Redmine struktúrájának kombinálása egy intuitív, könnyen használható, ugyanakkor professzionális projektmenedzsment platformban.
