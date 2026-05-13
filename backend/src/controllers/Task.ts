@@ -35,7 +35,7 @@ export const deleteTask = async (req: Request, res: Response) => {
   }
 };
 
-// Task befejezése (XP + log)
+// Task befejezése
 export const completeTask = async (req: Request, res: Response) => {
   try {
     const task = await Task.findById(req.params.id);

@@ -239,7 +239,7 @@ export default function MailsScreen() {
           />
         )}
 
-        {/* ✅ key prop fix: using mail._id directly */}
+        {/* mail_id használva */}
         {currentList.map((mail) => {
           const isUnread = !mail.read && tab === 'inbox';
           const isSelected = selected?._id === mail._id;
@@ -313,7 +313,7 @@ export default function MailsScreen() {
         })}
       </ScrollView>
 
-      {/* ── Read mail modal ── */}
+      {/* Read mail modal*/}
       <Modal
         visible={!!selected && !showCompose}
         animationType='slide'
@@ -332,7 +332,7 @@ export default function MailsScreen() {
                     <TouchableOpacity onPress={() => setSelected(null)}>
                       <Text style={styles.backBtn}>← Back</Text>
                     </TouchableOpacity>
-                    {/* ✅ FIX: border styles moved to View wrapper, not Text */}
+
                     <TouchableOpacity
                       style={styles.deleteBtnWrap}
                       onPress={() => handleDelete(selected._id)}
@@ -396,7 +396,7 @@ export default function MailsScreen() {
         </View>
       </Modal>
 
-      {/* ── Compose modal ── */}
+      {/*Compose modal*/}
       <Modal visible={showCompose} animationType='slide' transparent>
         <View style={styles.modalOverlay}>
           <View style={styles.modalSheet}>
@@ -407,7 +407,7 @@ export default function MailsScreen() {
               <ScrollView keyboardShouldPersistTaps='handled'>
                 <View style={styles.readHeader}>
                   <Text style={styles.modalTitle}>New Message</Text>
-                  {/* ✅ FIX: border on View, not Text */}
+
                   <TouchableOpacity
                     style={styles.deleteBtnWrap}
                     onPress={() => {
@@ -606,7 +606,6 @@ const styles = StyleSheet.create({
   },
   backBtn: { fontSize: 13, color: Colors.textMuted, fontWeight: '500' },
 
-  // ✅ FIX: border styles on View (TouchableOpacity), not Text
   deleteBtnWrap: {
     borderWidth: 1,
     borderColor: '#fca5a5',

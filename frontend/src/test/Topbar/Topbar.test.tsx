@@ -30,7 +30,6 @@ vi.mock('../../Context/GlobalContext', () => ({
 describe('Topbar', () => {
   it('rendereli a topbart', () => {
     render(<Topbar />);
-    // The Topbar renders a <header> element which has the 'banner' landmark role
     expect(screen.getByRole('banner')).toBeInTheDocument();
   });
 

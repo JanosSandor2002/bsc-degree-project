@@ -76,7 +76,7 @@ const Mails = () => {
   const handleOpen = async (mail: Mail) => {
     setSelected(mail);
     setShowCompose(false);
-    // Mark as read if it's an unread inbox mail
+    // Mark as read if it's  unread
     if (!mail.read && tab === 'inbox') {
       try {
         await axios.put(`${API_URL}/mails/${mail._id}/read`, {}, { headers });
@@ -190,7 +190,7 @@ const Mails = () => {
       </div>
 
       <div className='flex flex-1 overflow-hidden'>
-        {/* ── Left panel: mail list ── */}
+        {/* Left panel: mail list */}
         <div className='w-72 shrink-0 flex flex-col border-r border-blue-100 overflow-hidden'>
           {/* Tab bar */}
           <div className='flex bg-blue-50 mx-4 mt-4 rounded-xl p-1 shrink-0'>
@@ -284,7 +284,7 @@ const Mails = () => {
           </div>
         </div>
 
-        {/* ── Right panel: compose or read ── */}
+        {/* Right panel: compose or read */}
         <div className='flex-1 overflow-auto p-5'>
           {/* Compose form */}
           {showCompose && (
@@ -471,7 +471,7 @@ const Mails = () => {
         </div>
       </div>
 
-      {/* ── Footer ── */}
+      {/* Footer*/}
       <div className='mx-6 mb-6 mt-4 bg-blue-900 rounded-2xl px-6 py-4 flex items-center justify-between gap-3 shrink-0'>
         <div>
           <p className='text-white font-semibold text-sm'>Acxor Mails</p>

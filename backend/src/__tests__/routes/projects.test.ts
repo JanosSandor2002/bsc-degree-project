@@ -3,14 +3,14 @@ import app from '../../app';
 import Task from '../../models/Task';
 import Subtask from '../../models/Subtask';
 
-// ─── Segédfüggvény ────────────────────────────────────────────────────────────
+//Segédfüggvény
 
 let userCounter = 0;
 
 const registerAndLogin = async (
   username?: string,
   email?: string,
-  password = 'Jelszo123!'
+  password = 'Jelszo123!',
 ) => {
   userCounter++;
   const u = username ?? `user${userCounter}`;
@@ -23,7 +23,7 @@ const registerAndLogin = async (
   return { token: res.body.token as string, user: res.body.user };
 };
 
-// ─── Tesztek ──────────────────────────────────────────────────────────────────
+// Tesztek
 
 describe('Projects API – /api/projects', () => {
   let token: string;
@@ -35,7 +35,7 @@ describe('Projects API – /api/projects', () => {
     userId = auth.user._id;
   });
 
-  // ─── POST /api/projects ────────────────────────────────────────────────────
+  // POST /api/projects
 
   describe('POST /api/projects', () => {
     it('létrehoz egy projektet bejelentkezett felhasználóként (201)', async () => {
@@ -123,7 +123,7 @@ describe('Projects API – /api/projects', () => {
     });
   });
 
-  // ─── GET /api/projects ─────────────────────────────────────────────────────
+  // GET /api/projects
 
   describe('GET /api/projects', () => {
     it('visszaadja a bejelentkezett felhasználó projektjeit', async () => {
@@ -184,7 +184,7 @@ describe('Projects API – /api/projects', () => {
     });
   });
 
-  // ─── GET /api/projects/:id ──────────────────────────────────────────────────
+  // GET /api/projects/:id
 
   describe('GET /api/projects/:id', () => {
     it('visszaadja a projektet ID alapján', async () => {
@@ -210,7 +210,7 @@ describe('Projects API – /api/projects', () => {
     });
   });
 
-  // ─── PUT /api/projects/:id ──────────────────────────────────────────────────
+  //PUT /api/projects/:id
 
   describe('PUT /api/projects/:id', () => {
     it('frissíti a projekt nevét és leírását', async () => {
@@ -246,7 +246,7 @@ describe('Projects API – /api/projects', () => {
     });
   });
 
-  // ─── DELETE /api/projects/:id ───────────────────────────────────────────────
+  // DELETE /api/projects/:id
 
   describe('DELETE /api/projects/:id', () => {
     it('törli a projektet és az összes kapcsolódó task-ot és subtask-ot', async () => {

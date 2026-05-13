@@ -24,14 +24,14 @@ describe('xpService – addXP', () => {
     const user = await createUser(90, 1);
     const updated = await addXP(user._id.toString(), 20);
 
-    // 90 + 20 = 110, küszöb 100 → szintlépés, maradék: 10
+    // 90 + 20 = 110, kuszob 100 -> szintlépés, maradék: 10
     expect(updated.level).toBe(2);
     expect(updated.xp).toBe(10);
   });
 
   it('több szintet lép egyszerre, ha sok XP érkezik', async () => {
     const user = await createUser(0, 1);
-    // 1. szint: 100 XP, 2. szint: 200 XP → 300 XP kell a 3. szinthez
+    // 1. szint: 100 XP, 2. szint: 200 XP -> 300 XP kell a 3. szinthez
     const updated = await addXP(user._id.toString(), 350);
 
     expect(updated.level).toBe(3);

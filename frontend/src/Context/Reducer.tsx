@@ -80,12 +80,10 @@ export const AppReducer = (state: typeof initialState, action: Action) => {
       };
     case 'SET_SUBTASKS':
       return { ...state, subtasks: action.payload };
-    // APPEND merges new subtasks without wiping existing ones from other tasks
     case 'APPEND_SUBTASKS': {
       const incoming = action.payload as any[];
       if (incoming.length === 0) return state;
       const taskId = incoming[0].task?._id ?? incoming[0].task;
-      // Remove any old subtasks belonging to this task, then add the fresh ones
       const filtered = state.subtasks.filter((s: any) => {
         const sTaskId = typeof s.task === 'string' ? s.task : s.task?._id;
         return sTaskId !== taskId;

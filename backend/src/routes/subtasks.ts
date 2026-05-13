@@ -43,7 +43,7 @@ router.get('/task/:taskId', protect, async (req: Request, res: Response) => {
   }
 });
 
-// UPDATE SUBTASK (generic — no XP)
+// UPDATE SUBTASK
 router.put('/:id', protect, async (req: any, res: Response) => {
   try {
     const before = await Subtask.findById(req.params.id);
@@ -73,7 +73,7 @@ router.put('/:id', protect, async (req: any, res: Response) => {
   }
 });
 
-// COMPLETE SUBTASK — marks Done AND awards XP in one call
+// COMPLETE SUBTASK
 router.put('/:id/complete', protect, async (req: any, res: Response) => {
   try {
     const subtask = await Subtask.findById(req.params.id);

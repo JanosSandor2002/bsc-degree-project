@@ -4,12 +4,11 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:5000/api';
 
-// ── XP formula ──────────────────────────────────────────────────────────────
-// XP required to level up = 20 + (next_level * 10) + (prestige * level * 10)
+// XP formula
 const xpRequired = (level: number, prestige: number) =>
   20 + (level + 1) * 10 + prestige * level * 10;
 
-// ── Badge milestones ─────────────────────────────────────────────────────────
+// Badge milestones
 const BADGE_LEVELS = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
 
 const CLASS_OPTIONS: Record<
@@ -68,7 +67,7 @@ const CLASS_OPTIONS: Record<
   ],
 };
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+//Helpers
 const getPrestigeLabel = (prestige: number) => {
   if (prestige === 0) return null;
   const roman = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
@@ -127,7 +126,7 @@ const GamificationView = () => {
     fetchContributors();
   }, [state.selectedProject?._id, state.token]);
 
-  // Sort by XP desc to find top performer
+  // csökkeno sorrend xp alapján és rangsor felállitás
   const sorted = [...contributors].sort(
     (a, b) => b.level * 10000 + b.xp - (a.level * 10000 + a.xp),
   );
@@ -135,7 +134,7 @@ const GamificationView = () => {
 
   return (
     <div className='h-full overflow-auto'>
-      {/* ── Hero ── */}
+      {/* Hero */}
       <div className='relative px-8 pt-10 pb-8 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 rounded-t-3xl overflow-hidden'>
         <div className='absolute -top-8 -right-8 w-56 h-56 rounded-full bg-blue-600 opacity-25' />
         <div className='absolute bottom-0 left-1/2 w-40 h-40 rounded-full bg-blue-800 opacity-30' />
@@ -173,7 +172,7 @@ const GamificationView = () => {
       </div>
 
       <div className='px-6 py-6 flex flex-col gap-6'>
-        {/* ── How it works accordion ── */}
+        {/* How it works accordion  */}
         <div className='bg-white border border-blue-100 rounded-2xl overflow-hidden'>
           <button
             className='w-full flex items-center justify-between px-5 py-4 text-left'
@@ -296,7 +295,7 @@ const GamificationView = () => {
           )}
         </div>
 
-        {/* ── Project contributor leaderboard ── */}
+        {/* Project contributor leaderboard */}
         <div>
           <p className='text-xs font-semibold text-blue-600 uppercase tracking-widest mb-1'>
             Project leaderboard
@@ -449,7 +448,7 @@ const GamificationView = () => {
         </div>
       </div>
 
-      {/* ── Footer ── */}
+      {/* Footer */}
       <div className='mx-6 mb-6 bg-blue-900 rounded-2xl px-6 py-4 flex items-center justify-between gap-3'>
         <div>
           <p className='text-white font-semibold text-sm'>

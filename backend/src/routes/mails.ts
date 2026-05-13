@@ -5,7 +5,6 @@ import User from '../models/User';
 
 const router = Router();
 
-// GET inbox — mails sent TO the current user
 router.get('/inbox', protect, async (req: AuthRequest, res: Response) => {
   try {
     const mails = await Mail.find({ to: req.user!._id })
@@ -17,7 +16,6 @@ router.get('/inbox', protect, async (req: AuthRequest, res: Response) => {
   }
 });
 
-// GET sent — mails sent BY the current user
 router.get('/sent', protect, async (req: AuthRequest, res: Response) => {
   try {
     const mails = await Mail.find({ from: req.user!._id })
@@ -29,7 +27,7 @@ router.get('/sent', protect, async (req: AuthRequest, res: Response) => {
   }
 });
 
-// GET unread count
+// GET unread count szamlalo
 router.get(
   '/unread-count',
   protect,
@@ -46,7 +44,7 @@ router.get(
   },
 );
 
-// POST send a mail — recipient identified by username
+// POST send a mail
 router.post('/send', protect, async (req: AuthRequest, res: Response) => {
   try {
     const { toUsername, subject, body } = req.body;
@@ -106,7 +104,7 @@ router.put('/:id/read', protect, async (req: AuthRequest, res: Response) => {
   }
 });
 
-// DELETE a mail (sender or recipient can delete)
+// DELETE a mail
 router.delete('/:id', protect, async (req: AuthRequest, res: Response) => {
   try {
     const mail = await Mail.findOne({

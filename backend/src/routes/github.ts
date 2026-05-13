@@ -22,13 +22,9 @@ router.get('/user/repos/names', async (req, res) => {
       .json({ message: 'GitHub fetch error', error: error.message });
   }
 });
-// GET repository-k nevei (nem kell owner, token alapján)
-//router.get('/repos/names', fetchRepoNames);
 
-// GET issues egy repo-hoz
 router.get('/:owner/:repo/issues', fetchIssues);
 
-// POST: kiválasztott repo issue-jai
 router.post('/issues', fetchSelectedRepoIssues);
 
 export default router;

@@ -6,7 +6,7 @@ import User from '../models/User';
 
 const router = Router();
 
-// GET /api/users/me — current user profile
+// bejelentkezett felhasznalo GET
 router.get('/me', protect, async (req: AuthRequest, res: Response) => {
   try {
     const user = await User.findById(req.user!._id).select('-password');
@@ -17,7 +17,7 @@ router.get('/me', protect, async (req: AuthRequest, res: Response) => {
   }
 });
 
-// PUT /api/users/me — update username, email, and/or password
+// adatok szerkesztése
 router.put('/me', protect, async (req: AuthRequest, res: Response) => {
   try {
     const { username, email, password } = req.body;
@@ -32,7 +32,7 @@ router.put('/me', protect, async (req: AuthRequest, res: Response) => {
       user.username = username;
     }
 
-    // Check email uniqueness if changing
+    // email check hogy hasznalatban van-e
     if (email && email !== user.email) {
       const exists = await User.findOne({ email });
       if (exists)
@@ -40,7 +40,7 @@ router.put('/me', protect, async (req: AuthRequest, res: Response) => {
       user.email = email;
     }
 
-    // Hash new password if provided
+    // jelszo vizsgalat
     if (password) {
       if (password.length < 6)
         return res
@@ -51,7 +51,7 @@ router.put('/me', protect, async (req: AuthRequest, res: Response) => {
 
     await user.save();
 
-    // Return without password
+    // jelszo nélkuli visszatérés
     const updated = await User.findById(user._id).select('-password');
     res.json(updated);
   } catch (error) {

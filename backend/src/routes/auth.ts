@@ -5,7 +5,7 @@ import User from '../models/User';
 
 const router = Router();
 
-// REGISTERING
+//REGISTERING
 router.post('/register', async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
 
@@ -32,7 +32,7 @@ router.post('/register', async (req: Request, res: Response) => {
   }
 });
 
-// LOGIN
+//LOGIN
 router.post('/login', async (req: Request, res: Response) => {
   const { email, password } = req.body;
 

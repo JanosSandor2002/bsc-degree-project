@@ -133,7 +133,7 @@ const ScrumView = () => {
 
   return (
     <div className='h-full flex flex-col overflow-hidden'>
-      {/* ── Hero header ── */}
+      {/* Hero header */}
       <div className='relative px-8 pt-8 pb-6 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 rounded-t-3xl overflow-hidden shrink-0'>
         <div className='absolute -top-6 -right-6 w-44 h-44 rounded-full bg-blue-600 opacity-25' />
         <div className='absolute bottom-0 left-1/3 w-32 h-32 rounded-full bg-blue-800 opacity-30' />
@@ -166,7 +166,7 @@ const ScrumView = () => {
       </div>
 
       <div className='flex-1 overflow-auto px-6 py-5 flex flex-col gap-4'>
-        {/* ── Create sprint form ── */}
+        {/*  Create sprint form */}
         {showCreateForm && (
           <div className='bg-blue-50 border border-blue-200 rounded-2xl p-4 flex flex-col gap-3'>
             <p className='text-sm font-semibold text-gray-700'>New sprint</p>
@@ -222,7 +222,7 @@ const ScrumView = () => {
         )}
         {state.loading && <p className='text-sm text-gray-400'>Loading...</p>}
 
-        {/* ── Sprint selector tabs ── */}
+        {/*Sprint selector tabs*/}
         {state.sprints?.length > 0 && (
           <div className='flex gap-2 flex-wrap'>
             {state.sprints.map((sprint: Sprint) => (
@@ -261,7 +261,7 @@ const ScrumView = () => {
             </p>
           )}
 
-        {/* ── Sprint info bar ── */}
+        {/* Sprint info bar */}
         {selectedSprint && (
           <div className='bg-blue-50 border border-blue-200 rounded-2xl px-4 py-3 flex gap-6 text-sm flex-wrap'>
             <span className='text-gray-500'>
@@ -298,7 +298,7 @@ const ScrumView = () => {
           </div>
         )}
 
-        {/* ── Kanban columns ── */}
+        {/* Kanban columns */}
         {selectedSprint && (
           <div className='flex gap-4 overflow-x-auto pb-2 items-start'>
             {COLUMNS.map((col) => {
@@ -366,7 +366,7 @@ const ScrumView = () => {
           </div>
         )}
 
-        {/* ── Backlog ── */}
+        {/*Backlog  */}
         {backlogTasks.length > 0 && (
           <div>
             <p className='text-xs font-semibold text-blue-600 uppercase tracking-widest mb-2'>

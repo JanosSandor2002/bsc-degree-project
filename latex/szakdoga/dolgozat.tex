@@ -17,13 +17,13 @@
 \renewcommand{\lstlistingname}{Kódpélda}
 \DeclareCaptionLabelFormat{kodpelda}{\arabic{chapter}.\arabic{lstlisting} Kódpélda}
 \captionsetup[lstlisting]{labelformat=kodpelda, labelsep=period}
-% ── Szín definíciók a szintaxiskiemeléshez ───────────────────────────────────
+% Szín definíciók a szintaxiskiemeléshez
 \definecolor{kw}{rgb}{0.13,0.13,0.90}    % kulcsszavak - kék
 \definecolor{str}{rgb}{0.16,0.50,0.16}   % stringek - zöld
 \definecolor{cmt}{rgb}{0.50,0.50,0.50}   % kommentek - szürke
 \definecolor{num}{rgb}{0.60,0.0,0.60}    % számok - lila
 
-% ── JavaScript / TypeScript nyelv definíció ──────────────────────────────────
+%JavaScript / TypeScript nyelv definíció
 \lstdefinelanguage{JavaScript}{
   keywords={
     break, case, catch, continue, debugger, default, delete,
@@ -42,7 +42,7 @@
   morestring=[b]`,
 }
 
-% ── Globális listings beállítás (tördelés + magyar ékezetek) ─────────────────
+% Globális listings beállítás (tördelés + magyar ékezetek)
 \lstset{
   basicstyle=\small\ttfamily,
   breaklines=true,
@@ -59,7 +59,7 @@
   framesep=6pt,
   xleftmargin=6pt,
   xrightmargin=6pt,
-  % ── Szintaxiskiemelés ─────────────────────────────────────────────────────
+  % Szintaxiskiemelés
   keywordstyle=\color{kw}\bfseries,
   stringstyle=\color{str},
   commentstyle=\color{cmt}\itshape,

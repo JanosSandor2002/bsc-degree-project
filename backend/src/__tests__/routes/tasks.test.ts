@@ -15,7 +15,7 @@ const registerAndLogin = async () => {
   return { token: res.body.token as string, user: res.body.user };
 };
 
-describe('Tasks API – /api/tasks', () => {
+describe('Tasks API - /api/tasks', () => {
   let token: string;
   let projectId: string;
 
@@ -31,7 +31,7 @@ describe('Tasks API – /api/tasks', () => {
     projectId = projectRes.body._id;
   });
 
-  // ─── POST /api/tasks ───────────────────────────────────────────────────────
+  // POST /api/tasks
 
   describe('POST /api/tasks', () => {
     it('létrehoz egy task-ot (201)', async () => {
@@ -74,7 +74,7 @@ describe('Tasks API – /api/tasks', () => {
     });
   });
 
-  // ─── GET /api/tasks/project/:projectId ────────────────────────────────────
+  // GET /api/tasks/project/:projectId
 
   describe('GET /api/tasks/project/:projectId', () => {
     it('visszaadja a projekthez tartozó task-okat', async () => {
@@ -105,7 +105,7 @@ describe('Tasks API – /api/tasks', () => {
     });
   });
 
-  // ─── PUT /api/tasks/:id ────────────────────────────────────────────────────
+  // PUT /api/tasks/:id
 
   describe('PUT /api/tasks/:id', () => {
     it('frissíti a task státuszát', async () => {
@@ -138,7 +138,7 @@ describe('Tasks API – /api/tasks', () => {
     });
   });
 
-  // ─── DELETE /api/tasks/:id ─────────────────────────────────────────────────
+  // DELETE /api/tasks/:id
 
   describe('DELETE /api/tasks/:id', () => {
     it('törli a task-ot (200)', async () => {

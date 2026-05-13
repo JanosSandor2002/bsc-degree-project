@@ -76,7 +76,6 @@ export default function SubtasksScreen() {
       state.tasks.forEach((t: Task) =>
         fetchSubtasks(dispatch, state.token!, t._id),
       );
-      // Expand all tasks by default
       setExpandedTasks(new Set(state.tasks.map((t: Task) => t._id)));
     }
   }, [state.tasks.length]);
@@ -208,7 +207,6 @@ export default function SubtasksScreen() {
 
           return (
             <Card key={task._id} style={{ marginBottom: 12 }}>
-              {/* Task header - tappable to expand/collapse */}
               <TouchableOpacity
                 style={styles.taskHeader}
                 onPress={() => toggleExpand(task._id)}

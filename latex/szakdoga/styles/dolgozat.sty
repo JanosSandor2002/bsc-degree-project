@@ -1,5 +1,3 @@
-%A szükséges csomagok
-%méretek: margó, lap, fej~ és lábléc stb. NE MÓDOSÍTSUK!
 \usepackage{listings}
 \usepackage[paperwidth=210mm,paperheight=297mm,headheight=15.2pt,headsep=7.1mm,top=25mm,bottom=25mm,inner=30mm,outer=25mm,dvips]{geometry}
 %fejléc kezelõ csomag
@@ -26,7 +24,7 @@
 \usepackage{colortbl}
 %ábrakészítés a Tex-kel
 \usepackage[metapost]{mfpic}
-%latin2 kódolás - a magyar ékezetes betûk miatt
+%latin2 kódolás
 \usepackage[utf8]{inputenc}
 %a magyar elválasztáshoz szükséges
 \usepackage[T1]{fontenc}
@@ -44,12 +42,6 @@
   morestring=[b]",
   morestring=[b]'
 }
-
-% \newcommand{\myinclude}[1]{%
-% 
-% \ifthenelse{\not\(\isodd{\thepage}\)}{\thispagestyle{empty}\hbox{}\newpage}%
-% 
-% \include{#1}}
 
 %myheadings beállítása
 \def\ps@myheadings{%
@@ -75,41 +67,36 @@
 \chead{}
 }
 
-%Saját fejezet parancs, rövidítést használhatunk a tartalomjegyzékben: \SChapter
+%Saját fejezet parancsok
 \newcommand{\SChapter}[2]{\chapter[#2]{#1}}
 
-%Alfejezet parancs: \Section
 \newcommand{\Section}[1]{\section{#1}
 \chead{\textsl{\thesection. #1}}
 }
 
-%Alfejezet parancs, rövidítést használhatunk a fejlécben  és a tartalomjegyzékben is: \SSection
 \newcommand{\SSection}[3]{\section[#3]{#1}
 \chead{\textsl{\thesection. #2}}}
 
-%Al-alfejezet parancs: \SubSection
 \newcommand{\SubSection}[1]{\subsection{#1}
 }
 
-%Al-alfejezet parancs, rövidítést használhatunk a tartalomjegyzékben: \SSubSection
 \newcommand{\SSubSection}[2]{\subsection[#2]{#1}
 }
 
-%Saját referencia - nem teszi hozzá a névelõt, de a pontot igen!
+%Saját referencia
 \newcommand{\myref}[1]{\ref{#1}.}
 
-%Saját magyar referencia - hozzáteszi a névelõt és a pontot!
+%Saját magyar referencia
 \newcommand{\myaref}[1]{\aref{#1}.}
 
 %táblázatok beállítása
-\renewcommand{\arraystretch}{1.3}  %default: 1 Sorok közötti távolság nagyítása
+\renewcommand{\arraystretch}{1.3} 
 
-\setlength{\arrayrulewidth}{0.6pt} %default: 0.6pt A vonalak vastagsága
+\setlength{\arrayrulewidth}{0.6pt} 
 
-%A túlcsordulási hibák jelzése kikapcsolva (végleges verzió)
+%A túlcsordulási hibák jelzése kikapcsolva
 \overfullrule0pt
 
-%pont után nem nagyobb a szóköz
 \frenchspacing
 
 

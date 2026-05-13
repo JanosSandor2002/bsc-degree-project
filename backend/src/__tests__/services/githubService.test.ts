@@ -13,7 +13,7 @@ describe('githubService', () => {
     jest.restoreAllMocks();
   });
 
-  // ─── getRepoNames ────────────────────────────────────────────────────────────
+  // getRepoNames
 
   describe('getRepoNames', () => {
     it('visszaadja a repository neveket a válaszból', async () => {
@@ -92,7 +92,7 @@ describe('githubService', () => {
     });
   });
 
-  // ─── getRepoIssues ───────────────────────────────────────────────────────────
+  // getRepoIssues
 
   describe('getRepoIssues', () => {
     const mockIssues = [

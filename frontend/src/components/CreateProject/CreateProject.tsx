@@ -169,7 +169,7 @@ const CreateProject = () => {
 
   return (
     <div className='h-full overflow-auto'>
-      {/* ── Hero ── */}
+      {/* Hero*/}
       <div className='relative px-8 pt-8 pb-6 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 rounded-t-3xl overflow-hidden'>
         <div className='absolute -top-6 -right-6 w-44 h-44 rounded-full bg-blue-600 opacity-25' />
         <div className='absolute bottom-0 left-1/3 w-32 h-32 rounded-full bg-blue-800 opacity-30' />
@@ -198,7 +198,7 @@ const CreateProject = () => {
       </div>
 
       <div className='px-6 py-5'>
-        {/* ── STEP 0: Choose type ── */}
+        {/* STEP 0: Choose type*/}
         {step === 0 && (
           <div className='flex flex-col gap-4 max-w-md'>
             <p className='text-xs font-semibold text-blue-600 uppercase tracking-widest'>
@@ -267,7 +267,7 @@ const CreateProject = () => {
           </div>
         )}
 
-        {/* ── GITHUB STEP 1: select repo ── */}
+        {/*GITHUB STEP 1: select repo*/}
         {step === 1 && projectType === 'github' && (
           <div className='flex flex-col gap-3 max-w-md'>
             <p className='text-xs font-semibold text-blue-600 uppercase tracking-widest mb-1'>
@@ -296,7 +296,7 @@ const CreateProject = () => {
           </div>
         )}
 
-        {/* ── GITHUB STEP 2: contributors ── */}
+        {/* GITHUB STEP 2: contributors */}
         {step === 2 && projectType === 'github' && (
           <div className='flex flex-col gap-4 max-w-md'>
             <div className='bg-blue-50 border border-blue-200 rounded-xl px-4 py-3'>
@@ -373,7 +373,7 @@ const CreateProject = () => {
           </div>
         )}
 
-        {/* ── MANUAL STEP 1: details ── */}
+        {/* MANUAL STEP 1: details*/}
         {step === 1 && projectType === 'manual' && (
           <div className='flex flex-col gap-4 max-w-md'>
             <div className='flex flex-col gap-2'>
@@ -444,7 +444,7 @@ const CreateProject = () => {
           </div>
         )}
 
-        {/* ── MANUAL STEP 2: task groups ── */}
+        {/*MANUAL STEP 2: task groups*/}
         {step === 2 && projectType === 'manual' && (
           <div className='flex flex-col gap-5 max-w-lg'>
             {/* New task group form */}

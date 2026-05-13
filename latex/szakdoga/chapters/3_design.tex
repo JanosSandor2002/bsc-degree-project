@@ -2,9 +2,9 @@
 
 A tervezési fejezet célja az Acxor rendszer architektúrájának, adatmodelljének és felhasználói felületének részletes bemutatása. Ebben a fejezetben kerülnek ismertetésre azok a döntések, amelyek a fejlesztés irányvonalát meghatározták, beleértve a technológiai stack kiválasztását, az adatbázis-séma kialakítását, az API tervezését és a komponensstruktúrát. A tervezési fázis különösen fontos volt, hiszen a rendszernek három platformon – webes böngészőben, mobil eszközön és szerver oldalon – egyidejűleg kellett megfelelően működnie, miközben közös üzleti logikát és adatréteget használt.
 
-% ─────────────────────────────────────────────────────────────────────────────
+
 \Section{Rendszerarchitektúra}
-% ─────────────────────────────────────────────────────────────────────────────
+
 
 Az Acxor rendszer három jól elkülönülő részből áll: a webes frontend alkalmazásból, a React Native alapú mobil alkalmazásból és a Node.js backend API-ból. Mindhárom rész egyetlen közös RESTful API-on keresztül kommunikál, amelyet a backend szolgáltat. Ez a megközelítés lehetővé teszi, hogy a kliens oldalak teljesen független életet éljenek, miközben ugyanazokat az adatokat, autentikációs mechanizmust és üzleti szabályokat alkalmazzák. Az architektúra tehát klasszikus kliens-szerver modellt követ, azzal a kiegészítéssel, hogy két teljesen különböző típusú kliens is ugyanahhoz a backendhez csatlakozik. A rendszer magas szintű architektúrája a \ref{fig:sys-architecture}. ábrán látható.
 
@@ -19,9 +19,8 @@ A backend alkalmazás Express.js keretrendszeren alapul, és a következő főbb
 
 A webes frontend Vite segítségével épített React alkalmazás, amely Tailwind CSS-t használ a stílusok kialakítására. Az állapotkezelés React Context API-n és \texttt{useReducer} hookson alapul, amelyek Redux-szerű, de külső könyvtártól független megoldást nyújtanak. A mobil alkalmazás Expo keretrendszerre épített React Native projekt, amely ugyanolyan üzleti logikát követ, mint a webes változat, azonban natív mobil UI komponenseket alkalmaz.
 
-% ─────────────────────────────────────────────────────────────────────────────
+
 \Section{Technológiai stack}
-% ─────────────────────────────────────────────────────────────────────────────
 
 A fejlesztés során a technológiai döntések több szempontot is figyelembe vettek: a fejlesztői ökoszisztéma érettségét, a közösségi támogatottságot, a típusbiztonságot, valamint azt, hogy a választott technológiák lehetővé tegyék a gyors prototípuskészítést anélkül, hogy a kód minőségét veszélyeztetnék.
 
@@ -39,9 +38,7 @@ A webes alkalmazás React 18-ra épül \cite{react}, Vite fejlesztői szerverrel
 
 A mobil alkalmazás React Native alapú \cite{reactnative}, Expo keretrendszerrel \cite{expo}. Az Expo lehetővé teszi a gyors fejlesztést és az eszközön való tesztelést Expo Go segítségével. A navigáció Expo Router révén \cite{exporouter} fájlrendszer-alapú, ami közelebb áll a Next.js szemléletéhez. A mobil alkalmazás a fetch API-t alkalmazza HTTP kérésekhez, és a backend ugyanazon végpontjait éri el, mint a webes kliens. Az állapotkezelés megegyezik a webes verzióéval: Context API és useReducer kombináció.
 
-% ─────────────────────────────────────────────────────────────────────────────
 \Section{Karbantarthatósági szempontok a kliens architektúrában}
-% ─────────────────────────────────────────────────────────────────────────────
 
 A háromplatformos architektúra egyik legkritikusabb tervezési kérdése az volt,
 hogy hogyan lehet a webes React alkalmazás és a React Native mobil alkalmazás
@@ -165,9 +162,7 @@ követése csökkenti a jövőbeli fejlesztők betanulási idejét, és összhan
 azzal a tervezési elvvel, hogy minden platform a saját idiómáját kövesse —
 még akkor is, ha ez rövid távon több párhuzamos kódot jelent.
 
-% ─────────────────────────────────────────────────────────────────────────────
 \Section{A karbantarthatóság értékelése}
-% ─────────────────────────────────────────────────────────────────────────────
 
 A rendszer fejlesztése során a karbantarthatóság nem utólagos szempont volt, hanem tervezési alapelv. Martin megfogalmazásában a karbantartható kód egyik legfontosabb tulajdonsága, hogy minden egység egyetlen, jól meghatározott felelősséggel rendelkezzen \cite{martin2008clean} -- ezt az elvet az Acxor backend service rétege közvetlenül tükrözi. Ennek értékelése három dimenzióban végezhető el: a kódbázis struktúrája, a web--mobil összehangoltság és a jövőbeli bővíthetőség szempontjából.
 
@@ -189,9 +184,7 @@ Ugyanakkor a dolgozat őszintén elismeri a jelenlegi architektúra korlátait i
 
 Összességében az Acxor architektúrája a karbantarthatóság szempontjából egyensúlyt tart a pragmatizmus és az elvek között. A rendszer nem törekszik a tökéletes duplikáció\-mentességre, ha az azzal járó komplexitás nem arányos az előnyökkel -- de minden fontosabb architekturális döntés mögött felismerhető a karbantarthatósági szempont: a service réteg szétválasztása \cite{gamma1994design}, a közös állapotkezelési minta, a TypeScript típusbiztonság \cite{typescript} és a tesztlefedettség együtt olyan rendszert alkotnak, amelyen egy új fejlesztő a belépéstől kezdve hatékonyan tud dolgozni, és amelyen a változtatások hatása előre látható és kontrollálható \cite{martin2008clean}.
 
-%────────────────────────────────────────────────────────────────────────────
 \Section{Adatbázis-tervezés}
-%─────────────────────────────────────────────────────────────────────────────
 
 Az adatbázis tervezésekor a legfontosabb szempontok a normalizált, de praktikusan használható séma kialakítása volt. A MongoDB dokumentumorientált természete lehetővé tette a referencia-alapú kapcsolatok (ObjectId hivatkozások) és a beágyazott dokumentumok vegyítését. A rendszer összesen hét Mongoose modellt alkalmaz.
 
@@ -262,9 +255,7 @@ A konstansok megválasztásának indoka a fokozatos nehezedés biztosítása. Az
 
 Ez a formula biztosítja, hogy az első szintlépés viszonylag kevés XP-vel elérhető, ugyanakkor a prestige rendszer exponálisan növeli a szintenként szükséges XP mennyiséget. Az \texttt{addXP} service függvény a szintlépési logikát egy \texttt{while} ciklusban kezeli, hogy egyszerre több szinten is lehetséges legyen lépni, ha elég XP gyűlik össze. A jutalmak a következők: befejezett feladat esetén alapértelmezetten 5 XP, befejezett alfeladat esetén 3 XP jár a felelős felhasználónak.
 
-% ─────────────────────────────────────────────────────────────────────────────
 \Section{API tervezés}
-% ─────────────────────────────────────────────────────────────────────────────
 
 Az API RESTful elveket követ: az erőforrások azonosítása URL-eken keresztül történik, az HTTP metódusok (GET, POST, PUT, DELETE) jelölik a szándékot, a válaszok JSON formátumúak, és a megfelelő HTTP státuszkódok kerülnek visszaadásra. Az összes érzékeny végponthoz Bearer token alapú hitelesítés szükséges.
 
@@ -315,9 +306,8 @@ A hitelesítés kétlépéses folyamat: regisztrációkor a szerver bcrypt segí
 
 A feladatok befejezése nem az általános UPDATE végponton keresztül történik, hanem egy dedikált \texttt{PUT /api/tasks/:id/complete} végponton. Ez a döntés azért született, mert a befejezéshez kapcsolódó logika (XP jóváírás, naplóbejegyzés írása) komplex mellékhatásokat von maga után, amelyeket el kell különíteni az egyszerű adatmódosítástól. A befejezési végpont ellenőrzi, hogy a feladat korábban már el volt-e végezve (\texttt{alreadyDone} jelző), és csak az első befejezéskor ír jóvá XP-t. Hasonló logika érvényes az alfeladatokra is.
 
-% ─────────────────────────────────────────────────────────────────────────────
+
 \Section{Use case tervezés}
-% ─────────────────────────────────────────────────────────────────────────────
 
 A rendszer főbb használati esetei a következő szereplők köré szerveződnek: vendég felhasználó (nem bejelentkezett), alapfelhasználó (bejelentkezett), és projekt adminisztrátor (a projekt létrehozója). A vendég felhasználók csak a főoldalt és a wiki oldalt tekinthetik meg. Az alapfelhasználók projekteket hozhatnak létre és kezelhetnek, feladatokat adhatnak hozzá és zárhatnak le, belső üzeneteket küldhetnek, és követhetik a gamifikációs előrehaladásukat. A projekt adminisztrátor emellett módosíthatja és törölheti a projektet, és kezelheti a közreműködők listáját.
 
@@ -341,9 +331,7 @@ A \ref{fig:use-case}. ábrán látható use case diagram összefoglalja a három
 
 A fenti folyamatábra (\ref{fig:auth-sequence}. ábra) szemlélteti a két fázist: az első fázis a bejelentkezést, a második fázis a védett végpontok hívását mutatja be a Bearer token segítségével.
 
-% ─────────────────────────────────────────────────────────────────────────────
 \Section{Felhasználói felület tervezése}
-% ─────────────────────────────────────────────────────────────────────────────
 
 A felhasználói felület tervezésekor a vezérelv az volt, hogy a rendszer egyszerre legyen professzionális és könnyen kezelhető. Az esztétikai döntések a kék szín különböző árnyalataira épülnek, amelyek egységes vizuális identitást biztosítanak a három platform között.
 
@@ -379,9 +367,7 @@ A webes alkalmazásban a navigáció egy egyedi \texttt{ViewContext} alapú rend
 
 A mobil alkalmazásban az Expo Router fájlrendszer-alapú navigációt alkalmaz: a \texttt{(tabs)} mappában lévő fájlok automatikusan tab lapokként kerülnek regisztrálásra. Az önálló képernyők (Sign, Create Project) Stack navigáció részeként jelennek meg.
 
-% ─────────────────────────────────────────────────────────────────────────────
 \Section{Állapotkezelés tervezése}
-% ─────────────────────────────────────────────────────────────────────────────
 
 Az állapotkezelés mindkét kliensalkalmazásban React Context API-ra és useReducer hookra épül. Ez a megközelítés a Redux tároló-action-reducer mintáját követi, de anélkül, hogy külső könyvtár függőséget vonna be. A webes alkalmazásban két Context létezik párhuzamosan: a \texttt{GlobalContext} és a \texttt{ViewContext}.
 
@@ -391,9 +377,7 @@ Az \texttt{APPEND\_SUBTASKS} action típus különösen figyelemre méltó: mive
 
 A \ref{fig:state-mgmt}. ábra a teljes adatfolyamot szemlélteti: a komponens dispatch hívást küld, a reducer új állapotot állít elő, a GlobalContext Providerén keresztül frissülnek a feliratkozott komponensek, miközben az Actions.ts fájl aszinkron módon kommunikál a backend API-val.
 
-% ─────────────────────────────────────────────────────────────────────────────
 \Section{GitHub integráció tervezése}
-% ─────────────────────────────────────────────────────────────────────────────
 
 Az Acxor egyik kiegészítő funkciója a GitHub repozitóriumokból való projektimportálás. A tervezés során el kellett dönteni, hogy ez a funkció szerver oldalon vagy kliens oldalon menjen végbe. A szerver oldali megközelítés mellett döntöttünk, mivel a GitHub API tokent nem célszerű közvetlenül a kliensből küldeni a GitHub felé: a szerver közvetítőként működik, ami lehetővé teszi a jövőbeli token validációs logika hozzáadását is.
 

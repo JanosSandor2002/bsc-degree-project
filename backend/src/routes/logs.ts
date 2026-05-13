@@ -4,7 +4,6 @@ import Log from '../models/Log';
 
 const router = Router();
 
-// GET logs for a project (newest first, max 100)
 router.get(
   '/project/:projectId',
   protect,

@@ -1,7 +1,7 @@
 import type { Dispatch } from 'react';
 import { API_URL } from '../constants/api';
 
-// ── AUTH ──────────────────────────────────────────────────────────────────────
+// AUTH
 
 export const registerUser = async (dispatch: Dispatch<any>, data: any) => {
   dispatch({ type: 'SET_LOADING', payload: true });
@@ -60,7 +60,7 @@ export const loginUser = async (dispatch: Dispatch<any>, data: any) => {
   dispatch({ type: 'SET_LOADING', payload: false });*/
 };
 
-// ── PROJECTS ──────────────────────────────────────────────────────────────────
+// PROJECTS
 
 export const fetchProjects = async (dispatch: Dispatch<any>, token: string) => {
   dispatch({ type: 'SET_LOADING', payload: true });
@@ -117,8 +117,7 @@ export const deleteProject = async (
   }
 };
 
-// ── TASKS ─────────────────────────────────────────────────────────────────────
-
+// TASKS
 export const fetchTasks = async (
   dispatch: Dispatch<any>,
   token: string,
@@ -225,7 +224,7 @@ export const deleteTask = async (
   }
 };
 
-// ── SUBTASKS ──────────────────────────────────────────────────────────────────
+// SUBTASKS
 
 export const fetchSubtasks = async (
   dispatch: Dispatch<any>,
@@ -335,7 +334,7 @@ export const deleteSubtask = async (
   }
 };
 
-// ── SPRINTS ───────────────────────────────────────────────────────────────────
+// SPRINTS
 
 export const fetchSprints = async (
   dispatch: Dispatch<any>,
@@ -417,7 +416,7 @@ export const deleteSprint = async (
   }
 };
 
-// ── USER ──────────────────────────────────────────────────────────────────────
+// USER
 
 export const updateUser = async (
   dispatch: Dispatch<any>,
@@ -446,7 +445,7 @@ export const updateUser = async (
   }
 };
 
-// ── MAILS ─────────────────────────────────────────────────────────────────────
+// MAILS
 
 export const fetchInbox = async (token: string) => {
   const res = await fetch(`${API_URL}/mails/inbox`, {
@@ -493,7 +492,7 @@ export const deleteMail = async (token: string, mailId: string) => {
   if (!res.ok) throw new Error('Delete failed');
 };
 
-// ── LOGS ──────────────────────────────────────────────────────────────────────
+// LOGS
 
 export const fetchLogs = async (token: string, projectId: string) => {
   const res = await fetch(`${API_URL}/logs/project/${projectId}`, {
@@ -503,7 +502,7 @@ export const fetchLogs = async (token: string, projectId: string) => {
   return res.json();
 };
 
-// ── GITHUB ────────────────────────────────────────────────────────────────────
+// GITHUB
 
 export const fetchGithubRepos = async (githubToken: string) => {
   const res = await fetch(`${API_URL}/github/user/repos/names`, {
@@ -527,7 +526,7 @@ export const fetchGithubIssues = async (
   return json;
 };
 
-// ── GAMIFICATION ──────────────────────────────────────────────────────────────
+// GAMIFICATION
 
 export const fetchProjectContributors = async (
   token: string,

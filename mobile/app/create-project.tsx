@@ -199,8 +199,6 @@ export default function CreateProjectScreen() {
               </View>
             )}
           </View>
-
-          {/* ─── STEP 0: Choose type ─── */}
           {step === 0 && (
             <View style={styles.section}>
               <Text style={styles.sectionLabel}>CHOOSE IMPORT METHOD</Text>
@@ -252,7 +250,6 @@ export default function CreateProjectScreen() {
             </View>
           )}
 
-          {/* ─── GITHUB STEP 1: Select repo ─── */}
           {step === 1 && projectType === 'github' && (
             <View style={styles.section}>
               <Text style={styles.sectionLabel}>
@@ -276,7 +273,6 @@ export default function CreateProjectScreen() {
             </View>
           )}
 
-          {/* ─── GITHUB STEP 2: Contributors ─── */}
           {step === 2 && projectType === 'github' && (
             <View style={styles.section}>
               <Card>
@@ -340,7 +336,6 @@ export default function CreateProjectScreen() {
             </View>
           )}
 
-          {/* ─── MANUAL STEP 1: Details ─── */}
           {step === 1 && projectType === 'manual' && (
             <View style={styles.section}>
               <Input
@@ -398,7 +393,6 @@ export default function CreateProjectScreen() {
             </View>
           )}
 
-          {/* ─── MANUAL STEP 2: Task groups ─── */}
           {step === 2 && projectType === 'manual' && (
             <View style={styles.section}>
               {/* Task group builder */}

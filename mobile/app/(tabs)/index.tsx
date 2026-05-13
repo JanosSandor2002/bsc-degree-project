@@ -119,7 +119,7 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* Not logged in CTA */}
+        {/* Not logged in*/}
         {!state.user && (
           <Card style={styles.ctaCard}>
             <Text style={styles.ctaTitle}>Ready to get organised?</Text>

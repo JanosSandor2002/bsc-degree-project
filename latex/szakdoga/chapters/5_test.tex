@@ -12,9 +12,9 @@ A tesztelési megközelítés a következő elveket követi:
   \item Ahol a külső rendszerek (GitHub API) nem hívhatók valódi tesztekben, mockolt adatokkal dolgozunk.
 \end{itemize}
 
-% ─────────────────────────────────────────────────────────────────────────────
+
 \Section{Backend tesztelés}
-% ─────────────────────────────────────────────────────────────────────────────
+
 
 \SubSection{Eszközök és konfiguráció}
 
@@ -143,9 +143,8 @@ it('több szintet lép egyszerre, ha sok XP érkezik', async () => {
 
 \textbf{logService tesztek}: A tesztek az in-memory adatbázison ellenőrzik, hogy a \texttt{logEvent} hívása után a bejegyzés valóban létrejön-e a \texttt{Log} kollekcióban, a \texttt{message} mező helyesen tárolódik-e, és az opcionális \texttt{userId} paraméter esetén a \texttt{user} mező is perzisztálódik-e.
 
-% ─────────────────────────────────────────────────────────────────────────────
+
 \Section{Frontend tesztelés}
-% ─────────────────────────────────────────────────────────────────────────────
 
 \SubSection{Eszközök és konfiguráció}
 
@@ -245,9 +244,9 @@ Topbar.test.tsx & Banner elem, navigációs gombok & 3 \\
 \end{tabularx}
 \end{table}
 
-% ─────────────────────────────────────────────────────────────────────────────
+
 \Section{Manuális tesztelés}
-% ─────────────────────────────────────────────────────────────────────────────
+
 
 Az automatizált tesztek mellett a rendszer manuális tesztelésen is átesett. Ennek során a következő folyamatokat ellenőriztük végig a böngészőben és fizikai mobil eszközön:
 
@@ -277,9 +276,9 @@ Az automatizált tesztek mellett a rendszer manuális tesztelésen is átesett. 
 \label{fig:test-jest}
 \end{figure}
 
-% ─────────────────────────────────────────────────────────────────────────────
+
 \Section{Ismert korlátok és nem tesztelt területek}
-% ─────────────────────────────────────────────────────────────────────────────
+
 
 A tesztelés nem teljes körű, és számos terület kívül esett a tesztlefedettségen. A mail rendszer backend végpontjai nem kaptak dedikált integrációs teszteket, bár a modell és a route struktúrája megegyezik a többi, tesztelt erőforrással. A sprint feladat-hozzárendelési logika részletes edge case-jei (pl. egy feladat két sprinthez rendelése egymás után) szintén nem kerültek automatizált tesztekbe. A mobil alkalmazás frontend komponenseire nem készültek unit tesztek, elsősorban az Expo és React Native tesztkörnyezet konfigurálásának összetettsége miatt. A teljesítménytesztelés (load testing, stressz teszt) szintén nem volt a dolgozat keretein belül.
 

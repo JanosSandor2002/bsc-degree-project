@@ -40,7 +40,7 @@ router.get(
   },
 );
 
-// UPDATE TASK (generic — no XP)
+// UPDATE TASK
 router.put('/:id', protect, async (req: any, res: Response) => {
   try {
     const before = await Task.findById(req.params.id);
@@ -68,7 +68,7 @@ router.put('/:id', protect, async (req: any, res: Response) => {
   }
 });
 
-// COMPLETE TASK — marks Done AND awards XP in one call
+// COMPLETE TASK
 router.put('/:id/complete', protect, async (req: any, res: Response) => {
   try {
     const task = await Task.findById(req.params.id);

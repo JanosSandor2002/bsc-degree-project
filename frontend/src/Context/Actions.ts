@@ -3,7 +3,7 @@ import type { Dispatch } from 'react';
 
 const API_URL = 'http://localhost:5000/api';
 
-// ── AUTH ─────────────────────────────────────────────────────────────────────
+// AUTH
 
 export const registerUser = async (dispatch: Dispatch<any>, data: any) => {
   dispatch({ type: 'SET_LOADING', payload: true });
@@ -35,7 +35,7 @@ export const loginUser = async (dispatch: Dispatch<any>, data: any) => {
   }
 };
 
-// ── PROJECTS ─────────────────────────────────────────────────────────────────
+//PROJECTS
 
 export const fetchProjects = async (dispatch: Dispatch<any>, token: string) => {
   dispatch({ type: 'SET_LOADING', payload: true });
@@ -72,7 +72,7 @@ export const addProject = async (
   }
 };
 
-// ── TASKS ─────────────────────────────────────────────────────────────────────
+//TASKS
 
 export const fetchTasks = async (
   dispatch: Dispatch<any>,
@@ -110,7 +110,7 @@ export const addTask = async (
   }
 };
 
-// ── SUBTASKS ──────────────────────────────────────────────────────────────────
+//SUBTASKS
 
 export const fetchSubtasks = async (
   dispatch: Dispatch<any>,
@@ -149,7 +149,7 @@ export const addSubtask = async (
   }
 };
 
-// ── SPRINTS ───────────────────────────────────────────────────────────────────
+//SPRINTS
 
 export const fetchSprints = async (
   dispatch: Dispatch<any>,
@@ -238,7 +238,7 @@ export const deleteSprint = async (
   }
 };
 
-// ── USER ──────────────────────────────────────────────────────────────────────
+//USER
 
 export const updateUser = async (
   dispatch: Dispatch<any>,

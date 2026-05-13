@@ -53,7 +53,7 @@ const MainView = () => {
 
   return (
     <div className='h-full overflow-auto'>
-      {/* ── Hero ── */}
+      {/* Hero*/}
       <div className='relative px-8 pt-12 pb-10 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 rounded-t-3xl overflow-hidden'>
         {/* decorative circles */}
         <div className='absolute -top-10 -right-10 w-64 h-64 rounded-full bg-blue-600 opacity-30' />
@@ -126,7 +126,6 @@ const MainView = () => {
         </div>
       </div>
 
-      {/* ── CTA card (shown only when logged out) ── */}
       {!state.user && (
         <div className='mx-6 -mt-4 relative z-20'>
           <div className='bg-white border border-blue-200 rounded-2xl p-5 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4'>
@@ -148,7 +147,7 @@ const MainView = () => {
         </div>
       )}
 
-      {/* ── Features grid ── */}
+      {/* Features grid */}
       <div className='px-6 pt-8 pb-6'>
         <p className='text-xs font-semibold text-blue-600 uppercase tracking-widest mb-1'>
           What's inside
@@ -177,7 +176,7 @@ const MainView = () => {
         </div>
       </div>
 
-      {/* ── How it works ── */}
+      {/* How it works */}
       <div className='px-6 pb-6'>
         <p className='text-xs font-semibold text-blue-600 uppercase tracking-widest mb-1'>
           How it works
@@ -229,7 +228,7 @@ const MainView = () => {
         </div>
       </div>
 
-      {/* ── Footer strip ── */}
+      {/* Footer strip */}
       <div className='mx-6 mb-6 bg-blue-900 rounded-2xl px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3'>
         <div>
           <p className='text-white font-semibold text-sm'>

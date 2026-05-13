@@ -1,6 +1,13 @@
 import { describe, it, expect, vi } from 'vitest';
 import axios from 'axios';
-import { fetchTasks, addTask, fetchSubtasks, addSubtask, fetchProjects, addProject } from '../../Context/Actions';
+import {
+  fetchTasks,
+  addTask,
+  fetchSubtasks,
+  addSubtask,
+  fetchProjects,
+  addProject,
+} from '../../Context/Actions';
 
 vi.mock('axios');
 
@@ -12,7 +19,7 @@ describe('Actions', () => {
     vi.clearAllMocks();
   });
 
-  // ── fetchTasks ─────────────────────────────────────────────────────────────
+  // fetchTasks
 
   it('fetchTasks dispatch-olja a SET_TASKS-t', async () => {
     const fakeTasks = [
@@ -47,7 +54,7 @@ describe('Actions', () => {
     });
   });
 
-  // ── addTask ────────────────────────────────────────────────────────────────
+  //addTask
 
   it('addTask dispatch-olja az ADD_TASK-t', async () => {
     const newTask = { title: 'New Task', status: 'Open' };
@@ -81,7 +88,7 @@ describe('Actions', () => {
     });
   });
 
-  // ── fetchSubtasks ──────────────────────────────────────────────────────────
+  //fetchSubtasks
 
   it('fetchSubtasks dispatch-olja az APPEND_SUBTASKS-t', async () => {
     const fakeSubs = [{ _id: 'a', title: 'Sub 1', task: 'task1' }];
@@ -95,7 +102,7 @@ describe('Actions', () => {
     });
   });
 
-  // ── addSubtask ─────────────────────────────────────────────────────────────
+  //addSubtask
 
   it('addSubtask dispatch-olja az ADD_SUBTASK-t', async () => {
     const newSub = { title: 'Sub', task: 'task1' };
@@ -110,7 +117,7 @@ describe('Actions', () => {
     });
   });
 
-  // ── fetchProjects ──────────────────────────────────────────────────────────
+  //fetchProjects
 
   it('fetchProjects dispatch-olja a SET_PROJECTS-t', async () => {
     const fakeProjects = [{ _id: 'p1', name: 'Projekt 1' }];
@@ -124,7 +131,7 @@ describe('Actions', () => {
     });
   });
 
-  // ── addProject ─────────────────────────────────────────────────────────────
+  //addProject
 
   it('addProject dispatch-olja az ADD_PROJECT-t', async () => {
     const newProj = { name: 'Új Projekt' };

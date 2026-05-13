@@ -76,7 +76,6 @@ const PlanView = () => {
 
   return (
     <div className='h-full overflow-auto'>
-      {/* ── Hero ── */}
       <div className='relative px-8 pt-10 pb-8 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 rounded-t-3xl overflow-hidden'>
         <div className='absolute -top-8 -right-8 w-56 h-56 rounded-full bg-blue-600 opacity-25' />
         <div className='absolute bottom-0 left-1/2 w-40 h-40 rounded-full bg-blue-800 opacity-30' />
@@ -114,7 +113,7 @@ const PlanView = () => {
         </div>
       </div>
 
-      {/* ── Cards ── */}
+      {/*Cards  */}
       <div className='px-6 py-6 flex flex-col gap-4'>
         {!state.token && (
           <p className='text-sm text-gray-400'>Sign in to see your projects.</p>

@@ -35,9 +35,10 @@ describe('Sign', () => {
   it('rendereli a Sign komponenst alapértelmezetten login nézettel', () => {
     render(<Sign />);
 
-    // Default tab is 'login' — the Sign in tab button is active
     expect(screen.getByRole('button', { name: 'Sign in' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Register' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Register' }),
+    ).toBeInTheDocument();
   });
 
   it('login form megjelenik alapértelmezetten', () => {
@@ -60,7 +61,6 @@ describe('Sign', () => {
 
     const emailInput = screen.getByPlaceholderText('you@example.com');
     const passwordInput = screen.getByPlaceholderText('••••••••');
-    // Use exact text "Sign in →" to avoid matching the "Sign in" tab button
     const loginButton = screen.getByRole('button', { name: 'Sign in →' });
 
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
@@ -76,13 +76,14 @@ describe('Sign', () => {
   it('register form submit meghívja a registerUser-t', () => {
     render(<Sign />);
 
-    // Switch to register tab
     fireEvent.click(screen.getByRole('button', { name: 'Register' }));
 
     const usernameInput = screen.getByPlaceholderText('cooldev42');
     const emailInput = screen.getByPlaceholderText('you@example.com');
     const passwordInput = screen.getByPlaceholderText('••••••••');
-    const registerButton = screen.getByRole('button', { name: /create account/i });
+    const registerButton = screen.getByRole('button', {
+      name: /create account/i,
+    });
 
     fireEvent.change(usernameInput, { target: { value: 'TestUser' } });
     fireEvent.change(emailInput, { target: { value: 'reg@example.com' } });

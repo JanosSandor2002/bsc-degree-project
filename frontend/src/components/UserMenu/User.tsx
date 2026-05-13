@@ -110,7 +110,7 @@ const User = () => {
         </div>
       )}
 
-      {/* ── Hero ── */}
+      {/* Hero */}
       <div className='relative px-8 pt-8 pb-6 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 rounded-t-3xl overflow-hidden shrink-0'>
         <div className='absolute -top-6 -right-6 w-44 h-44 rounded-full bg-blue-600 opacity-25' />
         <div className='absolute bottom-0 left-1/3 w-32 h-32 rounded-full bg-blue-800 opacity-30' />
@@ -132,7 +132,7 @@ const User = () => {
       </div>
 
       <div className='flex-1 overflow-auto px-6 py-5 flex flex-col gap-5'>
-        {/* ── XP & Level card ── */}
+        {/* XP Level card*/}
         <div className='bg-white border border-blue-200 rounded-2xl p-5'>
           <p className='text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3'>
             Progress
@@ -188,7 +188,7 @@ const User = () => {
           )}
         </div>
 
-        {/* ── Profile info ── */}
+        {/* Profile info */}
         <div className='bg-white border border-blue-200 rounded-2xl p-5'>
           <p className='text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3'>
             Profile
@@ -355,7 +355,7 @@ const User = () => {
           </div>
         </div>
 
-        {/* ── Stats ── */}
+        {/*Stats */}
         <div className='bg-white border border-blue-200 rounded-2xl p-5'>
           <p className='text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3'>
             Stats
@@ -377,7 +377,7 @@ const User = () => {
           </div>
         </div>
 
-        {/* ── Footer ── */}
+        {/*Footer*/}
         <div className='bg-blue-900 rounded-2xl px-6 py-4 mt-auto'>
           <p className='text-white font-semibold text-sm'>
             Acxor — BSc Degree Project

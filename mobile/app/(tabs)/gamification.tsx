@@ -115,7 +115,7 @@ export default function GamificationScreen() {
           </View>
         </View>
 
-        {/* How it works accordion */}
+        {/* hogyna mukodik rész */}
         <View style={styles.accordion}>
           <TouchableOpacity
             style={styles.accordionHeader}

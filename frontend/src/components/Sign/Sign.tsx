@@ -25,7 +25,7 @@ const Sign = () => {
 
   return (
     <div className='h-full overflow-auto'>
-      {/* ── Hero ── */}
+      {/*Hero*/}
       <div className='relative px-8 pt-10 pb-8 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 rounded-t-3xl overflow-hidden'>
         <div className='absolute -top-8 -right-8 w-56 h-56 rounded-full bg-blue-600 opacity-25' />
         <div className='absolute bottom-0 left-1/2 w-40 h-40 rounded-full bg-blue-800 opacity-30' />
@@ -46,7 +46,7 @@ const Sign = () => {
         </div>
       </div>
 
-      {/* ── Form card ── */}
+      {/*Form card*/}
       <div className='px-6 py-6 flex justify-center'>
         <div className='w-full max-w-md'>
           {/* Tab switcher */}
@@ -204,7 +204,7 @@ const Sign = () => {
         </div>
       </div>
 
-      {/* ── Footer strip ── */}
+      {/* Footer strip*/}
       <div className='mx-6 mb-6 bg-blue-900 rounded-2xl px-6 py-4 flex items-center justify-between gap-3'>
         <div>
           <p className='text-white font-semibold text-sm'>

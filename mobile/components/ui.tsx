@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { Colors } from '../constants/Colors';
 
-// ── Button ────────────────────────────────────────────────────────────────────
+// Button
 
 interface ButtonProps {
   title: string;
@@ -86,7 +86,7 @@ export const Button = ({
   );
 };
 
-// ── Input ─────────────────────────────────────────────────────────────────────
+// Input
 
 interface InputProps extends TextInputProps {
   label?: string;
@@ -116,7 +116,7 @@ export const Input = ({
   </View>
 );
 
-// ── Badge ─────────────────────────────────────────────────────────────────────
+// Badge
 
 type BadgeVariant =
   | 'Open'
@@ -154,7 +154,7 @@ export const Badge = ({
   );
 };
 
-// ── Card ──────────────────────────────────────────────────────────────────────
+// Card
 
 export const Card = ({
   children,
@@ -164,7 +164,7 @@ export const Card = ({
   style?: ViewStyle;
 }) => <View style={[styles.card, style]}>{children}</View>;
 
-// ── SectionHeader ─────────────────────────────────────────────────────────────
+// SectionHeader
 
 export const SectionHeader = ({
   title,
@@ -179,7 +179,7 @@ export const SectionHeader = ({
   </View>
 );
 
-// ── HeroBanner ────────────────────────────────────────────────────────────────
+//HeroBanner
 
 export const HeroBanner = ({
   badge,
@@ -208,7 +208,7 @@ export const HeroBanner = ({
   </View>
 );
 
-// ── EmptyState ────────────────────────────────────────────────────────────────
+//EmptyState
 
 export const EmptyState = ({
   icon,
@@ -228,7 +228,7 @@ export const EmptyState = ({
   </View>
 );
 
-// ── Toast ─────────────────────────────────────────────────────────────────────
+// Toast
 
 export const Toast = ({
   message,
@@ -247,7 +247,7 @@ export const Toast = ({
   </View>
 );
 
-// ── Styles ────────────────────────────────────────────────────────────────────
+//Styles
 
 const styles = StyleSheet.create({
   btn: {

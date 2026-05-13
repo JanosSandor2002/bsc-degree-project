@@ -17,7 +17,6 @@ describe('CreateProject', () => {
   it('rendereli a kezdő képernyőt a GitHub és Manual gombokkal', () => {
     render(<CreateProject />);
 
-    // The component shows "Choose import method" not "Choose project type"
     expect(screen.getByText('Choose import method')).toBeInTheDocument();
     expect(screen.getByText('⊞ Import from GitHub')).toBeInTheDocument();
     expect(screen.getByText('✎ Create manually')).toBeInTheDocument();
@@ -50,19 +49,15 @@ describe('CreateProject', () => {
 
     fireEvent.click(screen.getByText('✎ Create manually'));
 
-    // Add a real contributor first to confirm the flow works
     const input = screen.getByPlaceholderText('Username');
     const addBtn = screen.getByText('Add');
 
-    // Try adding empty string — input value stays ''
     fireEvent.change(input, { target: { value: '' } });
     fireEvent.click(addBtn);
 
-    // Then add a real one so we can confirm only 1 contributor exists
     fireEvent.change(input, { target: { value: 'ValidUser' } });
     fireEvent.click(addBtn);
 
-    // Only "ValidUser" should appear, not a second empty entry
     const contributors = screen.getAllByText('ValidUser');
     expect(contributors).toHaveLength(1);
   });
@@ -72,9 +67,7 @@ describe('CreateProject', () => {
 
     fireEvent.click(screen.getByText('✎ Create manually'));
 
-    // Step 1 header should appear
     expect(screen.getByText('Project Details')).toBeInTheDocument();
-    // Back navigation via Next button disabled without name
     const nextBtn = screen.getByText('Next: Task Groups →');
     expect(nextBtn).toBeDisabled();
   });

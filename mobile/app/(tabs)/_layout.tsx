@@ -14,15 +14,14 @@ import {
   FontAwesome5,
 } from '@expo/vector-icons';
 
-// ── Tab definitions ────────────────────────────────────────────────────────────
+//Tab definitions
 
-// Ikonok megegyeznek a frontend react-icons választásával:
+// Ikonok
 // AiFillHome       → Ionicons home
 // BsFillKanbanFill → MaterialCommunityIcons view-column
 // PiProjectorScreen→ Ionicons stats-chart
 // FaGamepad        → MaterialCommunityIcons gamepad-variant
-// TbBrandWikipedia → FontAwesome5 wikipedia-w (itt: book-open)
-// + extra tabek a mobilon
+// TbBrandWikipedia → FontAwesome5 wikipedia-w
 
 type TabDef = {
   name: string;
@@ -139,7 +138,7 @@ const TABS: TabDef[] = [
   },
 ];
 
-// ── Custom scrollable tab bar ──────────────────────────────────────────────────
+//Custom scrollable tab bar
 
 function CustomTabBar({ state, navigation }: { state: any; navigation: any }) {
   return (
@@ -172,7 +171,7 @@ function CustomTabBar({ state, navigation }: { state: any; navigation: any }) {
   );
 }
 
-// ── Layout ────────────────────────────────────────────────────────────────────
+// Layout
 
 export default function TabsLayout() {
   return (
@@ -194,7 +193,7 @@ export default function TabsLayout() {
   );
 }
 
-// ── Styles ────────────────────────────────────────────────────────────────────
+//Styles
 
 const styles = StyleSheet.create({
   tabBarWrapper: {

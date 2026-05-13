@@ -36,7 +36,7 @@ describe('Subtasks API – /api/subtasks', () => {
     taskId = taskRes.body._id;
   });
 
-  // ─── POST /api/subtasks ────────────────────────────────────────────────────
+  // POST /api/subtasks
 
   describe('POST /api/subtasks', () => {
     it('létrehoz egy subtask-ot (201)', async () => {
@@ -77,7 +77,7 @@ describe('Subtasks API – /api/subtasks', () => {
     });
   });
 
-  // ─── GET /api/subtasks/task/:taskId ───────────────────────────────────────
+  // GET /api/subtasks/task/:taskId
 
   describe('GET /api/subtasks/task/:taskId', () => {
     it('visszaadja a task-hoz tartozó subtask-okat', async () => {
@@ -108,7 +108,7 @@ describe('Subtasks API – /api/subtasks', () => {
     });
   });
 
-  // ─── PUT /api/subtasks/:id ─────────────────────────────────────────────────
+  // PUT /api/subtasks/:id
 
   describe('PUT /api/subtasks/:id', () => {
     it('frissíti a subtask státuszát "Done"-ra', async () => {
@@ -141,7 +141,7 @@ describe('Subtasks API – /api/subtasks', () => {
     });
   });
 
-  // ─── DELETE /api/subtasks/:id ──────────────────────────────────────────────
+  //DELETE /api/subtasks/:id
 
   describe('DELETE /api/subtasks/:id', () => {
     it('törli a subtask-ot (200)', async () => {
