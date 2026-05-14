@@ -1,3 +1,14 @@
+/*
+ * Acxor Projektmenedzsment Rendszer
+ * Szerző: Sándor János, 2026
+ * Miskolci Egyetem — Szakdolgozat
+ *
+ * Megjegyzés: a tesztesetek kidolgozásához, hibakereséshez
+ * és javításhoz Claude (Anthropic) MI-alapú eszköz
+ * segítségével történt, minden esetben kritikus szakmai
+ * felülvizsgálattal párosulva.
+ */
+
 import axios from 'axios';
 import { getRepoNames, getRepoIssues } from '../../services/githubService';
 

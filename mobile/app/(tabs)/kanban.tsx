@@ -1,3 +1,14 @@
+/*
+ * Acxor Projektmenedzsment Rendszer
+ * Szerző: Sándor János, 2026
+ * Miskolci Egyetem — Szakdolgozat
+ *
+ * Megjegyzés: egyes kódrészletek generálása, hibakeresése
+ * és javítása Claude (Anthropic) MI-alapú eszköz
+ * segítségével történt, minden esetben kritikus szakmai
+ * felülvizsgálattal párosulva.
+ */
+
 import React, { useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';

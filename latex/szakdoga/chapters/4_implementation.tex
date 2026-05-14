@@ -1,3 +1,10 @@
+% Acxor Projektmenedzsment Rendszer
+% Szerző: Sándor János, 2026
+% Miskolci Egyetem — Szakdolgozat
+%
+% Megjegyzés: egyes kódrészletek hibakeresése és javítása
+% Claude (Anthropic) MI-alapú eszköz segítségével történt,
+% minden esetben kritikus szakmai felülvizsgálattal párosulva.
 \Chapter{Implementáció}
 
 Az implementációs fejezet részletesen bemutatja, hogyan valósultak meg a tervezési fázisban lefektetett elvek a konkrét kód szintjén. A fejezet a backend szolgáltatásoktól és adatmodellektől indul, majd a frontend állapotkezelésen és komponensstruktúrán át eljut a tesztelésig. Ahol indokolt, kódrészletek is szerepelnek az érintett mechanizmusok szemléltetéséhez.
@@ -297,7 +304,7 @@ A mobil alkalmazás főbb nézetei a \ref{fig:impl-mobile}. ábrán láthatók.
 \label{fig:impl-mobile}
 \end{figure}
 
-\Section{Tesztelés implementációja}
+\Section{Egységtesztek implementációja}
 
 
 A rendszer tesztelése két szinten valósul meg: backend oldalon Jest \cite{jest} és Supertest segítségével írt integrációs tesztek, frontend oldalon Vitest \cite{vitest} és React Testing Library alapú unit tesztek.

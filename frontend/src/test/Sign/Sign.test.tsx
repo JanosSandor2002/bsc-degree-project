@@ -1,3 +1,14 @@
+/*
+ * Acxor Projektmenedzsment Rendszer
+ * Szerző: Sándor János, 2026
+ * Miskolci Egyetem — Szakdolgozat
+ *
+ * Megjegyzés: a tesztesetek kidolgozásához, hibakereséshez
+ * és javításhoz Claude (Anthropic) MI-alapú eszköz
+ * segítségével történt, minden esetben kritikus szakmai
+ * felülvizsgálattal párosulva.
+ */
+
 import { render, screen, fireEvent } from '@testing-library/react';
 import Sign from '../../components/Sign/Sign';
 import * as GlobalContext from '../../Context/GlobalContext';

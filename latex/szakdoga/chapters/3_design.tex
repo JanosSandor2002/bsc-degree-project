@@ -1,3 +1,12 @@
+% Acxor Projektmenedzsment Rendszer
+% Szerző: Sándor János, 2026
+% Miskolci Egyetem — Szakdolgozat
+%
+% Megjegyzés: a fejezet struktúrájának kidolgozásához,
+% az ötleteléshez és a tartalmi felépítés kialakításához
+% Claude (Anthropic) MI-alapú eszköz nyújtott segítséget,
+% minden esetben kritikus szakmai felülvizsgálattal párosulva.
+
 \Chapter{Tervezés}
 
 A tervezési fejezet célja az Acxor rendszer architektúrájának, adatmodelljének és felhasználói felületének részletes bemutatása. Ebben a fejezetben kerülnek ismertetésre azok a döntések, amelyek a fejlesztés irányvonalát meghatározták, beleértve a technológiai stack kiválasztását, az adatbázis-séma kialakítását, az API tervezését és a komponensstruktúrát. A tervezési fázis különösen fontos volt, hiszen a rendszernek három platformon – webes böngészőben, mobil eszközön és szerver oldalon – egyidejűleg kellett megfelelően működnie, miközben közös üzleti logikát és adatréteget használt.
@@ -196,6 +205,8 @@ Az alábbi, \ref{tab:models}. táblázat összefoglalja a főbb modellek legfont
 
 \begin{table}[h!]
 \centering
+\caption{Az adatmodellek főbb mezői}
+\label{tab:models}
 \small
 \begin{tabularx}{\textwidth}{|l|l|Y|}
 \hline
@@ -223,8 +234,6 @@ Log & project, message, user & Naplóbejegyzés \\
 Mail & from, to, subject, body, read & Üzenet adatok \\
 \hline
 \end{tabularx}
-\caption{Az adatmodellek főbb mezői}
-\label{tab:models}
 \end{table}
 
 \begin{figure}[H]
@@ -316,20 +325,20 @@ A \ref{fig:use-case}. ábrán látható use case diagram összefoglalja a három
 \clearpage
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.8\textwidth]{images/acxor_auth_sequence.png}
+\fbox{\includegraphics[width=0.78\textwidth]{images/acxor_auth_sequence.png}}
 \caption{A JWT alapú hitelesítési folyamat szekvenciadiagramja}
 \label{fig:auth-sequence}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.8\textwidth]{images/acxor_use_case_v2.png}
+\fbox{\includegraphics[width=0.78\textwidth]{images/acxor_use_case_v2.png}}
 \caption{Az Acxor rendszer use case diagramja}
 \label{fig:use-case}
 \end{figure}
 \clearpage
 
-A fenti folyamatábra (\ref{fig:auth-sequence}. ábra) szemlélteti a két fázist: az első fázis a bejelentkezést, a második fázis a védett végpontok hívását mutatja be a Bearer token segítségével.
+A folyamatábra (\ref{fig:auth-sequence}. ábra) szemlélteti a két fázist: az első fázis a bejelentkezést, a második fázis a védett végpontok hívását mutatja be a Bearer token segítségével.
 
 \Section{Felhasználói felület tervezése}
 

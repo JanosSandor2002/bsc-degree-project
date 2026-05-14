@@ -1,3 +1,14 @@
+/*
+ * Acxor Projektmenedzsment Rendszer
+ * Szerző: Sándor János, 2026
+ * Miskolci Egyetem — Szakdolgozat
+ *
+ * Megjegyzés: egyes kódrészletek generálása, hibakeresése
+ * és javítása Claude (Anthropic) MI-alapú eszköz
+ * segítségével történt, minden esetben kritikus szakmai
+ * felülvizsgálattal párosulva.
+ */
+
 import { Router, Request, Response } from 'express';
 import protect from '../middleware/auth';
 import Project from '../models/Project';

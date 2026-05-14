@@ -1,3 +1,14 @@
+/*
+ * Acxor Projektmenedzsment Rendszer
+ * Szerző: Sándor János, 2026
+ * Miskolci Egyetem — Szakdolgozat
+ *
+ * Megjegyzés: a tesztesetek kidolgozásához, hibakereséshez
+ * és javításhoz Claude (Anthropic) MI-alapú eszköz
+ * segítségével történt, minden esetben kritikus szakmai
+ * felülvizsgálattal párosulva.
+ */
+
 import { AppReducer, initialState } from '../../Context/Reducer';
 
 describe('AppReducer', () => {
@@ -46,7 +57,11 @@ describe('AppReducer', () => {
   });
 
   it('LOGOUT törli a user és token mezőt', () => {
-    const loggedIn = { ...initialState, user: { username: 'Alice' }, token: 'tok' };
+    const loggedIn = {
+      ...initialState,
+      user: { username: 'Alice' },
+      token: 'tok',
+    };
     const newState = AppReducer(loggedIn, { type: 'LOGOUT' });
 
     expect(newState.user).toBeNull();
@@ -55,28 +70,43 @@ describe('AppReducer', () => {
 
   it('ADD_TASK hozzáad egy taskot a listához', () => {
     const task = { _id: 't1', title: 'Új task' };
-    const newState = AppReducer(initialState, { type: 'ADD_TASK', payload: task });
+    const newState = AppReducer(initialState, {
+      type: 'ADD_TASK',
+      payload: task,
+    });
 
     expect(newState.tasks).toContainEqual(task);
   });
 
   it('DELETE_TASK eltávolítja a taskot ID alapján', () => {
     const withTask = { ...initialState, tasks: [{ _id: 't1', title: 'Task' }] };
-    const newState = AppReducer(withTask, { type: 'DELETE_TASK', payload: 't1' });
+    const newState = AppReducer(withTask, {
+      type: 'DELETE_TASK',
+      payload: 't1',
+    });
 
     expect(newState.tasks).toHaveLength(0);
   });
 
   it('ADD_SPRINT hozzáad egy sprintet', () => {
     const sprint = { _id: 's1', name: 'Sprint 1' };
-    const newState = AppReducer(initialState, { type: 'ADD_SPRINT', payload: sprint });
+    const newState = AppReducer(initialState, {
+      type: 'ADD_SPRINT',
+      payload: sprint,
+    });
 
     expect(newState.sprints).toContainEqual(sprint);
   });
 
   it('DELETE_SPRINT eltávolítja a sprintet', () => {
-    const withSprint = { ...initialState, sprints: [{ _id: 's1', name: 'Sprint 1' }] };
-    const newState = AppReducer(withSprint, { type: 'DELETE_SPRINT', payload: 's1' });
+    const withSprint = {
+      ...initialState,
+      sprints: [{ _id: 's1', name: 'Sprint 1' }],
+    };
+    const newState = AppReducer(withSprint, {
+      type: 'DELETE_SPRINT',
+      payload: 's1',
+    });
 
     expect(newState.sprints).toHaveLength(0);
   });
@@ -86,7 +116,10 @@ describe('AppReducer', () => {
     const incoming = [{ _id: 'b', title: 'Új', task: 'task2' }];
     const withSubs = { ...initialState, subtasks: existing };
 
-    const newState = AppReducer(withSubs, { type: 'APPEND_SUBTASKS', payload: incoming });
+    const newState = AppReducer(withSubs, {
+      type: 'APPEND_SUBTASKS',
+      payload: incoming,
+    });
 
     expect(newState.subtasks).toHaveLength(2);
   });
